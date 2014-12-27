@@ -1,6 +1,6 @@
 # Website Anne van Rossum
 
-The source for my [website](http://mrquincle.github.com/mrquincle) that describes especially code I have written over the years.
+The source for my [website](https://mrquincle.github.io) that describes a little bit of everything.
 
 If you want to support me with respect to any of the open-source projects I have been working on, feel free to give me a beer! :-)
 
@@ -8,4 +8,4 @@ If you want to support me with respect to any of the open-source projects I have
 
 ## Collaboration
 
-If you want to collaborate on anything, please, tell me as well! I love quick prototyping and on the moment I am working on nonparametric Bayesian methods, figuring out how to build a cheap hexapod (RHex-like) robot, and trying to decrypt the Fitbit Flex wrist band.
+If you want to collaborate on anything, please, tell me as well! I love quick prototyping and on the moment I am working on nonparametric Bayesian methods, figuring out how to build a cheap hexapod (RHex-like) robot, and experimenting with different Bluetooth Low-Energy devices.
