@@ -20,7 +20,7 @@ There is another explanation, which is less exciting, but stems from my experien
 
 ## Where are the dragons?
 
-![Alien dragons? © 2012 Fantasy World, Inc](images/blog/female_dragon_warrior_by_guzboroda-d54ibde1.jpg)
+![Alien dragons? © 2012 Fantasy World, Inc]({{ site.url }}/images/blog/female_dragon_warrior_by_guzboroda-d54ibde1.jpg)
 
 Evolutionary algorithms seem to have glass ceilings, just as in the job market. Even if you check highly dynamic variants such as [artificial gene regulatory networks (Bongard)](http://www.cs.uvm.edu/~jbongard/zoo.html), or [neuroevolution of augmented topologies (Stanley)](http://www.wikiwand.com/en/Neuroevolution_of_augmenting_topologies), and I even went further (as in evo-devo, to eco-devo, to epigenetics) in incorporating [body changes to perceptual phenomena (pdf)](http://www.lucs.lu.se/LUCS/149/rossum.pdf) as required in the evolution of circadian rhythms. Although interesting light dependent metamorphosis was developed in a simulator, it became quite obvious to me, that it is very hard to scale these things. It is very well known in machine learning that local optima can be very troubling to an algorithm, and evolutionary algorithms, although versatile, are no exception.
 
