@@ -1,0 +1,35 @@
+---
+layout: post
+title: "Welcome"
+date: 2013-01-15 14:23:08 +0100
+comments: true
+categories: 
+---
+
+This website contains a few links of moderate importance to what I do. For my work see the company we started at [Almende](http://almende.com), namely [Distributed Organisms](https://dobots.nl) (which we informally call DoBots). DoBots is a very exciting company which sells internet services for large groups of robots. In Replicator we did research with respect to self-reconfigurable robots, but its applicability is still far away. However, in FireSwarm we can actually use a group of aerial robots to find a dune fire as quick as possible. At times I might post some things about robot cognition, because the thing that I like (professionally) more than robots is artificial intelligence.
+
+I like travelling and initiatives that make the world a better place! :-)
+
+<div style="float: left; margin: 0px 20px 0px 0px">
+	<a href="http://couchsurfing.com">
+		<img src="/images/blog/couchsurfing.jpg" alt="Couchsurfing" width="100" height="100" title="Couchsurfing"/>
+	</a>
+</div>
+
+Couchsurfing is a worldwide initiative that gives foreigners and countrymen the opportunity to sleep on your couch, so you can show them all the cool places in your city. And the other way around of course!
+
+<div style="float: right; margin: 0px 0px 0px 20px">
+	<a href="http://bookcrossing.com">
+		<img src="/images/blog/bookcrossing.jpg" alt="Bookcrossing" width="100" height="100" title="Bookcrossing"/>
+	</a>
+</div>
+
+Bookcrossing is basically a tracking mechanism. You can put books that you don’t wanna read or want others to read in a plastic bag with a tag. The world as one big free library.
+
+<div style="float: left; margin: 0px 20px 0px 0px">
+	<a href="http://improbable.com/ig/">
+		<img src="/images/blog/ignobel.gif" alt="Ignobel Prize" width="100" height="100" title="Ignobel Prize"/>
+	</a>
+</div>
+
+The ignobel prices are for funny experiments having often to do with dirty stuff, sex, drugs, weirdness, and just on first sight very irrelevant stuff. Check them out! 
