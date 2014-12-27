@@ -13,6 +13,7 @@ deploy_default = "push"
 
 # This will be configured for you when you run config_deploy
 deploy_branch  = "master"
+source_branch  = "source"
 
 ## -- Misc Configs -- ##
 
@@ -268,6 +269,17 @@ multitask :push do
     Bundler.with_clean_env { system "git push origin #{deploy_branch}" }
     puts "\n## Github Pages deploy complete"
   end
+end
+
+desc "Push source website to github"
+task :source_push do
+	puts "## Push source branch to github "
+	system "git add -A"
+	message = "Site updated at #{Time.now.utc}"
+	puts "\n## Committing: #{message}"
+	system "git commit -m \"#{message}\""
+	Bundler.with_clean_env { system "git push origin #{source_branch}" }
+	puts "\n## Github source push complete"
 end
 
 desc "Update configurations to support publishing to root or sub directory"
