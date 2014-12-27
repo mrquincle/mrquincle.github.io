@@ -1,9 +1,9 @@
 ---
 layout: post
 title: "Welcome"
-date: 2013-01-15 14:23:08 +0100
+date: 2013-01-15
 comments: true
-categories: 
+categories: welcome
 ---
 
 This website contains a few links of moderate importance to what I do. For my work see the company we started at [Almende](http://almende.com), namely [Distributed Organisms](https://dobots.nl) (which we informally call DoBots). DoBots is a very exciting company which sells internet services for large groups of robots. In Replicator we did research with respect to self-reconfigurable robots, but its applicability is still far away. However, in FireSwarm we can actually use a group of aerial robots to find a dune fire as quick as possible. At times I might post some things about robot cognition, because the thing that I like (professionally) more than robots is artificial intelligence.
