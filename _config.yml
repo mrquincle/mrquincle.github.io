@@ -2,12 +2,12 @@
 #      Main Configs       #
 # ----------------------- #
 
-url: http://mrquincle.github.io
+url: //mrquincle.github.io
 title: Robots, machine learning, global issues
 subtitle: Random thoughts
 author: Anne van Rossum
 simple_search: https://www.google.com/search
-description: A blog about random issues by a random nerd
+description: A blog about robots, machine learning, and other issues
 
 # Default date format is "ordinal" (resulting in "July 22nd 2007")
 # You can customize the format as defined in
@@ -63,6 +63,9 @@ default_asides: [asides/recent_posts.html, asides/github.html, asides/delicious.
 #   3rd Party Settings    #
 # ----------------------- #
 
+# Add this
+addthis_profile_id: ra-549f5fe730fc5e91
+
 # Github repositories
 github_user: mrquincle
 github_repo_count: 1
@@ -74,12 +77,12 @@ twitter_user: annevanrossum
 twitter_tweet_button: true
 
 # Google +1
-google_plus_one: false
+google_plus_one: true
 google_plus_one_size: medium
 
 # Google Plus Profile
 # Hidden: No visible button, just add author information to search results
-googleplus_user:
+googleplus_user: annevanrossum
 googleplus_hidden: false
 
 # Pinboard
@@ -91,11 +94,11 @@ delicious_user:
 delicious_count: 3
 
 # Disqus Comments
-disqus_short_name:
+disqus_short_name: annevanrossum
 disqus_show_comment_count: false
 
 # Google Analytics
 google_analytics_tracking_id:
 
 # Facebook Like
-facebook_like: false
+facebook_like: true

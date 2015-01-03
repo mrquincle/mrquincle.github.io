@@ -3,7 +3,7 @@ layout: post
 title: "Where are the aliens? Where are the dragons?"
 date: 2014-07-05 18:26:02 +0100
 comments: true
-categories: 
+categories: aliens dragons
 ---
 
 # Where are the aliens? Where are the dragons?

@@ -3,7 +3,7 @@ layout: post
 title: "The relevance vector machine"
 date: 2014-12-20 15:14:18 +0100
 comments: true
-categories: 
+categories: [relevance vector machine, sparsity, regression]
 ---
 
 Support vector machines are a kernel-based method that became quite popular in recent times. A support vector machine (in case of standard use, this is not about [one-class SVMs](https://rvlasveld.github.io/blog/2013/07/12/introduction-to-one-class-support-vector-machines/)) is a classifier: it separates data points originating from two different classes. It is smart because - rather than taking every data point seriously - only points that are on the border between two classes are taken into account. The so-called support vectors.
