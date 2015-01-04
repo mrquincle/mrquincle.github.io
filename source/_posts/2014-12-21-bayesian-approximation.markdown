@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Bayesian approximation"
+description: "Different ways to do Bayesian approximation. From full-fledged variational messages to iterated conditional modes. Ever heard about the difference between Maximization-Expectation and Expectation-Maximization?"
 date: 2014-12-21 14:35:18 +0100
 comments: true
 categories: [bayesian approximation, inference, Gibbs sampling, maximization-expectation]
