@@ -2,7 +2,7 @@
 #      Main Configs       #
 # ----------------------- #
 
-url: //mrquincle.github.io
+url: http://www.annevanrossum.com
 title: Robots, machine learning, global issues
 subtitle: Random thoughts
 author: Anne van Rossum
@@ -101,4 +101,4 @@ disqus_show_comment_count: false
 google_analytics_tracking_id:
 
 # Facebook Like
-facebook_like: true
+facebook_like: false
