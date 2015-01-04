@@ -6,8 +6,19 @@
 {% capture updated_formatted %}{{ page.updated_formatted }}{{ post.updated_formatted }}{% endcapture %}
 {% capture was_updated %}{{ updated | size }}{% endcapture %}
 
+{% assign day = date | date: "%-d" %}
+{% assign year = date | date: "%Y" %}
+{% assign month = date | date: "%B" %}
+{% case day %}
+	{% when '1' or '21' or '31' %}{% assign day_ext = "st" %}
+	{% when '2' or '22' %}{% assign day_ext = "nd" %}
+	{% when '3' or '23' %}{% assign day_ext = "rd" %}
+	{% else %}{% assign day_ext = "th" %}
+{% endcase %}
+{% capture datefmt %}{{month}} {{day}}{{day_ext}}, {{year}}{% endcapture %}
+
 {% if has_date != '0' %}
-  {% capture time %}<time datetime="{{ date | datetime | date_to_xmlschema }}" pubdate{% if updated %} data-updated="true"{% endif %}>{{ date_formatted }}</time>{% endcapture %}
+{% capture time %}<time datetime="{{ date | datetime | date_to_xmlschema }}" pubdate{% if updated %} data-updated="true"{% endif %}>{{ datefmt }}</time>{% endcapture %}
 {% endif %}
 
 {% if was_updated != '0' %}
