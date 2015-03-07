@@ -3,6 +3,7 @@ layout: post
 title: "The relevance vector machine"
 date: 2014-12-20 15:14:18 +0100
 comments: true
+published: false
 categories: [relevance vector machine, sparsity, regression]
 ---
 
