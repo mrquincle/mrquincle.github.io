@@ -282,15 +282,15 @@ $$ p(c_i=c^*|c_1,\ldots,c_{i-1}) = \frac{ \alpha/K + n_{c^*,-i}  }{\alpha+n-1} $
 So, if we are in state corresponding with $c_i=c$ we divide by the probability $p(c_i=c\|c_1,\ldots,c\_{i-1})$ and
 multiply with $p(c_i=c^\*\|c_1,\ldots,c\_{i-1})$ to arrive at:
 
-$$g(c^*|c) = \frac{n_{c^*,-i}}{n_{c,-i}}$$ 
+$$g(c_i^*|c_i) = \frac{n_{c^*,-i}}{n_{c,-i}}$$ 
 
 Again, we run into trouble. I would say that the probability of the reverse transition is:
 
-$$g(c|c^*) = \frac{n_{c,-i}}{n_{c^*,-i}}$$ 
+$$g(c_i|c_i^*) = \frac{n_{c,-i}}{n_{c^*,-i}}$$ 
 
 Hence:
 
-$$\frac{g(x|x^*)}{g(x^*|x)} = 
+$$\frac{g(c_i|c_i^*)}{g(c_i^*|c_i)} = 
  \left( \frac{n_{c,-i} }{n_{c^*,-i} }\right)^2$$ 
 
 That would mean that it is much more likely to transition to a cluster to which only few other observations belong 
@@ -298,13 +298,14 @@ That would mean that it is much more likely to transition to a cluster to which 
 
 Considering we are interested in the density $\pi(\cdot)=F(y_i,\phi_{c_i})$, the acceptance probability becomes:
 
-$$a(x^*,x) = \min \left[ 1, \left( \frac{n_{c,-i} }{n_{c^*,-i} }\right)^2 \frac{ F(y_i,\phi_{c_i^*})}{F(y_i,\phi_{c_i})} \right]$$
+$$a(c_i^*,c_i) = \min \left[ 1, \left( \frac{n_{c,-i} }{n_{c^*,-i} }\right)^2 \frac{ F(y_i,\phi_{c_i^*})}{F(y_i,\phi_{c_i})} \right]$$
+
+**I would love if someone checks this!**
 
 Neal states this factor cancels however, and that the acceptance probability is:
 
-$$a(x^*,x) = \min \left[ 1, \frac{ F(y_i,\phi_{c_i^*})}{F(y_i,\phi_{c_i})} \right]$$
+$$a(c_i^*,c_i) = \min \left[ 1, \frac{ F(y_i,\phi_{c_i^*})}{F(y_i,\phi_{c_i})} \right]$$
 
-**I would love if someone checks this!**
 
 ## Auxiliary parameters
 
