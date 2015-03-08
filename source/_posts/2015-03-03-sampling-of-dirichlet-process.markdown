@@ -97,7 +97,11 @@ Here $\alpha=\sum_k \alpha_k$, $n=\sum_n n(c_l=k)$ and $l$ runs from $1$ to $n$ 
 shorter notation $n_k=n(c_l=k)$ as the number of cluster indices that point to the same cluster $k$. Do not forget however
 that this number is a function of $c_l$, or else you might think: where have all the $c$'s gone!?
 And of course the guy who uses a variable $p$ in probabilistic
-texts should be a $p$-victim in Jackass. In our case $\alpha_k$ is taken to be the same for all clusters, so $\alpha/K$:
+texts should be a $p$-victim in Jackass. :-) I think you deserve a break on the moment:
+
+<iframe width="740" height="480" src="//www.youtube.com/embed/VhnZ3wzrwik" frameborder="0" allowfullscreen></iframe>
+
+In our case $\alpha_k$ is taken to be the same for all clusters, so $\alpha/K$:
 
 $$ \int p(c|p) p(p|\alpha) dp = \frac{\Gamma(\alpha)}{\Gamma(\alpha + n)} \prod_k \frac{\Gamma(\alpha/K + n_k)}{\Gamma(\alpha/K)}$$
 
