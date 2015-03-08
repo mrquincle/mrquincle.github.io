@@ -71,9 +71,9 @@ To remind you about the basics of Gibbs sampling; if we sample the conditionals 
 ## Using cluster indices
 
 It is possible to calculate stuff using the parameters $\theta$ directly, but considering that we are here interested
-in clustering, it makes sense to introduce *one level of indirection*. In this case: **class indices**. Each parameter
-$\theta_i$ is paired with a class index $c_i$. The values of the class indices do not matter, as long as all the 
-parameters that belong to the same class are having the same value $c_i$. For computational convenience a series of
+in clustering, it makes sense to introduce *one level of indirection*. In this case: **cluster indices**. Each parameter
+$\theta_i$ is paired with a cluster index $c_i$. The values of the cluster indices do not matter, as long as all the 
+parameters that belong to the same cluster are having the same value $c_i$. For computational convenience a series of
 integers is appropriate, but it could just have as well be names from a dictionary about tropical trees.
 
 In [Neal's paper][1] the derivation of the following is quite brief, so let me expand here a bit. The system under 
@@ -85,8 +85,8 @@ c_i | p \sim Discrete(p_1,\ldots,p_K) \\
 p_1,\ldots,p_K \sim Dirichlet(\alpha/K,\ldots,\alpha/K)
 $$
 
-Now we have to integrate out the mixing proportions $p_i$ to get a formula that operates on class indices. Again, the 
-number of class indices is exactly equal to the number of parameters and exactly equal to the number of observations.
+Now we have to integrate out the mixing proportions $p_i$ to get a formula that operates on cluster indices. Again, the 
+number of cluster indices is exactly equal to the number of parameters and exactly equal to the number of observations.
 
 Let us now consider the Dirichlet-Multinomial as it is often called (terrible name!). As you see from above it should
 be called the Dirichlet-Categorical (see for a derivation [stackoverflow](http://math.stackexchange.com/questions/709959/how-to-derive-the-dirichlet-multinomial)).
@@ -94,7 +94,7 @@ be called the Dirichlet-Categorical (see for a derivation [stackoverflow](http:/
 $$ \int p(c|p) p(p|\alpha) dp = \frac{\Gamma(\alpha)}{\Gamma(\alpha + n)} \prod_k \frac{\Gamma(\alpha_k + n(c_l=k))}{\Gamma(\alpha_k)}$$
 
 Here $\alpha=\sum_k \alpha_k$, $n=\sum_n n(c_l=k)$ and $l$ runs from $1$ to $n$ (over all observations). We will use the
-shorter notation $n_k=n(c_l=k)$ as the number of class indices that point to the same class $k$. Do not forget however
+shorter notation $n_k=n(c_l=k)$ as the number of cluster indices that point to the same cluster $k$. Do not forget however
 that this number is a function of $c_l$, or else you might think: where have all the $c$'s gone!?
 And of course the guy who uses a variable $p$ in probabilistic
 texts should be a $p$-victim in Jackass. In our case $\alpha_k$ is taken to be the same for all clusters, so $\alpha/K$:
@@ -123,7 +123,7 @@ instance of $c_i$. It ain't pretty, I know!
 
 The nominator:
 
-$$ \int p(c_1,\ldots,c_{i-1},c_i=k|p) p(p|\alpha) dp = 
+$$ \int p(c_1,\ldots,c_{i-1},c_i=c|p) p(p|\alpha) dp = 
  \frac{\Gamma(\alpha)}{\Gamma(\alpha + n)} \prod_k \frac{\Gamma(\alpha/K + n_k)}{\Gamma(\alpha/K)}$$
 
 And the denominator where we have one less component index to calculate with (so $n-1$ to sum over):
@@ -131,7 +131,7 @@ And the denominator where we have one less component index to calculate with (so
 $$ \int p(c_1,\ldots,c_{i-1}|p) p(p|\alpha) dp = 
  \frac{\Gamma(\alpha)}{\Gamma(\alpha + n - 1)} \prod_k \frac{\Gamma(\alpha/K + n_{k,-i})}{\Gamma(\alpha/K)}$$
 
-The notation $n_{k,-i}$ counts the class indices as for $n_k$ but does not take into account $i$. A bit awkward 
+The notation $n_{k,-i}$ counts the cluster indices as for $n_k$ but does not take into account $i$. A bit awkward 
 admittedly, because the left-hand side does not contain $c_i$. However, it is just easier to write it down like this,
 trust me. The division becomes:
 
@@ -228,26 +228,32 @@ $$ p(c_i\neq c|c_1,\ldots,c_{i-1}) =
 \frac{ \alpha + n - 1 - n_{c,-i}  }{\alpha+n-1} $$
 
 Unless $n_{c,-i} = n - 1$ (which is of course not the case) we will not arrive at the same result as in the paper. 
-So, we do something wrong here. 
+So, we are calculating the wrong entity here. The equation is correct, but we are after a different entity, namely
+the following.
 
 Apparently, what we are after is not the collection of other options for $c_i$, which
 is indeed kind of trivial, but the probability that none of the other observations $c_j$ is part of the same cluster.
 If we consider $c_i=c$ again and now with $n_{c,-i}=0$:
 
-$$ p(c_i=c \textit{ and } c_i\neq c_j|c_1,\ldots,c_{i-1}) = \frac{ \alpha/K }{\alpha+n-1} $$
+$$ p(c_i=c \textit{ and } c_i\neq c_j \textit{ and } i \neq j|c_1,\ldots,c_{i-1}) = \frac{ \alpha/K }{\alpha+n-1} $$
 
 I won't say often "of course", but here it is of course that $i \neq j$.
 Then if we allow $c_i$ to take all possible $K$ values, in this case the sum is not one because of the "and" operation:
 
-$$\sum_{\omega \in \Omega} p(c_i=\omega \textit{ and } c_i \neq c_j |c_1 ,\ldots,c_{i-1}) = K \frac{ \alpha/K }{\alpha+n-1} $$
+$$\sum_{\omega \in \Omega} p(c_i=\omega \textit{ and } c_i \neq c_j \textit{ and } i \neq j |c_1 ,\ldots,c_{i-1}) = K \frac{ \alpha/K }{\alpha+n-1} $$
 
 So, this is straightforward the number of clusters, $K$, times the previously calculated probability for a single cluster.
 We arrive sweetly - without taking limits in this case - at:
 
-$$ p(c_i\neq c_j|c_1,\ldots,c_{i-1}) =  
+$$ p(c_i \in \Omega(c) \textit{ and } c_i\neq c_j \textit{ and } i \neq j |c_1,\ldots,c_{i-1}) =  
 \frac{ \alpha }{\alpha+n-1} $$
 
-Here we left out the (cumbersome) notation with which we make explicit that we consider all possible cluster indices for $c_i$.
+We kept here explicit that we consider all possible cluster indices for $c_i$ by drawing it from the set $\Omega(c)$.
+Sorry, this is not standard notation, feel free to suggest improvements using the discussion section! The reason why
+I explicitly add it is because $$p(c_i\neq c_j \textit{ and } i \neq j)$$ might be read as the sum of the probabilities
+of any two cluster indices being unequal (where we do not fix $i$ to a specific cluster index). Note also that in
+Neal's exposition $$i$$ is the last observation. The notation here does not assume that $i$ is the last observation,
+and hence uses $i \neq j$ rather than $$j < i$$, but this is absolutely equivalent.
 
 ## Nonconjugate priors
 
@@ -259,7 +265,7 @@ $$ p(c_i=c \textit{ and } c_i=c_j|c_1,\ldots,c_{i-1}) = \frac{ n_{c,-i}  }{\alph
 
 And one part in which we have a cluster index that has not been encountered before:
 
-$$ p(c_i\neq c_j|c_1,\ldots,c_{i-1}) = \frac{ \alpha }{\alpha+n-1} $$
+$$ p(c_i \in \Omega(c) \textit{ and } c_i\neq c_j \textit{ and }i \neq j|c_1,\ldots,c_{i-1}) = \frac{ \alpha }{\alpha+n-1} $$
 
 We now have to take a shortcut and bluntly introduce the [Metropolis-Hastings algorithm](http://en.wikipedia.org/wiki/Metropolis%E2%80%93Hastings_algorithm). Why it works I would love to
 show another time. It is a typical Monte Carlo method driven by detailed balance. Ehrenfest, the inventer of the 
@@ -271,7 +277,7 @@ $$a(x^*,x) = \min \left[ 1, \frac{g(x|x^*)}{g(x^*|x)} \frac{ \pi(x^*)}{\pi(x)} \
 
 With probability $a$ the new state $x^*$ is accepted. With probability $1-a$ the old state $x$ is maintained.
 
-The proposal distribution in our case is the conditional distribution for the class indices!
+The proposal distribution in our case is the conditional distribution for the cluster indices!
 
 $$ p(c_i=c|c_1,\ldots,c_{i-1}) = \frac{ \alpha/K + n_{c,-i}  }{\alpha+n-1} $$
 
@@ -282,19 +288,24 @@ $$ p(c_i=c^*|c_1,\ldots,c_{i-1}) = \frac{ \alpha/K + n_{c^*,-i}  }{\alpha+n-1} $
 So, if we are in state corresponding with $c_i=c$ we divide by the probability $p(c_i=c\|c_1,\ldots,c\_{i-1})$ and
 multiply with $p(c_i=c^\*\|c_1,\ldots,c\_{i-1})$ to arrive at:
 
-$$g(c_i^*|c_i) = \frac{n_{c^*,-i}}{n_{c,-i}}$$ 
+$$g(c_i^*|c_i) = \frac{p(c_i=c^*|c_1,\ldots,c_{i-1})}{p(c_i=c|c_1,\ldots,c_{i-1}) } = \frac{n_{c^*,-i}}{n_{c,-i}}$$ 
 
-Again, we run into trouble. I would say that the probability of the reverse transition is:
+All the terms $\alpha$, $n$, $-1$, and $\alpha/K$ cancel against each other.
 
-$$g(c_i|c_i^*) = \frac{n_{c,-i}}{n_{c^*,-i}}$$ 
+I would say that the probability of the reverse transition is:
 
-Hence:
+$$g(c_i|c_i^*) = \frac{p(c_i=c|c_1,\ldots,c_{i-1})}{p(c_i=c^*|c_1,\ldots,c_{i-1}) } = \frac{n_{c,-i}}{n_{c^*,-i}}$$ 
+
+Note now that we need the *inverse* of the reverse transition, hence:
 
 $$\frac{g(c_i|c_i^*)}{g(c_i^*|c_i)} = 
  \left( \frac{n_{c,-i} }{n_{c^*,-i} }\right)^2$$ 
 
 That would mean that it is much more likely to transition to a cluster to which only few other observations belong 
-(that is, if $$n_{c,-i} > n_{c^*,-i}$$ it will likely transition to state $$c^*$$). That will lead to fast mixing.
+(that is, if $$n_{c,-i} > n_{c^*,-i}$$ it will likely transition to state $$c^*$$). That will lead to fast mixing. 
+We have to realize that $$n_{c,-1} \neq n_{c^*,-i}$$ because although the current $i$ is excluded from this count,
+this doesn't mean that the number of observations with the same cluster index $c_i=c$ is equal to the number of
+observations with the cluster index $c_i=d$.
 
 Considering we are interested in the density $\pi(\cdot)=F(y_i,\phi_{c_i})$, the acceptance probability becomes:
 
