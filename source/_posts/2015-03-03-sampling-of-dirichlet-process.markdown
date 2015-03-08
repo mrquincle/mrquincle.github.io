@@ -218,7 +218,7 @@ $$ p(c_i=c \textit{ and } n_{c,-i} \neq 0 |c_1,\ldots,c_{i-1}) = \frac{ n_{c,-i}
 
 Or, equivalently:
 
-$$ p(c_i=c \textit{ and } c_i = c_j \textit{ and } i \neq j \neq 0 |c_1,\ldots,c_{i-1}) = \frac{ n_{c,-i}  }{\alpha+n-1} $$
+$$ p(c_i=c \textit{ and } c_i = c_j \textit{ and } i \neq j |c_1,\ldots,c_{i-1}) = \frac{ n_{c,-i}  }{\alpha+n-1} $$
 
 If we count all conditional probabilities for $c_i \neq c$ it has to sum to one minus the term above. This is just
 sampling over the entire sample space $\Omega$. To recapitulate the essence of it:
@@ -269,11 +269,13 @@ and hence uses $i \neq j$ rather than $$j < i$$, but this is absolutely equivale
 the conditional probabilities of cluster indices given the other cluster indices for an infinite number of clusters.
 The equation has two parts. One in which we have a cluster index that has been encountered before:
 
-$$ p(c_i=c \textit{ and } c_i=c_j \texit{ and } i \neq j | c_1,\ldots,c_{i-1}) = \frac{ n_{c,-i}  }{\alpha+n-1} $$
+$$ p(c_i=c \textit{ and } c_i=c_j \textit{ and } i \neq j | c_1,\ldots,c_{i-1}) = \frac{ n_{c,-i}  }{\alpha+n-1} $$
 
 And one part in which we have a cluster index that has not been encountered before:
 
 $$ p(c_i \in \Omega(c) \textit{ and } c_i\neq c_j \textit{ and }i \neq j|c_1,\ldots,c_{i-1}) = \frac{ \alpha }{\alpha+n-1} $$
+
+The term $$c_i=c_j \textit{ and } i \neq j$$ is true for any $i \neq j$, while $$c_i \neq c_j \textit{ and } i \neq j$$ is true only when all of $$c_j$$ are unequal to $$c_i$$.
 
 We now have to take a shortcut and bluntly introduce the [Metropolis-Hastings algorithm](http://en.wikipedia.org/wiki/Metropolis%E2%80%93Hastings_algorithm). Why it works I would love to
 show another time. It is a typical Monte Carlo method driven by detailed balance. Ehrenfest, the inventer of the 
