@@ -214,7 +214,11 @@ mind, not my sloppy one. If we only consider cluster $c_i=c$, we can use the equ
 The only other assumption we need in this case, is that there is some other observation with cluster index $c_i$, so
 $n_{c,-i} \neq 0$.
 
-$$ p(c_i=c|c_1,\ldots,c_{i-1}) = \frac{ n_{c,-i}  }{\alpha+n-1} $$
+$$ p(c_i=c \textit{ and } n_{c,-i} \neq 0 |c_1,\ldots,c_{i-1}) = \frac{ n_{c,-i}  }{\alpha+n-1} $$
+
+Or, equivalently:
+
+$$ p(c_i=c \textit{ and } c_i = c_j \textit{ and } i \neq j \neq 0 |c_1,\ldots,c_{i-1}) = \frac{ n_{c,-i}  }{\alpha+n-1} $$
 
 If we count all conditional probabilities for $c_i \neq c$ it has to sum to one minus the term above. This is just
 sampling over the entire sample space $\Omega$. To recapitulate the essence of it:
@@ -265,7 +269,7 @@ and hence uses $i \neq j$ rather than $$j < i$$, but this is absolutely equivale
 the conditional probabilities of cluster indices given the other cluster indices for an infinite number of clusters.
 The equation has two parts. One in which we have a cluster index that has been encountered before:
 
-$$ p(c_i=c \textit{ and } c_i=c_j|c_1,\ldots,c_{i-1}) = \frac{ n_{c,-i}  }{\alpha+n-1} $$
+$$ p(c_i=c \textit{ and } c_i=c_j \texit{ and } i \neq j | c_1,\ldots,c_{i-1}) = \frac{ n_{c,-i}  }{\alpha+n-1} $$
 
 And one part in which we have a cluster index that has not been encountered before:
 
