@@ -7,7 +7,7 @@ comments: true
 categories: [bayesian, inference, sampling, Dirichlet process]
 ---
 
-Thousands of articles describe the use of the Dirichlet Process, but very few describe how to sample from it. Most often one is referred to [Markov chain sampling methods for Dirichlet process mixture models (pdf)][1] by Neal, which is a nice piece of work, but quite a dense introduction.
+Thousands of articles describe the use of the Dirichlet Process, but very few describe how to sample from it. Most often one is referred to [Markov chain sampling methods for Dirichlet process mixture models (pdf)][1] by [Radford Neal](http://www.cs.toronto.edu/~radford/) (at University of Toronto), which is a nice piece of work, but still a bit dense as an introduction. I contacted him by email about certain things that were difficult to understand at first and he was kind enough to respond, thanks a lot! Definitely also check out [his blog](https://radfordneal.wordpress.com/) in which he regularly showcases his fast version of R.
 
 Let us introduce the Dirichlet Process with two lines:
 
