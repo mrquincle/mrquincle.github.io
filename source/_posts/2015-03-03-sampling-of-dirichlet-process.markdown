@@ -299,12 +299,12 @@ First, I went on a tangent here. I thought Neal was picking the following as a t
 $$g(c_i^*\mid c_i) = \frac{p(c_i^*; k^* \mid c_{-i}^*)}{p(c_i; k \mid c_{-i})} 
 $$
 
-And subsequently I started calculating this ratio, where I made mistakes as well not realizing at first that $k$ and $k^*$ do not need to be the same. However, after breaking my head, I finally understood that Neal proposes something much simpler:
+And subsequently I started calculating this ratio, where I made mistakes as well not realizing at first that $k$ and $k^*$ do not need to be the same. However, after "breaking my head", I finally understood that Neal proposes something much simpler:
 
 $$g(c_i^* \mid c_i) = p(c_i^*; k^* \mid c_{-i}^*) 
 $$
 
-In such a case it the acceptance rule becomes indeed quite simple:
+In such a case the acceptance rule becomes indeed quite simple:
 
 $$a(c_i^*,c_i) = \min \left[ 1, \frac{ F(y_i,\phi_{c_i^*})}{F(y_i,\phi_{c_i})} \right]$$
 
