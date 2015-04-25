@@ -213,7 +213,10 @@ A [patch](https://bugs.archlinux.org/task/43848?getfile=12710) for ArchLinux jus
 
 What I can think of are only two things:
 
-* Somehow the initialization isn't done correctly. 
+* Somehow the initialization isn't done correctly. Clocks aren't initialized at the right time, not synchronized. Or
+anything else with respect to initialization is forgotten.
+* Latency is configured incorrectly. Perhaps the BIOS of my Asus (although up to date) hands over latency values that
+are not sufficiently high.
 
 My issues aren't solved, so I'll need to delve further into details some other time.
 
