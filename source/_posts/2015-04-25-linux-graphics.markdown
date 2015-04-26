@@ -231,6 +231,18 @@ First of all, it is of course not nice that they only turn this on late, after a
 when all planes are disabled, this will lead to an underrun. But, it might be symptomatic about a same problem in
 Gen 3 of the chips. Why not?
 
+In the [North Display Registers](http://www.x.org/docs/intel/HD/IHD_OS_Vol_3_Part3_BJS.pdf) document you see a nice
+overview of the sequence in which the display needs to be set. 
+
+![Display Mode Set Sequence](/images/display_mode_set_sequence.png)
+
+You can follow along in the code, in particular, in the function `ironlake_crtc_enable`. Here you will see an order 
+like `intel_enable_pipe` -> `ironlake_pch_enable` -> `intel_crtc_enable_planes`. What is remarkable is that step 7
+in which the planes are configured is done after the port on the PHC is enabled in the code. In the haswell code, 
+this is the same, but this function is preceded with `haswell_mode_set_planes_workaround`. It is also interesting to
+note that the "Notes" in this table state that the CPU FDI Transmitter should not be set to idle while the PCH
+transcoder is enabled because it will lead to PCH transcoder underflow.
+
 On bugzilla there are several bug reports on the FIFO underrun, such as [79261](https://bugzilla.kernel.org/show_bug.cgi?id=79261).
 However, none of them seems to be about the HD Graphics 4000 in particular, and even less providing any solution.
 A [patch](https://bugs.archlinux.org/task/43848?getfile=12710) for ArchLinux just makes `DRM_DEBUG` messages from the `DRM_ERROR` messages.
