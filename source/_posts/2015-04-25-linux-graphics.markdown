@@ -227,9 +227,8 @@ if (IS_GEN2(dev))
 	intel_set_cpu_fifo_underrun_reporting(dev_priv, pipe, true);
 ```
 
-First of all, it is of course not nice that they only turn this on late, after a plane has been enabled. So, indeed,
-when all planes are disabled, this will lead to an underrun. But, it might be symptomatic about a same problem in
-Gen 3 of the chips. Why not?
+Of course, this is reporting about underruns for the CPU, not the PCH, and it is Gen 2, not Gen 3 of the chips. But it
+might be a symptom of something peculiar in the hardware.
 
 In the [North Display Registers](http://www.x.org/docs/intel/HD/IHD_OS_Vol_3_Part3_BJS.pdf) document you see a nice
 overview of the sequence in which the display needs to be set. 
