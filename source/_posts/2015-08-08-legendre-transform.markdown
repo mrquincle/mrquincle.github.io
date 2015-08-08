@@ -19,8 +19,9 @@ function anywhere else if the function is convex.
 
 Why is the Legendre transform interesting? It is basically just writing down a function in a different manner. The
 Legendre transform is particular useful in the situation that the derivatives of a function $$f(x)$$ are easier to
-describe than the function itself. For a nice introduction see [[2]]. Intuitively, we map from points $$(x,y)$$ to
-$$(m,z)$$, with $$m$$ the slope and $$z$$ such that we can recover $$x$$ and $$y$$.
+describe than the function itself. For a nice introduction see [[2]]. Intuitively, we map from points $$(x,f(x))$$ to
+$$(m,g(m))$$, with $$m$$ the slope and $$g(m)$$ some value so that we can recover $$x$$ and $$y$$ (see below for the
+exact definition).
 
 In the following example, we will get get the Legendre transform of the function:
 
@@ -65,9 +66,19 @@ $$mx$$ term.
 
 ## Probability theory
 
-The rate function is defined as the Legendre transform of the logarithm of the moment generating function of a random
-variable.
+The rate function is defined as the Legendre transform of the [scaled cumulant generating function](https://en.wikipedia.org/wiki/Cumulant) of a random
+variable $$A_n$$. The scaled cumulant generation function of $A_n$ is defined by the limit:
 
+$$\lambda(k)=\lim_{n\rightarrow\infty}\frac{1}{n}\ln\left<\exp(n k A_n) \right>$$
+
+And the Gärtner-Ellis theorem establishes under some conditions the rate function:
+
+$$I(a)=\sup_{k \in \cal{R}} (ka - \lambda(k))$$
+
+This theorem is more general than Cramér's theorem, which is only valid for independent and identically distributed
+random variables.
+
+Now you know what a Legendre transform entails, you might start to notice it in the most surprising places!
 
 1. [Legendre-Fenchel Transforms in a Nutshell][1], a good explanation of the Legendre-Fenchel generalization of the Legendre transform
 2. [Making Sense of the Legendre Transform][2]
