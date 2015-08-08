@@ -11,7 +11,7 @@ If you're interested in how things work, our brain is one of the most intriguing
 
 The thalamus is, hmmm, particular shaped, and centered in the middle of our head, resting on our cerebellum.
 
-![Visualation of the thalamus from the Dr. Rudyard Health Pictures collection. The person doesn't look very happy...](http://www.rudyard.org/wp-content/uploads/2013/09/parts-of-the-brain-thalamus.jpg)
+![Visualization of the thalamus from Dr. G Bhanu Prakash. The person doesn't look very happy...](/images/blog/thalamus1.jpg)
 
 One thing that is very interesting of the thalamus is that it has a thalamic nucleus (a bunch of neurons) for every type of sensory system
 (see also [5]):
@@ -35,7 +35,7 @@ It is quite interesting that the pulvinar nuclei are quite big in humans (making
 
 It is a remarkable fact that Newton already foresaw that if the brain has to have a continuous representation of continuous objects in its view, there must be crossing (decussation) in which the left part of the left eye is merged with the left part of the right eye, and the right part of the right eye is merged with the right part of the left eye.
 
-![Partial decussation at the optic chiasm, as predicted by Newton (picture from Psychology class at Appalachian State University)](http://www1.appstate.edu/~kms/classes/psy3203/EyePhysio/VisualPathways.jpg)
+![Partial decussation at the optic chiasm, as predicted by Newton (picture from Psychology class at Appalachian State University)](/images/blog/VisualPathways.jpg)
 
 Quite remarkably however is how neatly this has been organized. Lesions at the cortex (thank fast and precise bullets of the first world war for these) lead to very fine lesions at the retina all the way through the thalamus. All intermediate neurons die slowly off because of a lack of input of higher levels (called retrograde cell degradation). The interesting thing is that this death is very local. Apparently there is a very strict map from the retina onto the thalamus (the lateral geniculate nucleus) and onto the primary visual cortex. It is incredible that this has been already completely organized before our eyes open as babies!
 

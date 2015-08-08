@@ -1,0 +1,17 @@
+{% for page in paginator.posts %}
+{% for js in page.customjs %}
+<script type="text/javascript" src="{{ js }}"></script>
+{% endfor %}
+{% for css in page.customcss %}
+<link href="{{ css }}" rel="stylesheet" type="text/css" />
+{% endfor %}
+{% endfor %}
+
+{% for js in page.customjs %}
+<script type="text/javascript" src="{{ js }}"></script>
+{% endfor %}
+{% for css in page.customcss %}
+<link href="{{ css }}" rel="stylesheet" type="text/css" />
+{% endfor %}
+
+
