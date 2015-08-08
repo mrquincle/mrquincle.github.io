@@ -78,12 +78,16 @@ $$I(a)=\sup_{k \in \cal{R}} (ka - \lambda(k))$$
 This theorem is more general than Cramér's theorem, which is only valid for independent and identically distributed
 random variables.
 
-Now you know what a Legendre transform entails, you might start to notice it in the most surprising places!
+Now you know what a Legendre transform entails, you might start to notice it in the most surprising places! For example
+in clustering multivariate normal distributions [[3]]!
 
 1. [Legendre-Fenchel Transforms in a Nutshell][1], a good explanation of the Legendre-Fenchel generalization of the Legendre transform
 2. [Making Sense of the Legendre Transform][2]
+3. [Clustering Multivariate Normal Distributions][3]
 
 [1]: http://odessa.phy.sdsmt.edu/~andre/PHYS743/lfth2.pdf "Legendre-Fenchel Transforms in a Nutshell (2005) Touchette"
-[2]: http://users.df.uba.ar/ariel/materias/FT3_2011_2C/Extra/LegendreTransform.pdf "Making Sense of the Legendre Transform"
+[2]: http://users.df.uba.ar/ariel/materias/FT3_2011_2C/Extra/LegendreTransform.pdf "Making Sense of the Legendre Transform (2008) Zia"
+[3]: http://www.lix.polytechnique.fr/Labo/Frank.Nielsen/pdf/2008-C-ClusteringNormal-ETVC.pdf "Clustering Multivariate Normal Distributions (2008) Nielsen and Nock"
+
 <script type="text/javascript" src="/javascripts/legendre.js">
 
