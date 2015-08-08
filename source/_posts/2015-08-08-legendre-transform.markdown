@@ -12,12 +12,12 @@ customjs:
 ---
 
 The [Legendre Transform](https://en.wikipedia.org/wiki/Legendre_transformation) describes a function - in the normal
-Legendre case, a convex function - as a function of its
+Legendre case, a convex function (but for the generalized case, see [[1]]) - as a function of its
 [supporting hyperplanes](https://en.wikipedia.org/wiki/Supporting_hyperplane). In the case of a 2D function these are
 supporting lines. The supporting lines are the lines that just touch the function. These lines do not intersect the
 function anywhere else if the function is convex.
 
-The line we will want to get the Legendre transform of, is the following:
+In the following example, we will get get the Legendre transform of the function:
 
 $$f(x)=c x^2$$
 
