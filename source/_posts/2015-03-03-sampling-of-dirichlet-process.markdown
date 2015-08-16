@@ -13,10 +13,10 @@ Let us introduce the Dirichlet Process with two lines:
 
 $$
 G \sim DP(H,\alpha) \\
-\theta_i  \mid  G \sim G 
+\theta_i  \mid  G \sim G
 $$
 
-First of all, if you haven't been reading an article about this material in the last decennia, the notation $$\sim$$ stands for "is distributed as" (see [stackexchange](http://stats.stackexchange.com/questions/41306/why-are-probability-distributions-denoted-with-a-tilde)). 
+First of all, if you haven't been reading an article about this material in the last decennia, the notation $$\sim$$ stands for "is distributed as" (see [stackexchange](http://stats.stackexchange.com/questions/41306/why-are-probability-distributions-denoted-with-a-tilde)).
 
 On the first line we have defined that $$G$$ being distributed as a Dirichlet Process (DP) with parameters $$H$$ and $$\alpha$$. The parameter $$H$$ has kind of the role of a mean, the parameter $$\alpha$$ has kind of the role of precision (inverse variance). The parameter $$H$$ is called the base distribution, the parameter $$\alpha$$ is called the dispersion factor.
 
@@ -57,14 +57,14 @@ $$
 Here $$C$$ is a normalization factor to make it a proper probability summing to one. The entity $$H_i$$ is the posterior distribution of $$\theta$$ given $$G_0$$ as prior and given observation $$y_i$$. The integral on the right side has the imposing form of a (Lebesgue-)Stieltjes integral. The Lebesgue integral is a nice topic on its own as well, but skimming through [wikipedia](http://en.wikipedia.org/wiki/Lebesgue_integration) should be sufficient. A one-line summary: For a two-dimensional function you can see it as "horizontal" integration rather than "vertical" integration. The Stieltjes part of it generalizes integration by (linear) parts $$dx = x_i - x_{i-1}$$ to that of integration by $$dg(x)$$. If $$g(x)$$ is differentiable everywhere and the derivative is continuous, it has the more familiar presentation:
 
 $$
-\int F(y_i,\theta) G_0'(\theta) d\theta = \int F(y_i,\theta) \frac{dG_0(\theta)}{d\theta} d\theta
+\int F(y_i,\theta) G_0'(\theta) d\theta = \int F(y_i,\theta) \frac{dG_0(\theta)}{d\theta} d\theta = \int F(y_i,\theta) \frac{dG_0(\theta)}
 $$
 
 There is a solid reason why this familiar notation is insufficient here. In probability theory we often have a nice cumulative distribution function $$g(x)$$. However, things become nasty for the probability density function as such. The Lebesgue measure for $$g'(x)$$ (the "horizontal" integration) if the distribution of $$x$$ is discrete becomes nonsense.
 
 Studying this multiplicative (or convolutive) form it is clear that a conjugate pair of $$F$$ and $$G_0$$ is extremely convenient.
 
-The definition of $$p(\theta_i\ \mid \theta_{-i},y_i)$$ leads to Gibbs sampling by just drawing from it for all indices $$(i=1,\ldots,n)$$. 
+The definition of $$p(\theta_i\ \mid \theta_{-i},y_i)$$ leads to Gibbs sampling by just drawing from it for all indices $$(i=1,\ldots,n)$$.
 
 To remind you about the basics of Gibbs sampling; if we sample the conditionals $$p(a_0\ \mid a_1,b)$$ and $$p(a_1\ \mid a_0,b)$$ iteratively, we will get the distribution $$p(a_0,a_1\ \mid b)$$ which is joint in $$a_0$$ and $$a_1$$. So, our sampling results in $$p(\theta\ \mid y)$$ with $$y$$ all observations. Note that Gibbs sampling allows you to forget a value $$\theta_i$$ when it is time to sample it again.
 
@@ -72,11 +72,11 @@ To remind you about the basics of Gibbs sampling; if we sample the conditionals 
 
 It is possible to calculate stuff using the parameters $$\theta$$ directly, but considering that we are here interested
 in clustering, it makes sense to introduce *one level of indirection*. In this case: **cluster indices**. Each parameter
-$$\theta_i$$ is paired with a cluster index $$c_i$$. The values of the cluster indices do not matter, as long as all the 
+$$\theta_i$$ is paired with a cluster index $$c_i$$. The values of the cluster indices do not matter, as long as all the
 parameters that belong to the same cluster are having the same value $$c_i$$. For computational convenience a series of
 integers is appropriate, but it could just have as well be names from a dictionary about tropical trees.
 
-In [Neal's paper][1] the derivation of the following is quite brief, so let me expand here a bit. The system under 
+In [Neal's paper][1] the derivation of the following is quite brief, so let me expand here a bit. The system under
 consideration here is not a Dirichlet Process, but a mixture of $$K$$ Dirichlet distributions:
 
 $$
@@ -85,7 +85,7 @@ c_i  \mid  p \sim Discrete(p_1,\ldots,p_K) \\
 p_1,\ldots,p_K \sim Dirichlet(\alpha/K,\ldots,\alpha/K)
 $$
 
-Now we have to integrate out the mixing proportions $$p_i$$ to get a formula that operates on cluster indices. Again, the 
+Now we have to integrate out the mixing proportions $$p_i$$ to get a formula that operates on cluster indices. Again, the
 number of cluster indices is exactly equal to the number of parameters and exactly equal to the number of observations.
 
 Let us now consider the Dirichlet-Multinomial as it is often called (terrible name!). As you see from above it should
@@ -115,91 +115,91 @@ $$ p(c_1,\ldots,c_{i-1},c_i=c;\alpha) = \int p(c_1,\ldots,c_{i-1},c_i=c \mid p) 
 
 Basically the $$;\alpha$$ means that we identified it as a variable. However, we haven't decided yet if it is going to
 be a random variable or just a parameter. We can just leave it out in the next equations, just remember that the entire
-thing depends on $$\alpha$$ in the end. 
+thing depends on $$\alpha$$ in the end.
 Anyway, the above two functions are required to calculate the entity we are after.
-Using the definition of a conditional probability, we calculate the probability of a value for a specific cluster index 
+Using the definition of a conditional probability, we calculate the probability of a value for a specific cluster index
 given all other cluster indices:
 
 $$ p(c_i=c \mid c_1,\ldots,c_{i-1}) = \frac{p(c_1,\ldots,c_{i-1},c_i=c)}{p(c_1,\ldots,c_{i-1})}$$
 
-I try to follow here the notation in Neal's paper as close as possible. Do not fry me because I use $$c$$ here as an 
+I try to follow here the notation in Neal's paper as close as possible. Do not fry me because I use $$c$$ here as an
 instance of $$c_i$$. It ain't pretty, I know!
 
 The nominator:
 
-$$ \int p(c_1,\ldots,c_{i-1},c_i=c \mid p) p(p \mid \alpha) dp = 
+$$ \int p(c_1,\ldots,c_{i-1},c_i=c \mid p) p(p \mid \alpha) dp =
  \frac{\Gamma(\alpha)}{\Gamma(\alpha + n)} \prod_k \frac{\Gamma(\alpha/K + n_k)}{\Gamma(\alpha/K)}$$
 
 And the denominator where we have one less component index to calculate with (so $$n-1$$ to sum over):
 
-$$ \int p(c_1,\ldots,c_{i-1} \mid p) p(p \mid \alpha) dp = 
+$$ \int p(c_1,\ldots,c_{i-1} \mid p) p(p \mid \alpha) dp =
  \frac{\Gamma(\alpha)}{\Gamma(\alpha + n - 1)} \prod_k \frac{\Gamma(\alpha/K + n_{k,-i})}{\Gamma(\alpha/K)}$$
 
-The notation $$n_{k,-i}$$ counts the cluster indices as for $$n_k$$ but does not take into account $$i$$. This notation is a bit awkward 
+The notation $$n_{k,-i}$$ counts the cluster indices as for $$n_k$$ but does not take into account $$i$$. This notation is a bit awkward
 admittedly, because the left-hand side does not seem to contain $$c_i$$. But it does because $$n_k = n(c_l = k)$$ if you remember. The notation just becomes a bit less cluttered by writing it down like this,
 trust me. The division becomes:
 
-$$ p(c_i=c \mid c_1,\ldots,c_{i-1}) = \frac{ 
+$$ p(c_i=c \mid c_1,\ldots,c_{i-1}) = \frac{
  \frac{\Gamma(\alpha)}{\Gamma(\alpha + n)} \prod_k \frac{\Gamma(\alpha/K + n_k)}{\Gamma(\alpha/K)} }
  {\frac{\Gamma(\alpha)}{\Gamma(\alpha + n - 1)} \prod_k \frac{\Gamma(\alpha/K + n_{k,-i})}{\Gamma(\alpha/K)} }$$
 
 And we are happy to see we can cross-out a lot of the terms in this fraction:
 
 $$ p(c_i=c \mid c_1,\ldots,c_{i-1}) = \frac{\Gamma(\alpha + n - 1)}{ \Gamma(\alpha+n)}
-\prod_k \frac{ \Gamma(\alpha/K + n_k)} 
+\prod_k \frac{ \Gamma(\alpha/K + n_k)}
 {\Gamma(\alpha/K + n_{k,-i})}$$
 
-As you probably know $$\Gamma(x)=(x-1)!$$, so it is not hard to see that $$\Gamma(x+1)=x\Gamma(x)$$ just as with a 
+As you probably know $$\Gamma(x)=(x-1)!$$, so it is not hard to see that $$\Gamma(x+1)=x\Gamma(x)$$ just as with a
 factorial: $$x! = x(x-1)!$$.
 Also, $$\Gamma(x-1)=\Gamma(x)/(x-1)$$, which leads to a simplification of the first fraction:
 
-$$ p(c_i=c \mid c_1,\ldots,c_{i-1}) = 
+$$ p(c_i=c \mid c_1,\ldots,c_{i-1}) =
 \frac{\Gamma(\alpha + n)}{(\alpha+n-1) \Gamma(\alpha+n)}
-\prod_k \frac{ \Gamma(\alpha/K + n_k)} 
+\prod_k \frac{ \Gamma(\alpha/K + n_k)}
 {\Gamma(\alpha/K + n_{k,-i})} \\
 =\frac{1}{\alpha+n-1}
-\prod_k \frac{ \Gamma(\alpha/K + n_k)} 
-{\Gamma(\alpha/K + n_{k,-i})} 
+\prod_k \frac{ \Gamma(\alpha/K + n_k)}
+{\Gamma(\alpha/K + n_{k,-i})}
 $$
 
 The second fraction requires splitting of the product for $$c_i=k$$ or, equivalently, $$k=c$$. So, we bring the index that
 (amongst others) is pointed at by observation $$c_i=k$$ to the front:
 
-$$\prod_k \Gamma(\alpha/K + n_k) = 
-\Gamma(\alpha/K + n_c) \prod_{k \neq c}  \Gamma(\alpha/K + n_k) 
+$$\prod_k \Gamma(\alpha/K + n_k) =
+\Gamma(\alpha/K + n_c) \prod_{k \neq c}  \Gamma(\alpha/K + n_k)
 $$
 
 If we think this through, we now know that $$n_c$$ does contain the cluster corresponding with the observation with index $$i$$ and henceforth that $$n_k$$
 does **not** contain that cluster. Thus the following is absolutely equivalent to the above:
 
-$$\prod_k \Gamma(\alpha/K + n_k) = 
-\Gamma(\alpha/K + n_c) \prod_{k \neq c}  \Gamma(\alpha/K + n_{k,-i}) 
+$$\prod_k \Gamma(\alpha/K + n_k) =
+\Gamma(\alpha/K + n_c) \prod_{k \neq c}  \Gamma(\alpha/K + n_{k,-i})
 $$
 
-Thinking this through, we also realize that $$n_c$$ does indeed contain this cluster corresponding with observation $$i$$, 
+Thinking this through, we also realize that $$n_c$$ does indeed contain this cluster corresponding with observation $$i$$,
 and therefore must be exactly one larger than if it would not be counting $$c_i$$!
 
-$$\prod_k \Gamma(\alpha/K + n_k) = 
-\Gamma(\alpha/K + n_{c,-i} + 1) \prod_{k \neq c}  \Gamma(\alpha/K + n_{k,-i}) 
+$$\prod_k \Gamma(\alpha/K + n_k) =
+\Gamma(\alpha/K + n_{c,-i} + 1) \prod_{k \neq c}  \Gamma(\alpha/K + n_{k,-i})
 $$
 
 We can again make use of the $$\Gamma(x+1)=x\Gamma(x)$$ fact:
 
-$$\prod_k \Gamma(\alpha/K + n_k) = 
-(\alpha/K + n_{c,-i}) \Gamma(\alpha/K + n_{c,-i}) \prod_{k \neq c}  \Gamma(\alpha/K + n_{k,-i}) 
+$$\prod_k \Gamma(\alpha/K + n_k) =
+(\alpha/K + n_{c,-i}) \Gamma(\alpha/K + n_{c,-i}) \prod_{k \neq c}  \Gamma(\alpha/K + n_{k,-i})
 $$
 
 And we can move the Gamma term with $$n_{c,-i}$$ within the product again:
 
-$$\prod_k \Gamma(\alpha/K + n_k) = 
-(\alpha/K + n_{c,-i}) \prod_k \Gamma(\alpha/K + n_{k,-i}) 
+$$\prod_k \Gamma(\alpha/K + n_k) =
+(\alpha/K + n_{c,-i}) \prod_k \Gamma(\alpha/K + n_{k,-i})
 $$
 
 Let me reiterate the equation from above (because it has now scrolled off your screen except if you keep your laptop
 vertically - on its side - when reading this, or if you use a ridiculous high resolution):
 
 $$ p(c_i=c \mid c_1,\ldots,c_{i-1}) = \frac{1}{\alpha+n-1}
-\prod_k \frac{ \Gamma(\alpha/K + n_k)} 
+\prod_k \frac{ \Gamma(\alpha/K + n_k)}
 {\Gamma(\alpha/K + n_{k,-i})}$$
 
 Fill in our neat endevour with shifting in and out of the product, just to go through a Gamma function, and we arrive at:
@@ -207,7 +207,7 @@ Fill in our neat endevour with shifting in and out of the product, just to go th
 $$ p(c_i=c \mid c_1,\ldots,c_{i-1}) = \frac{ \alpha/K + n_{c,-i}  }{\alpha+n-1} $$
 
 The first time I encountered the sentence "just integrate out the mixing proportions $$p_i$$" I did not have a clue that a dozen steps
-like these were required. But, perhaps, I need them spelled out in more detail than a person with a normal brain... 
+like these were required. But, perhaps, I need them spelled out in more detail than a person with a normal brain...
 
 The step subsequently fo $$K \rightarrow \infty$$ contains probably also many steps, but only for a mathematical rigorous
 mind, not my sloppy one. If we only consider cluster $$c_i=c$$, we can use the equation above and assume $$\alpha/K$$ goes to zero.
@@ -228,15 +228,15 @@ $$\sum_{\omega \in \Omega(\mathbf{c})} p(c_i=\omega \mid c_1,\ldots,c_{i-1}) = 1
 
 Apply this:
 
-$$ p(c_i\neq c \mid c_1,\ldots,c_{i-1}) = 1 - \frac{\alpha/K + n_{c,-i}  }{\alpha+n-1} 
+$$ p(c_i\neq c \mid c_1,\ldots,c_{i-1}) = 1 - \frac{\alpha/K + n_{c,-i}  }{\alpha+n-1}
 = \frac{ \alpha + n - 1 - n_{c,-i} - \alpha/K  }{\alpha+n-1} $$
 
 If we let $$K \rightarrow \infty$$, it seems we arrive at:
 
-$$ p(c_i\neq c \mid c_1,\ldots,c_{i-1}) =  
+$$ p(c_i\neq c \mid c_1,\ldots,c_{i-1}) =
 \frac{ \alpha + n - 1 - n_{c,-i}  }{\alpha+n-1} $$
 
-Unless $$n_{c,-i} = n - 1$$ (which is of course not the case) we will not arrive at the same result as in the paper. 
+Unless $$n_{c,-i} = n - 1$$ (which is of course not the case) we will not arrive at the same result as in the paper.
 So, we are calculating the wrong entity here. The equation is correct, but we are after a different entity, namely
 the following.
 
@@ -256,7 +256,7 @@ $$\sum_{\omega \in \Omega(\mathbf{c}} p(c_i=\omega \textit{ and } c_i \neq c_j \
 So, this is straightforward the number of clusters, $$K$$, times the previously calculated probability for a single cluster.
 We arrive sweetly - without taking limits in this case - at:
 
-$$ p(c_i \in \Omega(\mathbf{c}) \textit{ and } c_i\neq c_j \textit{ and } i \neq j  \mid c_1,\ldots,c_{i-1}) =  
+$$ p(c_i \in \Omega(\mathbf{c}) \textit{ and } c_i\neq c_j \textit{ and } i \neq j  \mid c_1,\ldots,c_{i-1}) =
 \frac{ \alpha }{\alpha+n-1} $$
 
 We kept here explicit that we consider all possible cluster indices for $$c_i$$ by drawing it from the set $$\Omega(\mathbf{c})$$.
@@ -281,8 +281,8 @@ $$ p(c_i \in \Omega(\mathbf{c}) \textit{ and } c_i\neq c_j \textit{ and }i \neq 
 The term $$c_i=c_j \textit{ and } i \neq j$$ is true for any $$i \neq j$$, while $$c_i \neq c_j \textit{ and } i \neq j$$ is true only when all of $$c_j$$ are unequal to $$c_i$$.
 
 We now have to take a shortcut and bluntly introduce the [Metropolis-Hastings algorithm](http://en.wikipedia.org/wiki/Metropolis%E2%80%93Hastings_algorithm). Why it works I would love to
-show another time. It is a typical Monte Carlo method driven by detailed balance. Ehrenfest, the inventer of the 
-[dog-flea model](http://en.wikipedia.org/wiki/Ehrenfest_model) would have been proud. 
+show another time. It is a typical Monte Carlo method driven by detailed balance. Ehrenfest, the inventer of the
+[dog-flea model](http://en.wikipedia.org/wiki/Ehrenfest_model) would have been proud.
 
 To sample a density $$\pi(c_i)$$ a proposal density, $$g(c_i^*\mid c_i)$$, is used in calculating an acceptance probability $$a(c_i^*,c_i)$$:
 
@@ -296,12 +296,12 @@ Here we made explicit that $$k^*$$ and $$k$$ might be different. Moreover, the n
 
 First, I went on a tangent here. I thought Neal was picking the following as a transition probability:
 
-$$g(c_i^*\mid c_i) = \frac{p(c_i^*; k^* \mid c_{-i}^*)}{p(c_i; k \mid c_{-i})} 
+$$g(c_i^*\mid c_i) = \frac{p(c_i^*; k^* \mid c_{-i}^*)}{p(c_i; k \mid c_{-i})}
 $$
 
 And subsequently I started calculating this ratio, where I made mistakes as well not realizing at first that $k$ and $k^*$ do not need to be the same. However, after "breaking my head", I finally understood that Neal proposes something much simpler:
 
-$$g(c_i^* \mid c_i) = p(c_i^*; k^* \mid c_{-i}^*) 
+$$g(c_i^* \mid c_i) = p(c_i^*; k^* \mid c_{-i}^*)
 $$
 
 In such a case the acceptance rule becomes indeed quite simple:
