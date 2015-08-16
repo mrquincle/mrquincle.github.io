@@ -57,7 +57,7 @@ $$
 Here $$C$$ is a normalization factor to make it a proper probability summing to one. The entity $$H_i$$ is the posterior distribution of $$\theta$$ given $$G_0$$ as prior and given observation $$y_i$$. The integral on the right side has the imposing form of a (Lebesgue-)Stieltjes integral. The Lebesgue integral is a nice topic on its own as well, but skimming through [wikipedia](http://en.wikipedia.org/wiki/Lebesgue_integration) should be sufficient. A one-line summary: For a two-dimensional function you can see it as "horizontal" integration rather than "vertical" integration. The Stieltjes part of it generalizes integration by (linear) parts $$dx = x_i - x_{i-1}$$ to that of integration by $$dg(x)$$. If $$g(x)$$ is differentiable everywhere and the derivative is continuous, it has the more familiar presentation:
 
 $$
-\int F(y_i,\theta) G_0'(\theta) d\theta = \int F(y_i,\theta) \frac{dG_0(\theta)}{d\theta} d\theta = \int F(y_i,\theta) \frac{dG_0(\theta)}
+\int F(y_i,\theta) G_0'(\theta) d\theta = \int F(y_i,\theta) \frac{dG_0(\theta)}{d\theta} d\theta = \int F(y_i,\theta) dG_0(\theta)
 $$
 
 There is a solid reason why this familiar notation is insufficient here. In probability theory we often have a nice cumulative distribution function $$g(x)$$. However, things become nasty for the probability density function as such. The Lebesgue measure for $$g'(x)$$ (the "horizontal" integration) if the distribution of $$x$$ is discrete becomes nonsense.
