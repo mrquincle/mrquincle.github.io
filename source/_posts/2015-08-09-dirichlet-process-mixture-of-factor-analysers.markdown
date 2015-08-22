@@ -5,6 +5,7 @@ description: "Dirichlet Process Mixture of Factor Analysers"
 date: 2015-08-09 17:25:52 +0200
 comments: true
 categories:
+published: false
 ---
 
 Factor analysis is the term used to describe datasets in which the raw observations live in a space of higher dimension than if they would be described by some hidden variables. For example, imagine a 3D space where the observations are distributed over a single plane in this space. There are very large regions in the space without any observations at all. The hidden variables are called factors. The observations are **linear combinations** of these factors.
