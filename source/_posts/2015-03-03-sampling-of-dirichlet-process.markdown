@@ -33,13 +33,13 @@ Here $$F$$ describes the mapping of parameters to observations.
 We can integrate over $$G$$ to obtain a presentation such as:
 
 $$
-\theta_{n+1}  \mid  \theta_1 \ldots \theta_{n-1} \sim \frac{1}{\alpha+n} (\alpha G_0 + \sum_{i=1}^n \delta_{\theta_i})
+\theta_{n+1}  \mid  \theta_1 \ldots \theta_{n-1} \sim \frac{1}{\alpha+n} (\alpha H + \sum_{i=1}^n \delta_{\theta_i})
 $$
 
 And just to write this down in a totally equivalent notation for your convenience:
 
 $$
-p(\theta_m \mid \theta_{-m},\alpha,G_0) = \frac{a}{M-1+\alpha} G_0 + \frac{1}{M-1+\alpha} \sum_{j=1,j\neq m}^M \delta_{\theta_j}
+p(\theta_m \mid \theta_{-m},\alpha,H) = \frac{a}{M-1+\alpha} H + \frac{1}{M-1+\alpha} \sum_{j=1,j\neq m}^M \delta_{\theta_j}
 $$
 
 Here we have picked an index $$m$$ mid-way, and not a new item $$n+1$$ which complicates the notation considerably. The notation $$\theta_{-m}$$ with the minus sign means in this case the set of parameters $$(\theta_1,\ldots,\theta_M)$$ with $$\theta_m$$ excluded.
@@ -51,18 +51,18 @@ In both notations we have $$\delta_{\theta}$$, the distribution at the point $$\
 If we incorporate the likelihood $$F(y_i,\theta_i)$$, we will arrive at the following formula:
 
 $$
-\theta_i  \mid  \theta_{-i}, y_i \sim C ( \sum_{i \neq j} F(y_i,\theta_j) \delta_{\theta_j} + \alpha H_i \int F(y_i,\theta) dG_0(\theta) )
+\theta_i  \mid  \theta_{-i}, y_i \sim C ( \sum_{i \neq j} F(y_i,\theta_j) \delta_{\theta_j} + \alpha H_i \int F(y_i,\theta) dH(\theta) )
 $$
 
-Here $$C$$ is a normalization factor to make it a proper probability summing to one. The entity $$H_i$$ is the posterior distribution of $$\theta$$ given $$G_0$$ as prior and given observation $$y_i$$. The integral on the right side has the imposing form of a (Lebesgue-)Stieltjes integral. The Lebesgue integral is a nice topic on its own as well, but skimming through [wikipedia](http://en.wikipedia.org/wiki/Lebesgue_integration) should be sufficient. A one-line summary: For a two-dimensional function you can see it as "horizontal" integration rather than "vertical" integration. The Stieltjes part of it generalizes integration by (linear) parts $$dx = x_i - x_{i-1}$$ to that of integration by $$dg(x)$$. If $$g(x)$$ is differentiable everywhere and the derivative is continuous, it has the more familiar presentation:
+Here $$C$$ is a normalization factor to make it a proper probability summing to one. The entity $$H_i$$ is the posterior distribution of $$\theta$$ given $$H$$ as prior and given observation $$y_i$$. The integral on the right side has the imposing form of a (Lebesgue-)Stieltjes integral. The Lebesgue integral is a nice topic on its own as well, but skimming through [wikipedia](http://en.wikipedia.org/wiki/Lebesgue_integration) should be sufficient. A one-line summary: For a two-dimensional function you can see it as "horizontal" integration rather than "vertical" integration. The Stieltjes part of it generalizes integration by (linear) parts $$dx = x_i - x_{i-1}$$ to that of integration by $$dg(x)$$. If $$g(x)$$ is differentiable everywhere and the derivative is continuous, it has the more familiar presentation:
 
 $$
-\int F(y_i,\theta) G_0'(\theta) d\theta = \int F(y_i,\theta) \frac{dG_0(\theta)}{d\theta} d\theta = \int F(y_i,\theta) dG_0(\theta)
+\int F(y_i,\theta) H'(\theta) d\theta = \int F(y_i,\theta) \frac{dH(\theta)}{d\theta} d\theta = \int F(y_i,\theta) dH(\theta)
 $$
 
 There is a solid reason why this familiar notation is insufficient here. In probability theory we often have a nice cumulative distribution function $$g(x)$$. However, things become nasty for the probability density function as such. The Lebesgue measure for $$g'(x)$$ (the "horizontal" integration) if the distribution of $$x$$ is discrete becomes nonsense.
 
-Studying this multiplicative (or convolutive) form it is clear that a conjugate pair of $$F$$ and $$G_0$$ is extremely convenient.
+Studying this multiplicative (or convolutive) form it is clear that a conjugate pair of $$F$$ and $$H$$ is extremely convenient.
 
 The definition of $$p(\theta_i\ \mid \theta_{-i},y_i)$$ leads to Gibbs sampling by just drawing from it for all indices $$(i=1,\ldots,n)$$.
 
@@ -81,7 +81,7 @@ consideration here is not a Dirichlet Process, but a mixture of $$K$$ Dirichlet 
 
 $$
 c_i  \mid  p \sim Discrete(p_1,\ldots,p_K) \\
-\phi_c \sim G_0 \\
+\phi_c \sim H \\
 p_1,\ldots,p_K \sim Dirichlet(\alpha/K,\ldots,\alpha/K)
 $$
 
