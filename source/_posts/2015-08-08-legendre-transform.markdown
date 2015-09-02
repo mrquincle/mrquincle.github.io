@@ -47,7 +47,7 @@ To refresh the animation, press F5.
 
 <div id="visualization"></div>
 
-I hope the Lebesque transform is a little bit less mysterious after you've seen this animation. The animation has been
+I hope the Legendre transform is a little bit less mysterious after you've seen this animation. The animation has been
 created by making use of the [vis.js](http://visjs.org/) library. The source code can be found at [legendre.js](/javascripts/legendre.js).
 
 ## Physics
