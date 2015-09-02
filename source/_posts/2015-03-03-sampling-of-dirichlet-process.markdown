@@ -251,7 +251,7 @@ $$ p(c_i=c \textit{ and } c_i\neq c_j \textit{ and } i \neq j \mid c_1,\ldots,c_
 I won't say often "of course", but here it is of course that $$i \neq j$$.
 Then if we allow $$c_i$$ to take all possible $$K$$ values, in this case the sum is not one because of the "and" operation:
 
-$$\sum_{\omega \in \Omega(\mathbf{c}} p(c_i=\omega \textit{ and } c_i \neq c_j \textit{ and } i \neq j  \mid c_1 ,\ldots,c_{i-1}) = K \frac{ \alpha/K }{\alpha+n-1} $$
+$$\sum_{\omega \in \Omega(\mathbf{c})} p(c_i=\omega \textit{ and } c_i \neq c_j \textit{ and } i \neq j  \mid c_1 ,\ldots,c_{i-1}) = K \frac{ \alpha/K }{\alpha+n-1} $$
 
 So, this is straightforward the number of clusters, $$K$$, times the previously calculated probability for a single cluster.
 We arrive sweetly - without taking limits in this case - at:
