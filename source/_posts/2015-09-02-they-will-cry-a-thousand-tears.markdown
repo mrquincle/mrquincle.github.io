@@ -11,7 +11,7 @@ Perhaps you have seen the recent [TED video from Nick Bostrom](http://www.ted.co
 
 <iframe width="740" height="480" src="//www.youtube.com/embed/pywF6ZzsghI" frameborder="0" allowfullscreen></iframe>
 
-It is regretfully that our philosophers are not able to program! And I guess it takes an extraordinary mind like
+It is regretfully the case that our philosophers are not able to program! And I guess it takes an extraordinary mind like
 [Daniel Dennett's](http://www.theguardian.com/books/2013/may/15/intuition-pumps-tools-dennett-review) to come close to
 something future-proof.
 
