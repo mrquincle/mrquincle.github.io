@@ -42,9 +42,9 @@ Observing a device over a longer time period leads to current curves such as the
 ![Fridge](/images/blog/fridge.png)
 
 It is a fridge that turns on and off at regular time intervals. It is quite clear from this curve that the actual
-power consumption value is not so relevant, the form is really telling!
+power consumption value is not so relevant: the form is really telling!
 
-We subsequently pool all kind of these features with boosting methods from machine learning. This are collections of
+We subsequently pool all kind of these features with boosting methods from machine learning. Boosting methods are collections of
 weak classifiers. The particular classifier we have been testing is a random committee classifier. You can read more
 on the [DoBots blog](https://dobots.nl/2015/09/04/recognize-that-fridge/) again.
 
