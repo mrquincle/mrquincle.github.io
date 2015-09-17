@@ -7,7 +7,7 @@ comments: true
 categories:
 ---
 
-We have put on [Kickstarter](https://www.kickstarter.com/projects/dobots/crownstone/) a smart power outlet with quite sophisticated technology. I think it's nice for the general hacker community to get some more insight on the technology behind it.
+We have put the Crownstone on [Kickstarter](https://www.kickstarter.com/projects/dobots/crownstone/), a smart power outlet with quite sophisticated technology. I think it's nice for the general hacker community to get some more insight on the technology behind it.
 
 <object type="application/x-shockwave-flash" style="width:700px; height:400px;" data="http://vimeo.com/moogaloop.swf?clip_id=138335017&amp;server=vimeo.com&amp;show_title=0&amp;show_byline=0&amp;show_portrait=0&amp;color=ff9933&amp;fullscreen=1" allowfullscreen="true" allowscriptaccess="always">
 <param name="movie" value="http://vimeo.com/moogaloop.swf?clip_id=138335017&amp;server=vimeo.com&amp;show_title=0&amp;show_byline=0&amp;show_portrait=0&amp;color=ff9933&amp;fullscreen=1" allowfullscreen="true" allowscriptaccess="always" />
