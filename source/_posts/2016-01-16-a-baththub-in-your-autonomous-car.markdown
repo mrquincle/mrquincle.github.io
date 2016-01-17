@@ -1,10 +1,15 @@
 ---
 layout: post
 title: "A baththub in your autonomous car"
-description: "A baththub in your autonomous car"
+description: "A baththub in your autonomous car. According to many the future is a socialist paradise. The autonomous car will change everything! We will be car sharing. We can change parking lots into a lot of parks! Will that be the case indeed?"
 date: 2016-01-16 12:07:52 +0100
 comments: true
 categories:
+facebook:
+  image: //img.youtube.com/vi/Vgi6W0vevOc/0.jpg
+twitter_card:
+  type: summary_large_image
+  image: //img.youtube.com/vi/Vgi6W0vevOc/0.jpg
 ---
 
 Will you have a bathtub in your autonomous car?
