@@ -1,6 +1,6 @@
 <!-- Social media content metadata -->
 {% if site.facebook_app_id %}
-<meta property="fb:app_id" content="{{ site.facebook_app_id }}" />
+<meta property="fb:admins" content="{{ site.facebook_admin_id }}" />
 <meta property="og:title" content="{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}" />
 <meta property="og:site_name" content="{{ site.title }}" />
 <meta property="og:url" content="{% if canonical %}{{ canonical }}{% else %}{{ site.url }}{% endif %}/" />
