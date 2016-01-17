@@ -3,7 +3,7 @@
 <meta property="fb:admins" content="{{ site.facebook_admin_id }}" />
 <meta property="og:title" content="{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}" />
 <meta property="og:site_name" content="{{ site.title }}" />
-<meta property="og:url" content="{% if page.url %}{{ page.url }}{% else %}{{ site.url }}{% endif %}/" />
+<meta property="og:url" content="{% if page.url %}{{ site.url }}/{{ page.url }}{% else %}{{ site.url }}{% endif %}/" />
 <meta property="og:type" content="{% if page.title %}article{% else %}website{% endif %}" />
 <meta property="og:description" content="{{ description | strip_html | condense_spaces | truncate:200 }}" />
 <meta property="og:author" content="{{ site.facebook_page }}" />
@@ -12,7 +12,7 @@
 {% if site.twitter_user %}
 <meta property="twitter:card" content="{% if page.twitter_card.type %}{{ page.twitter_card.type}}{% else %}summary{% endif %}" />
 <meta property="twitter:site" content="{{ site.twitter_user }}" />
-<meta property="twitter:url" content="{% if page.url %}{{ page.url }}{% else %}{{ site.url }}{% endif %}" />
+<meta property="twitter:url" content="{% if page.url %}{{ site.url }}/{{ page.url }}{% else %}{{ site.url }}{% endif %}" />
 <meta property="twitter:title" content="{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}" />
 <meta property="twitter:description" content="{{ description | strip_html | condense_spaces | truncate:200 }}" />
 <meta property="twitter:creator" content="{% if page.twitter_card.creator %}{{ page.twitter_card.creator }}{% else %}{{ site.twitter_user }}{% endif %}" />
