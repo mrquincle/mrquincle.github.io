@@ -6,10 +6,10 @@ date: 2016-01-16 12:07:52 +0100
 comments: true
 categories:
 facebook:
-  image: {{ site.url }}/images/blog/bathtub.jpg
+  image: /images/blog/bathtub.jpg
 twitter_card:
   type: summary_large_image
-  image: {{ site.url }}/images/blog/bathtub.jpg
+  image: /images/blog/bathtub.jpg
 ---
 
 Will you have a bathtub in your autonomous car?
