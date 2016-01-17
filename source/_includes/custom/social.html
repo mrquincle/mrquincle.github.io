@@ -4,6 +4,7 @@
 <meta property="og:title" content="{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}" />
 <meta property="og:site_name" content="{{ site.title }}" />
 <meta property="og:url" content="{% if canonical %}{{ canonical }}{% else %}{{ site.url }}{% endif %}/" />
+<meta property="og:type" content="{% if page.title %}article{% else %}website{% endif %}" />
 <meta property="og:description" content="{{ description | strip_html | condense_spaces | truncate:200 }}" />
 <meta property="og:author" content="{{ site.facebook_page }}" />
 {% if page.facebook.image %}<meta property="og:image" content="{{ site.url }}{{ page.facebook.image }}" />{% endif %}
