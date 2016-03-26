@@ -15,7 +15,7 @@ Today, Saturday, I have to run Linux on it! First, I thought to resize the Windo
 
 The beta version of [Ubuntu 16.04 (Xenial Xerus)](http://releases.ubuntu.com/xenial/) is out, so time to try that out! Getting it to boot from USB was a bit cumbersome. On the Yoga 900 the function keys can only be reached through pressing Fn simultaneously. After trying a few times with F12 and Fn-F12 during booting I finally got into the boot menu. 
 
-When running from the stick I in the end decided to disable internet and disable third-party repositories as well. If I didn't do this I was running into a problem:
+When running from the stick in the end I decided to disable internet and disable third-party repositories as well. If I didn't do this I was running into a problem:
 
 
     ubi-prepare failed with exit code 255
