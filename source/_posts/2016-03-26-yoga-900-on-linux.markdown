@@ -1,0 +1,39 @@
+---
+layout: post
+title: "Yoga 900 on Linux"
+description: "Yoga 900 on Linux"
+date: 2016-03-26 19:09:35 +0100
+comments: true
+categories: 
+---
+
+The Yoga 900 is a beautiful machine that has a considerable battery lifetime and can be folded such that it functions as a tablet. The Yoga arrived on Friday and the entire [Crownstone](https://crownstone.rocks) team was enjoying how it came out of the box: it lifts up! If you're creating your own hardware you suddenly appreciate how other people pay attention to packaging!
+
+![Yoga 900](/images/blog/lenovo-yoga-900.jpg "Yoga 900, although mine is Silver to not annoy customers too much")
+
+Naturally, today, Saturday, I've to run Linux on it. First, I thought to resize the Windows partition in Windows itself, but it decided that there were unmovable files somewhere at the end of the partition. Not nice, so just running gparted from a USB stick running Ubuntu it is.
+
+The beta version of [Ubuntu 16.04 (Xenial Xerus)](http://releases.ubuntu.com/xenial/) is out, so time to try that out! Getting it to boot from USB was a bit cumbersome. On the Yoga 900 the function keys can only be reached through pressing Fn simultaneously. After trying a few times with F12 and Fn-F12 during booting I finally got into the boot menu. 
+
+When running from the stick I in the end decided to disable internet and disable third-party repositories as well. If I didn't do this I was running into a problem:
+
+
+    ubi-prepare failed with exit code 255
+    use of unitialized value in concatenation
+
+Hence, I just installed it without anything else enabled, disregarding the online posts that I needed third-party repositories to get Wifi working etc. The Windows partition I shrunk to around 37 GB, giving it 8 GB of space on top of the 29 GB it was already sucking up. Around 20 GB for the root partition, 4GB for swap at the end, and the rest for the home partition. Fingers crossed I decided to put the boot loader on `/dev/sda` (the Windows bootloader is on `/dev/sda1` on this machine).
+
+Everything went smoothly!! No custom kernels needed. Wifi works out of the box. Bluetooth works out of the box. The touchpad works out of the box. The touchscreen works out of the box. Even if I fold the device to use it as a tablet the keyboard is automatically switched off.
+
+There are a few things I've to figure out. If someone else did, please drop me a message!
+
+* After suspend (by closing and opening the lid) the touchpad stops working. 
+* After suspend the Wifi connection drops.
+* The touchpad doesn't stop working in tablet mode (only the keyboard does).
+* On entering a textbox in tablet mode, there is not automatically a virtual keyboard popping up.
+* In tablet mode, the orientation is not automatically adjusted to upside-down in V-mode or portrait in tablet-mode.
+* The F6 function key does not disable the touchpad.
+
+The first issue can be temporarily resolved by going to a terminal `Ctrl+Alt+Fn+F1` and back to `Ctrl+Alt+Fn+F7`. The second issue can be resolved by a restart of the network manager: `sudo service network-manager restart`. I'm pretty sure these issues will be worked out.
+
+A super nice laptop, I'm super happy! 
