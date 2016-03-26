@@ -7,7 +7,7 @@ comments: true
 categories: 
 ---
 
-The Yoga 900 is a beautiful machine that has a considerable battery lifetime and can be folded such that it functions as a tablet. The Yoga arrived on Friday and the entire [Crownstone](https://crownstone.rocks) team was enjoying how it came out of the box: it lifts up! If you're creating your own hardware you suddenly appreciate how other people pay attention to packaging!
+The Yoga 900 is a beautiful machine that has a considerably long battery lifetime and can be folded such that it functions as a tablet. The Yoga arrived on Friday and the entire [Crownstone](https://crownstone.rocks) team was enjoying how it came out of the box: it lifts up! If you're creating your own hardware you suddenly appreciate how other people pay attention to packaging!
 
 ![Yoga 900](/images/blog/lenovo-yoga-900.jpg "Yoga 900, although mine is Silver to not annoy customers too much")
 
