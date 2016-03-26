@@ -11,7 +11,7 @@ The Yoga 900 is a beautiful machine that has a considerably long battery lifetim
 
 ![Yoga 900](/images/blog/lenovo-yoga-900.jpg "Yoga 900, although mine is Silver to not annoy customers too much")
 
-Naturally, today, Saturday, I've to run Linux on it. First, I thought to resize the Windows partition in Windows itself, but it decided that there were unmovable files somewhere at the end of the partition. Not nice, so just running gparted from a USB stick running Ubuntu it is.
+Today, Saturday, I have to run Linux on it! First, I thought to resize the Windows partition in Windows itself, but it decided that there were unmovable files somewhere at the end of the partition. Not nice, so just running gparted from a USB stick running Ubuntu it is.
 
 The beta version of [Ubuntu 16.04 (Xenial Xerus)](http://releases.ubuntu.com/xenial/) is out, so time to try that out! Getting it to boot from USB was a bit cumbersome. On the Yoga 900 the function keys can only be reached through pressing Fn simultaneously. After trying a few times with F12 and Fn-F12 during booting I finally got into the boot menu. 
 
