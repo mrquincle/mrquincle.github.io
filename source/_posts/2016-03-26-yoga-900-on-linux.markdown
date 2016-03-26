@@ -17,11 +17,10 @@ The beta version of [Ubuntu 16.04 (Xenial Xerus)](http://releases.ubuntu.com/xen
 
 When running from the stick in the end I decided to disable internet and disable third-party repositories as well. If I didn't do this I was running into a problem:
 
-
     ubi-prepare failed with exit code 255
     use of unitialized value in concatenation
 
-Hence, I just installed it without anything else enabled, disregarding the online posts that I needed third-party repositories to get Wifi working etc. The Windows partition I shrunk to around 37 GB, giving it 8 GB of space on top of the 29 GB it was already sucking up. Around 20 GB for the root partition, 4GB for swap at the end, and the rest for the home partition. Fingers crossed I decided to put the boot loader on `/dev/sda` (the Windows bootloader is on `/dev/sda1` on this machine).
+Hence, I just installed it without anything else enabled, disregarding the online posts that told me that I needed third-party repositories to get Wifi working etc. The Windows partition I shrunk to around 37 GB, giving it 8 GB of space on top of the 29 GB it was already sucking up. Around 20 GB for the root partition, 4GB for swap at the end, and the rest for the home partition. Fingers crossed I decided to put the boot loader on `/dev/sda` (the Windows bootloader is on `/dev/sda1` on this machine).
 
 Everything went smoothly!! No custom kernels needed. Wifi works out of the box. Bluetooth works out of the box. The touchpad works out of the box. The touchscreen works out of the box. Even if I fold the device to use it as a tablet the keyboard is automatically switched off.
 
