@@ -163,6 +163,12 @@ task :new_page, :filename do |t, args|
   end
 end
 
+# Build
+desc "Build"
+task :default do
+  system "jekyll build --config _config.yml"
+end # task :build
+
 # usage rake isolate[my-post]
 desc "Move all other posts than the one currently being worked on to a temporary stash location (stash) so regenerating the site happens much more quickly."
 task :isolate, :filename do |t, args|

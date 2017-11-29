@@ -1,19 +1,21 @@
 source "https://rubygems.org"
 
 group :development do
-  gem 'rake', '~> 10.0'
-  gem 'jekyll', '~> 2.0'
-  gem 'octopress-hooks', '~> 2.2'
-  gem 'octopress-date-format', '~> 2.0'
+  gem 'rake'
+  gem 'jekyll'
+  gem 'octopress-hooks'
+  gem 'octopress-date-format'
   gem 'jekyll-sitemap'
   gem 'kramdown'
-  gem 'RedCloth', '~> 4.2.9'
-  gem 'haml', '~> 4.0'
-  gem 'compass', '~> 0.12.2'
-  gem 'sass-globbing', '~> 1.0.0'
-  gem 'rubypants', '~> 0.2.0'
-  gem 'rb-fsevent', '~> 0.9'
-  gem 'stringex', '~> 1.4.0'
+  gem 'RedCloth'
+  gem 'haml'
+  gem 'compass'
+  gem 'sass-globbing'
+  gem 'rubypants'
+  gem 'rb-fsevent'
+  gem 'stringex'
+  gem 'pygments.rb'
+  gem 'jekyll-paginate'
 end
 
-gem 'sinatra', '~> 1.4.2'
+gem 'sinatra'

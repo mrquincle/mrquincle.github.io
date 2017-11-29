@@ -1,5 +1,12 @@
-language: ruby
-rvm:
-  - 2.0.0
-  - 1.9.3
-script: bundle exec rake install; bundle exec rake generate
+deploy:
+  provider: pages
+  local_dir: _site
+  skip_cleanup: true
+  github_token: $GH_TOKEN
+  on:
+    branch: master
+
+notifications:
+  email: 
+    on_success: never
+    on_failure: always
