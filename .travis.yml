@@ -1,7 +1,6 @@
 deploy:
   provider: pages
   local_dir: public
-  target_branch: master
   skip_cleanup: true
   github_token: $GH_TOKEN
   on:
