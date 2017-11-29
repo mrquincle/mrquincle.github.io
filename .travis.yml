@@ -1,10 +1,11 @@
 deploy:
   provider: pages
-  local_dir: _site
+  local_dir: public
+  target_branch: master
   skip_cleanup: true
   github_token: $GH_TOKEN
   on:
-    branch: master
+    branch: source
 
 notifications:
   email: 
