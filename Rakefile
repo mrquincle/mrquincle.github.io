@@ -53,12 +53,14 @@ end
 # Working with Jekyll #
 #######################
 
+task :default => [:generate]
+
 desc "Generate jekyll site"
 task :generate do
   raise "### You haven't set anything up yet. First run `rake install` to set up an Octopress theme." unless File.directory?(source_dir)
   puts "## Generating Site with Jekyll"
   system "compass compile --css-dir #{source_dir}/stylesheets"
-  system "jekyll build --config _config.yml,_config.private.yml"
+  system "jekyll build --config _config.yml"
   #system "jekyll build"
 end
 
@@ -162,12 +164,6 @@ task :new_page, :filename do |t, args|
     puts "Syntax error: #{args.filename} contains unsupported characters"
   end
 end
-
-# Build
-desc "Build"
-task :default do
-  system "jekyll build --config _config.yml"
-end # task :build
 
 # usage rake isolate[my-post]
 desc "Move all other posts than the one currently being worked on to a temporary stash location (stash) so regenerating the site happens much more quickly."
