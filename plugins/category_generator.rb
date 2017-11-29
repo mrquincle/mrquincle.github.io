@@ -135,6 +135,8 @@ ERR
     safe true
     priority :low
 
+    puts "Is called"
+
     def generate(site)
       site.write_category_indexes
     end
@@ -189,5 +191,7 @@ ERR
     end
 
   end
+
+  Liquid::Template.register_filter(Filters)
 
 end

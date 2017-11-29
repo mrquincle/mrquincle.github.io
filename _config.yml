@@ -33,6 +33,7 @@ destination: public
 plugins_dir: plugins
 plugins:
 - jekyll-paginate
+
 code_dir: downloads/code
 category_dir: blog/categories
 markdown: kramdown # use always two dollar signs, or else kramdown does not recognize it as math!

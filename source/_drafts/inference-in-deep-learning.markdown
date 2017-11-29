@@ -2,9 +2,8 @@
 layout: post
 title: "Inference in deep learning"
 description: "Inference in deep learning"
-date: 2017-11-22 13:59:15 +0100
 comments: true
-categories: 
+categories: [inference, deep learning]
 ---
 
 There are many, many new generative methods developed in the recent years. 
@@ -36,9 +35,11 @@ The post by [Miriam Shiffman](http://blog.fastforwardlabs.com/2016/08/22/under-t
 
 ![Variational Autoencoder (copyright Miriam Shiffman). The hidden (latent) variables in a variational autoencoder are random variables. A variational autoencoder is a probabilistic autoencoder rather than a conventional deterministic one. This means that it becomes possible that there are closed form descriptions for p and q and that standard Bayesian inference can be applied.](/images/blog/variational_autoencoder.png "Variational Autoencoder")
 
+A variational autoencoder can be seen as a (bottom-up) recognition model and a (top-down) generative model. The recognition model maps observations to latent variables. The generative model maps latent variables to observations. In an autoencoder setup the generated observations should be similar to the real observations that go into the recognition model. Both models are trained simultanously. The latent variables are constrained in such a way that a representation is found that is approximately factorial.
+
 # Importance weighted Autoencoders
 
-(Burda et al., 2015)
+The importance weighted autoencoder ([Burda et al., 2015](https://arxiv.org/pdf/1509.00519.pdf)) is similar to the variational autoencoder, but it uses a tighter loglikelihood lower bound through applying importance weighting. The main difference is that the recognition model uses **multiple samples** (to approximate the posterior distribution over latent variables given the observations). In order words, the recognition model is run a few times and the suggested latent variables are combined to get a better estimate. The model gives more weight to the recognition model than the generative model. 
 
 # Generative Adversarial Networks
 
