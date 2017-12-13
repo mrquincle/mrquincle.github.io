@@ -9,6 +9,8 @@ categories:
 
 The Yoga 900 is a beautiful machine that has a considerably long battery lifetime and can be folded such that it functions as a tablet. The Yoga arrived on Friday and the entire [Crownstone](https://crownstone.rocks) team was enjoying how it came out of the box: it lifts up! If you're creating your own hardware you suddenly appreciate how other people pay attention to packaging!
 
+<!--more-->
+
 ![Yoga 900](/images/blog/lenovo-yoga-900.jpg "Yoga 900, although mine is Silver to not annoy customers too much")
 
 Today, Saturday, I have to run Linux on it! First, I thought to resize the Windows partition in Windows itself, but it decided that there were unmovable files somewhere at the end of the partition. Not nice, so just running gparted from a USB stick running Ubuntu it is.

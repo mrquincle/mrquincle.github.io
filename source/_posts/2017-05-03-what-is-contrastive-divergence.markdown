@@ -15,6 +15,8 @@ $$D(P_0(x) \mid\mid P(x\mid W)) = \sum_x P_0(x) \log \frac {P_0(x) }{P(x\mid W)}
 
 Here $$P_0(x)$$ is the observed data distribution, $$P(x\mid W)$$ is the model distribution and $$W$$ are the model parameters. A **divergence** ([wikipedia](https://en.wikipedia.org/wiki/Divergence_(statistics))) is a fancy term for something that resembles a **metric** distance. It is not an actual metric because the divergence of $$x$$ given $$y$$ can be different (and often is different) from the divergence of $$y$$ given $$x$$. The Kullback-Leibler divergence $$D_{KL}(P \mid \mid Q)$$ exists only if $$Q(\cdot) = 0$$ implies $$P(\cdot) = 0$$.
 
+<!--more-->
+
 The model distribution can be written in the form of a normalized energy function:
 
 $$P(x|W) = \frac {\exp \{ -E(x,W) \} } { Z(W) } $$

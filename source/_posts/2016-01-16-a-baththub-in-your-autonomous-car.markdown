@@ -29,6 +29,8 @@ trust in other drivers be learnt? Or should humans be the ones blamed for [slamm
 tweaks that don't require any form of procedural and contextual intelligence that we possess as humans. We will have
 these autonomous cars in 2020, everything is fancy, and humans can be blamed for all accidents.
 
+<!--more-->
+
 ## So undesirable that we don't want to own it?
 
 Why on earth would this type of autonomous machine, this type of robot, be suddenly so undesirable that we don't want

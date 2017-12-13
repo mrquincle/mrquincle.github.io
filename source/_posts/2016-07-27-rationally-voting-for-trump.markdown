@@ -19,6 +19,8 @@ or by ideology. In political matters, whatever the source of information, our pr
 deception is always very high. However, it is not obvious whether this alone can prevent us from
 coming to agreement.
 
+<!--more-->
+
 Let us assume that there are three different individuals that have preconceived ideas about the trustworthiness of Mr. N. This Mr. N has expressed something about a drug, presenting <font color='red'>A</font>, <font color='green'>B</font>, and <font color='blue'>C</font> with the same evidence, however, they reach totally different conclusions! See how they reason:
 
 * <font color='red'>A: "Mr. N is a nice fellow, doing a notable public service. I had thought the drug to be safe from other evidence, but he would not knowingly misrepresent the facts; therefore hearing his report leads me to change my mind and think that the drug is unsafe after all. My belief in safety is now lowered dramatically, so I will not buy any more."</font>

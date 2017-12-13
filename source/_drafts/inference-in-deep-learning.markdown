@@ -6,6 +6,8 @@ comments: true
 categories: [inference, deep learning]
 ---
 
+<!-- Inception in Tensorflow -->
+
 There are many, many new generative methods developed in the recent years. 
 
 * denoising autoencoders
@@ -19,6 +21,18 @@ There are many, many new generative methods developed in the recent years.
 * generative latent optimization 
 * deep learning through the use of non-equilibrium thermodynamics 
 
+# Deep Models
+
+We can't delve into the details of those old workhorse models, but let us summarize a few of them nevertheless. 
+
+A Boltzmann machine can be seen as a stochastic generalization of a Hopfield network. In their unrestricted form often Hebbian learning is used to learn representations. 
+
+<!--more-->
+
+A restricted Boltzmann machine, or Harmonium, restricts a Boltzmann machine in the sense that the neurons have to form a bipartite graph. Neurons in one "group" are allowed connections to another group, and the other way around, but they are not allowed to be connected to neurons in the same group. This restriction naturally, but not necessarily leads to structures that resemble layers.
+
+A deep belief network hand deep Boltzmann machines have multiple (hidden) layers that are each connected to each other in the restricted sense of above. These models are basically stacks of restricted Boltzmann machines. This is by the way only true in a handwaving manner. A deep belief network is not a true Boltzmann machine because its lower layers form a *directed* generative model. [Salakhutdinov and Hinton (pdf)](http://proceedings.mlr.press/v5/salakhutdinov09a/salakhutdinov09a.pdf) spell out the differences in detail.
+
 # Markov Chain Monte Carlo (MCMC)
 
 Restricted Boltzmann Machines, Deep Belief Networks, and Deep Boltzmann Machines were trained by MCMC methods. MCMC computes the gradient of the log-likelihood (see post on [contrastive divergence](/blog/2017/05/03/what-is-contrastive-divergence/)). MCMC has particular difficulty in mixing between modes.
@@ -27,7 +41,11 @@ Restricted Boltzmann Machines, Deep Belief Networks, and Deep Boltzmann Machines
 
 An autoencoder has an input layer, one or more hidden layers, and an output layer. If the hidden layer has fewer nodes than the input layer it is a dimension reduction technique. Given a particular input, the hidden layer represents only particular abstractions that are subsequently enriched so that the output corresponds to the original input. An other dimension reduction technique is for example principle component analysis which has some additional constraints such as linearity of the nodes. Given the shape an autoencoder can also be called a bottleneck or sandglass network.
 
-If we represent the encoder $$\psi: X \rightarrow F$$ and the decoder $$\phi: F \rightarrow X$$, and we write the combination applied to $$X$$ as $$X' = (\psi \circ \phi)X$$, then we can define the autoencoder as $$\psi, \phi = \arg \min_{\psi,\phi} \| X - X'\|^2$$. Here we choose for an L2 norm for the reconstruction: $$L(x,x') = \| x-x' \|^2$$.
+If we represent the encoder $$\psi: X \rightarrow F$$ and the decoder $$\phi: F \rightarrow X$$, and we write the combination applied to $$X$$ as $$X' = (\psi \circ \phi)X$$, then we can define the autoencoder as:
+
+$$\psi, \phi = \arg \min_{\psi,\phi} \| X - X'\|^2$$
+
+Here we choose for an L2 norm for the reconstruction: $$L(x,x') = \| x-x' \|^2$$.
 
 # Denoising Autoencoders
 
@@ -35,7 +53,13 @@ A denoising autoencoder (DAE) is a regular autoencoder with the input signal cor
 
 The reconstruction error is again measured by $$L(x,x') = \| x - x'\|^2$$, but now $$x'$$ is formed by a distortion of the original $$x$$, denoted by $$\tilde{x}$$, hence $$x' = (\psi \circ \phi) \tilde{x}$$.
 
+Note that a denoising autoencoder can be seen as a stochastic transition operator from input space to input space. An autoencoder is typically started from or very close to the training data. The challenge is to get an equilibrium distribution that contains all the modes. It is henceforth important that the autoencoder matches properly between the different modes.
+
 # Generative Stochastic Networks
+
+Generative Stochastic Networks ([Alain et al., 2015](https://www.researchgate.net/profile/Saizheng_Zhang/publication/273788029_GSNs_Generative_Stochastic_Networks/links/55140dbf0cf2eda0df303dad/GSNs-Generative-Stochastic-Networks.pdf)) generalize denoising autoencoders. It learns the transition operator of a Markov chain such that its stationary distribution approaches the data distribution.
+
+![Denoising Autoencoder vs a Generative Stochastic Network (copyright Alain et al.). Top: the denoising autoencoder corrupts X and subsequently tries to reconstruct X. Bottom: a generative stochastic network introduces arbitrary random variables H, rather than just a distorted version of X and reconstructs X given H.](/images/blog/generative_stochastic_networks.png)
 
 # Variational Autoencoders
 
@@ -46,6 +70,12 @@ The post by [Miriam Shiffman](http://blog.fastforwardlabs.com/2016/08/22/under-t
 ![Variational Autoencoder (copyright Miriam Shiffman). The hidden (latent) variables in a variational autoencoder are random variables. A variational autoencoder is a probabilistic autoencoder rather than a conventional deterministic one. This means that it becomes possible that there are closed form descriptions for p and q and that standard Bayesian inference can be applied.](/images/blog/variational_autoencoder.png "Variational Autoencoder")
 
 A variational autoencoder can be seen as a (bottom-up) recognition model and a (top-down) generative model. The recognition model maps observations to latent variables. The generative model maps latent variables to observations. In an autoencoder setup the generated observations should be similar to the real observations that go into the recognition model. Both models are trained simultanously. The latent variables are constrained in such a way that a representation is found that is approximately factorial.
+
+# Helmholtz Machine
+
+A Helmholtz machine is a probabilistic model similar to the variational autoencoder. It is trained by the so-called sleep-wake algorithm (similar to expectation-maximization). 
+
+<!-- See http://artem.sobolev.name/posts/2016-07-11-neural-variational-inference-variational-autoencoders-and-Helmholtz-machines.html -->
 
 # Importance weighted Autoencoders
 
@@ -67,28 +97,42 @@ It is clearly visualized by Mark Chang's [slide](https://www.slideshare.net/ckma
 
 ![Generative Adversarial Net (copyright Mark Chang). The discriminator is trying to score as high as possible by assigning ones to real data and zeros to fake data. The generator is trying to make this job as difficult as possible by having the fake data look similar to the real data. The log function punishes false positives and false negatives extraordinarly hard.](/images/blog/generative-adversarial-network.jpg "Generative Adversarial Net")
 
-
-
 # Adversarial Autoencoders
 
-Adversarial Autoencoders ([Makhzani et al., 2016](https://arxiv.org/pdf/1511.05644.pdf)) is an autoencoder that uses generative adversarial networks. The latent variables (the code) is matched with a prior distribution. This prior distribution can be anything. The autoencoder subsequently maps this to the data distribution.
+Adversarial Autoencoders ([Makhzani et al., 2016](https://arxiv.org/pdf/1511.05644.pdf)) is an autoencoder that uses generative adversarial networks. The latent variables (the code) are matched with a prior distribution. This prior distribution can be anything. The autoencoder subsequently maps this to the data distribution.
 
 ![Adversarial Autoencoder (copyright at Makhzani et al., 2016). The latent variables (code) are denoted by z. Samples are drawn from e.g. a Normal distribution p(z). The discriminator (bottom-right) has the task to distinguish positive samples p(z) from negative samples q(z). Preferably q(z) will look like p(z) in the end. In the meantime the top row is reconstructing the image x from z as well.](/images/blog/adversarial_autoencoder.png "Adversarial Autoencoder")
 
-
-# Infusion Training
-
-# Variational Walkback 
-
-Variational Walkback ([Goyal et al.](http://papers.nips.cc/paper/7026-variational-walkback-learning-a-transition-operator-as-a-stochastic-recurrent-net.pdf) learns a transition operator as a stochastic recurrent network. It learns those operators which can represent a nonequilibrium stationary distribution (also violating detailed balance) directly. The training objective is a variational one. The chain is allowed to "walk back" 
-
-# Stacked Generative Adversarial Networks
-
-# Generative Latent Optimization 
+Note that the use of the adversarial network is on the level of the hidden variables. The discriminator attempts to distinguish "true" from "fake" hidden variables. This immediately gives rise to the suggestion, can we not also generate fake data as well? If one discriminator has the goal to distinguish true from fake hidden variables, the other can have as goal to distinguish true from fake data. We should take provisions to not have the former discriminator punished by a bad performing second discriminator.
 
 # Deep Learning Through The Use Of Non-Equilibrium Thermodynamics
 
 Non-equilibrium Thermodynamics ([Sohl-Dickstein et al., 2015](https://arxiv.org/pdf/1503.03585.pdf)) slowly destroys structure in a data distribution through a diffusion process. Then a reverse diffusion process is learned that restores the structure in the ata. 
+
+Both processes are factorial Gaussians, the forward process, $$p(x^{t}\mid p(x^{t-1})$$ and the inverse process, 
+$$p(x^{t-1}\mid p(x^t)$$.
+
+To have an exact inverse diffusion the chain requires thousands of small steps. 
+
+<!-- We can also have "heat up" the diffusion operator. -->
+
+# Infusion Training
+
+Infusion training ([Bordes et al., 2017](https://arxiv.org/pdf/1703.06975.pdf)) learns a generative model as the transition operator of a Markov chain. When applied multiple times on unstructured random noise, infusion training will denoise it into a sample that matches the target distribution.
+
+![Infusion training (copyright Bordes et al.) infuses in this case target x=3 into the chain. First row: random initialization of network weights. Second row: after 1 training epoch. Third row: after 2 training epochs, etc. Bottom row: the network learned how to denoise as fast as possible to x=3.](/images/blog/infusion-training.png "Infusion training")
+
+<!-- compatative results compared to GAN -->
+
+# Variational Walkback 
+
+Variational Walkback ([Goyal et al.](http://papers.nips.cc/paper/7026-variational-walkback-learning-a-transition-operator-as-a-stochastic-recurrent-net.pdf)) learns a transition operator as a stochastic recurrent network. It learns those operators which can represent a nonequilibrium stationary distribution (also violating detailed balance) directly. The training objective is a variational one. The chain is allowed to "walk back" and revisit states that were quite "interesting" in the past.
+
+Compared to MCMC we do not have detailed balance, nor an energy function. A detailed balance condition would by the way mean a network with symmetric weights.
+
+# Stacked Generative Adversarial Networks
+
+# Generative Latent Optimization 
 
 
 
@@ -104,7 +148,7 @@ It relates the probability of $$x$$ with that of all possible other states. A so
 
 The generalization of the canonical assemble to an infinite number of states is called the [Gibbs measure](https://en.wikipedia.org/wiki/Gibbs_measure):
 
-$$P(X=x) = \fraq{1}{Z(\beta)} \exp^{-\beta E(x)}
+$$P(X=x) = \frac{1}{Z(\beta)} \exp^{-\beta E(x)}$$
 
 What is all narrows down to is that not every state is counted equally. The Boltzmann factor is a weight. A low energy state is easier to access and weighs much more than a high energy state. If the temperature increases this difference diminishes.
 
@@ -151,9 +195,9 @@ Gradient descent or steepest descent is an iterative method where we take steps 
 
 Stochastic gradient descent is a stochastic approximation to gradient descent. What is approximated is the true gradient. 
 
-##
+## Likelihood
 
-Likelihood, call it some error function if you hate Bayesian terms.
+Likelihood, call it an error function if you hate Bayesian terms. :-)
 
 
 
