@@ -57,7 +57,7 @@ coordinates:
 
 $$\cal{L}(q_j,\dot{q}_j,t)$$
 
-The Hamiltonian is the Legende transform of the Laplacian:
+The Hamiltonian is the Legende transform of the Lagrangian:
 
 $$\cal{H}(q_j,p_j,t)=\left( \sum_i \dot{q}_i p_i \right) - \cal{L}(q_j,\dot{q}_j,t)$$
 
