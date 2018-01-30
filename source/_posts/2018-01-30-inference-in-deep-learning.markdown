@@ -25,7 +25,7 @@ There are many, many new generative methods developed in the recent years.
 
 We can't delve into the details of those old workhorse models, but let us summarize a few of them nevertheless. 
 
-A Boltzmann machine can be seen as a stochastic generalization of a Hopfield network. In their unrestricted form often Hebbian learning is used to learn representations. 
+A Boltzmann machine can be seen as a stochastic generalization of a Hopfield network. In their unrestricted form Hebbian learning is often used to learn representations. 
 
 <!--more-->
 
@@ -41,33 +41,39 @@ Restricted Boltzmann Machines, Deep Belief Networks, and Deep Boltzmann Machines
 
 An autoencoder has an input layer, one or more hidden layers, and an output layer. If the hidden layer has fewer nodes than the input layer it is a dimension reduction technique. Given a particular input, the hidden layer represents only particular abstractions that are subsequently enriched so that the output corresponds to the original input. An other dimension reduction technique is for example principle component analysis which has some additional constraints such as linearity of the nodes. Given the shape an autoencoder can also be called a bottleneck or sandglass network.
 
-If we represent the encoder $$\psi: X \rightarrow F$$ and the decoder $$\phi: F \rightarrow X$$, and we write the combination applied to $$X$$ as $$X' = (\psi \circ \phi)X$$, then we can define the autoencoder as:
+If we represent the encoder $$F: X \rightarrow H$$ and the decoder $$G: H \rightarrow X$$. We apply the individual $$x$$ to the product as $$x' = (G \circ F)x$$, then we can define the autoencoder as:
 
-$$\psi, \phi = \arg \min_{\psi,\phi} \| X - X'\|^2$$
+$$\{F, G \} = \arg \min_{F,G} \| X - X'\|^2$$
 
 Here we choose for an L2 norm for the reconstruction: $$L(x,x') = \| x-x' \|^2$$.
 
+![The autoencoder exists of an encoder F and a decoder G. The encoder maps the input to a hidden set of variables, the decoder maps it back as good as possible to the original input. The difference between original and generated output is used to guide the process to converge to optimal F and G.](/images/blog/autoencoder.png "Autoencoder")
+
+An autoencoder is typically trained using a variant of backpropagation (conjugate gradient method, steepest descent). It is possible to use so-called pre-training. Train each two subsequent layers as a restricted Boltzmann machine and use backpropagation for fine-tuning.
+
 # Denoising Autoencoders
 
-A denoising autoencoder (DAE) is a regular autoencoder with the input signal corrupted by noice (on purpose). This forces the autoencoder to be resilient against missing or corrupted values in the input. 
+A denoising autoencoder (DAE) is a regular autoencoder with the input signal corrupted by noice (on purpose: $$\tilde{x} = B(x)$$). This forces the autoencoder to be resilient against missing or corrupted values in the input. 
 
-The reconstruction error is again measured by $$L(x,x') = \| x - x'\|^2$$, but now $$x'$$ is formed by a distortion of the original $$x$$, denoted by $$\tilde{x}$$, hence $$x' = (\psi \circ \phi) \tilde{x}$$.
+The reconstruction error is again measured by $$L(x,x') = \| x - x'\|^2$$, but now $$x'$$ is formed by a distortion of the original $$x$$, denoted by $$\tilde{x}$$, hence $$x' = (G \circ F) \tilde{x}$$.
 
-Note that a denoising autoencoder can be seen as a stochastic transition operator from input space to input space. An autoencoder is typically started from or very close to the training data. The challenge is to get an equilibrium distribution that contains all the modes. It is henceforth important that the autoencoder matches properly between the different modes.
+![The denoising autoencoder is like the autoencoder but has first a step in which the input is distorted before it is fed into the encoder F and a decoder G.](/images/blog/denoising-autoencoder.png "Denoising autoencoder")
 
+Note that a denoising autoencoder can be seen as a stochastic transition operator from **input space** to **input space**. In other words, if some input is given, it will generate something "nearby" in some abstract sense. An autoencoder is typically started from or very close to the training data. The goal is to get an equilibrium distribution that contains all the modes. It is henceforth important that the autoencoder mixes properly between the different modes, also modes that are "far" away.
+
+<!--
 # Generative Stochastic Networks
 
 Generative Stochastic Networks ([Alain et al., 2015](https://www.researchgate.net/profile/Saizheng_Zhang/publication/273788029_GSNs_Generative_Stochastic_Networks/links/55140dbf0cf2eda0df303dad/GSNs-Generative-Stochastic-Networks.pdf)) generalize denoising autoencoders. It learns the transition operator of a Markov chain such that its stationary distribution approaches the data distribution.
 
 ![Denoising Autoencoder vs a Generative Stochastic Network (copyright Alain et al.). Top: the denoising autoencoder corrupts X and subsequently tries to reconstruct X. Bottom: a generative stochastic network introduces arbitrary random variables H, rather than just a distorted version of X and reconstructs X given H.](/images/blog/generative_stochastic_networks.png)
+-->
 
 # Variational Autoencoders
 
-(Kingma and Welling, 2014), (Rezende et al., 2014)
+The post by [Miriam Shiffman](http://blog.fastforwardlabs.com/2016/08/22/under-the-hood-of-the-variational-autoencoder-in.html) is a nice introduction to variational autoencoders. They have been designed by [(Kingma and Welling, 2014)](https://arxiv.org/pdf/1312.6114.pdf) and [(Rezende et al., 2014)](https://arxiv.org/pdf/1401.4082.pdf). The main difference is that $$h$$ is now a full-fledged random variable, often Gaussian.
 
-The post by [Miriam Shiffman](http://blog.fastforwardlabs.com/2016/08/22/under-the-hood-of-the-variational-autoencoder-in.html) is a nice introduction to variational autoencoders. 
-
-![Variational Autoencoder (copyright Miriam Shiffman). The hidden (latent) variables in a variational autoencoder are random variables. A variational autoencoder is a probabilistic autoencoder rather than a conventional deterministic one. This means that it becomes possible that there are closed form descriptions for p and q and that standard Bayesian inference can be applied.](/images/blog/variational_autoencoder.png "Variational Autoencoder")
+![Variational Autoencoder. The hidden (latent) variables in a variational autoencoder are random variables. A variational autoencoder is a probabilistic autoencoder rather than a conventional deterministic one. This means that it becomes possible that there are closed form descriptions for p and q and that standard Bayesian inference can be applied.](/images/blog/variational-autoencoder.png "Variational Autoencoder")
 
 A variational autoencoder can be seen as a (bottom-up) recognition model and a (top-down) generative model. The recognition model maps observations to latent variables. The generative model maps latent variables to observations. In an autoencoder setup the generated observations should be similar to the real observations that go into the recognition model. Both models are trained simultanously. The latent variables are constrained in such a way that a representation is found that is approximately factorial.
 
@@ -95,15 +101,17 @@ $$V(D,G) = \mathbb{E}_{x\sim p_{data}(x)} \left[ \log( D(x) \right] + \mathbb{E}
 
 It is clearly visualized by Mark Chang's [slide](https://www.slideshare.net/ckmarkohchang/generative-adversarial-networks).
 
-![Generative Adversarial Net (copyright Mark Chang). The discriminator is trying to score as high as possible by assigning ones to real data and zeros to fake data. The generator is trying to make this job as difficult as possible by having the fake data look similar to the real data. The log function punishes false positives and false negatives extraordinarly hard.](/images/blog/generative-adversarial-network.jpg "Generative Adversarial Net")
+![Generative Adversarial Net. The discriminator is trying to score as high as possible by assigning ones to real data and zeros to fake data. The generator is trying to make this job as difficult as possible by having the fake data look similar to the real data. The log function punishes false positives and false negatives extraordinarly hard.](/images/blog/gan.png "Generative Adversarial Net")
 
 # Adversarial Autoencoders
 
 Adversarial Autoencoders ([Makhzani et al., 2016](https://arxiv.org/pdf/1511.05644.pdf)) is an autoencoder that uses generative adversarial networks. The latent variables (the code) are matched with a prior distribution. This prior distribution can be anything. The autoencoder subsequently maps this to the data distribution.
 
-![Adversarial Autoencoder (copyright at Makhzani et al., 2016). The latent variables (code) are denoted by z. Samples are drawn from e.g. a Normal distribution p(z). The discriminator (bottom-right) has the task to distinguish positive samples p(z) from negative samples q(z). Preferably q(z) will look like p(z) in the end. In the meantime the top row is reconstructing the image x from z as well.](/images/blog/adversarial_autoencoder.png "Adversarial Autoencoder")
+![Adversarial Autoencoder. The latent variables (code) are denoted by h. Samples are drawn from e.g. a Normal distribution p(h). The discriminator (bottom-right) has the task to distinguish positive samples h' from negative samples h. Preferably p(h) will look like p(h') in the end. In the meantime the top row is reconstructing the image x from h as well.](/images/blog/adversarial_autoencoder.png "Adversarial Autoencoder")
 
-Note that the use of the adversarial network is on the level of the hidden variables. The discriminator attempts to distinguish "true" from "fake" hidden variables. This immediately gives rise to the suggestion, can we not also generate fake data as well? If one discriminator has the goal to distinguish true from fake hidden variables, the other can have as goal to distinguish true from fake data. We should take provisions to not have the former discriminator punished by a bad performing second discriminator.
+Note that the use of the adversarial network is on the level of the hidden variables. The discriminator attempts to distinguish "true" from "fake" hidden variables. 
+
+This immediately rises the following question: Can we also generate fake data as well? If one discriminator has the goal to distinguish true from fake hidden variables, the other can have as goal to distinguish true from fake data. We should take provisions to not have the former discriminator punished by a bad performing second discriminator.
 
 # Deep Learning Through The Use Of Non-Equilibrium Thermodynamics
 
@@ -122,15 +130,46 @@ Infusion training ([Bordes et al., 2017](https://arxiv.org/pdf/1703.06975.pdf)) 
 
 ![Infusion training (copyright Bordes et al.) infuses in this case target x=3 into the chain. First row: random initialization of network weights. Second row: after 1 training epoch. Third row: after 2 training epochs, etc. Bottom row: the network learned how to denoise as fast as possible to x=3.](/images/blog/infusion-training.png "Infusion training")
 
-<!-- compatative results compared to GAN -->
+<!-- compatitive results compared to GAN -->
 
 # Variational Walkback 
 
-Variational Walkback ([Goyal et al.](http://papers.nips.cc/paper/7026-variational-walkback-learning-a-transition-operator-as-a-stochastic-recurrent-net.pdf)) learns a transition operator as a stochastic recurrent network. It learns those operators which can represent a nonequilibrium stationary distribution (also violating detailed balance) directly. The training objective is a variational one. The chain is allowed to "walk back" and revisit states that were quite "interesting" in the past.
+Variational Walkback ([Goyal et al., 2017](http://papers.nips.cc/paper/7026-variational-walkback-learning-a-transition-operator-as-a-stochastic-recurrent-net.pdf)) learns a transition operator as a stochastic recurrent network. It learns those operators which can represent a nonequilibrium stationary distribution (also violating detailed balance) directly. The training objective is a variational one. The chain is allowed to "walk back" and revisit states that were quite "interesting" in the past.
 
 Compared to MCMC we do not have detailed balance, nor an energy function. A detailed balance condition would by the way mean a network with symmetric weights.
 
+<!--
 # Stacked Generative Adversarial Networks
+
+Stacked Generative Adversarial Networks ([Huang et al., 2017](https://arxiv.org/pdf/1612.04357.pdf)) 
+
+![Stacked Generative Adversarial Networks (copyright Huang et al.) ](/images/blog/stacked_gans.jpg "Stacked Generative Adversarial Networks")
+
+-->
+
+# Nonparametric autoencoders
+
+The latent variables in the standard variational autoencoder are Gaussian and have a fixed quantity. The ideal hidden representation however might require a dynamic number of such latent variables. For example if the neural network has only 8 latent variables in the MNIST task it has to somehow represent 10 digits with these 8 variables.
+
+To extend the hidden layer from a fixed to a variable number of nodes it is possible to use methods developed in the nonparametric Bayesian literature. 
+
+There have been already several developments:
+
+* A stick-breaking variational autoencoder ([Nalisnick and Smyth, 2017](https://arxiv.org/pdf/1605.06197.pdf)) where the latent variables are represented by a stick-breaking process (SB-VAE);
+* A nested Chinese Restaurant Process as a prior on the latent variables ([Goyal et al., 2017](https://arxiv.org/pdf/1703.07027.pdf));
+* An (ordinary) Gaussian mixture as a prior distribution on the latent variables ([Dilokthanakul et al., 2017](https://arxiv.org/pdf/1611.02648.pdf)), but see [this interesting blog post](http://ruishu.io/2016/12/25/gmvae/) for a critical review (GMVAE);
+* A deep latent Gaussian mixture model ([Nalisnick et al, 2016](http://www.ics.uci.edu/~enalisni/BDL_paper20.pdf)) where a Gaussian mixture is used as the approximate posterior (DLGMM);
+<!-- $$z ~ DP(\alpha)$$ and $$x ~ p_\theta(x|z_i)$$ with $$p_\theta$$ the generating network (DLGMM); -->
+* Variational deep embedding uses (again) a mixture of Gaussians as a prior ([Jiang et al., 2017](https://arxiv.org/pdf/1611.05148.pdf)) (VaDE);
+* Variational autoencoded deep Gaussian Processes ([Dai et al., 2016](https://arxiv.org/pdf/1511.06455.pdf)) uses a "chain" of Gaussian Processes to represent multiple layers of latent variables (VAE-DGP).
+
+The problem with autoencoders is that they actually not necessarily say how the latent variables are to be used. For example, with InfoGAN (not yet explained) mutual information between input and latent variables is maximized to make sure that the latter are actually used. This is useful to avoid the "uninformative latent code problem", where latent features are actually not used in the training. However, with for example the information bottleneck approach the mutual information between input and latent variables is minimized (under the constraint that the features still predict some labels). This is logically from the perspective of compression. This behavior can all be seen as a so-called information-autoencoding family ([Zhao et al., 2017](http://bayesiandeeplearning.org/2017/papers/60.pdf)).
+
+It is interesting to study how nonparametric Bayesian methods fair with respect to this family and what role they fulfill in such a constrained optimization problem. Existing models namely use fixed values for the Lagrangian multipliers (the tradeoffs they make). 
+
+<!-- if the primal is infeasible (insufficient model capacity) the choice of Lagrange multipliers prioritizes different constraints -->
+
+<!--
 
 # Generative Latent Optimization 
 
@@ -151,6 +190,7 @@ The generalization of the canonical assemble to an infinite number of states is 
 $$P(X=x) = \frac{1}{Z(\beta)} \exp^{-\beta E(x)}$$
 
 What is all narrows down to is that not every state is counted equally. The Boltzmann factor is a weight. A low energy state is easier to access and weighs much more than a high energy state. If the temperature increases this difference diminishes.
+-->
 
 <!--
 Kullback-Leibler
@@ -158,6 +198,20 @@ Thus, we have for example:
 
 $$\log p(x) = -E(x) - \log Z$$
 -->
+
+<!--
+
+## Monte Carlo simulation
+
+If a probability density function $$p(x)$$ is known, its statistical properties such as mean, variance, etcetera can be found through integration:
+
+$$E[h(X)] = \int h(x) p(x) dx$$
+
+This integral can be approximated by Monte Carlo simulation by drawing many $$X_i$$ from $$p(x)$$:
+
+$$\mu_h = \int h(x) p(x) dx \approx \frac{1}{n} \sum_{i=1}^n h(X_i)$$
+
+That the latter converges to the expectation $$\mu_h$$ of $$h(x)$$ is known as the law of large numbers.
 
 
 ## Jensen's inequality
@@ -200,5 +254,5 @@ Stochastic gradient descent is a stochastic approximation to gradient descent. W
 Likelihood, call it an error function if you hate Bayesian terms. :-)
 
 
-
+-->
 
