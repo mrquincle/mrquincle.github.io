@@ -51,6 +51,8 @@ Here we choose for an L2 norm for the reconstruction: $$L(x,x') = \| x-x' \|^2$$
 
 An autoencoder is typically trained using a variant of backpropagation (conjugate gradient method, steepest descent). It is possible to use so-called pre-training. Train each two subsequent layers as a restricted Boltzmann machine and use backpropagation for fine-tuning.
 
+A nice blog post at [Keras](https://blog.keras.io/building-autoencoders-in-keras.html) explains also some of the disadvantages of autoencoders, a very clarifying read!
+
 # Denoising Autoencoders
 
 A denoising autoencoder (DAE) is a regular autoencoder with the input signal corrupted by noice (on purpose: $$\tilde{x} = B(x)$$). This forces the autoencoder to be resilient against missing or corrupted values in the input. 
@@ -73,7 +75,7 @@ Generative Stochastic Networks ([Alain et al., 2015](https://www.researchgate.ne
 
 The post by [Miriam Shiffman](http://blog.fastforwardlabs.com/2016/08/22/under-the-hood-of-the-variational-autoencoder-in.html) is a nice introduction to variational autoencoders. They have been designed by [(Kingma and Welling, 2014)](https://arxiv.org/pdf/1312.6114.pdf) and [(Rezende et al., 2014)](https://arxiv.org/pdf/1401.4082.pdf). The main difference is that $$h$$ is now a full-fledged random variable, often Gaussian.
 
-![Variational Autoencoder. The hidden (latent) variables in a variational autoencoder are random variables. A variational autoencoder is a probabilistic autoencoder rather than a conventional deterministic one. This means that it becomes possible that there are closed form descriptions for p and q and that standard Bayesian inference can be applied.](/images/blog/variational-autoencoder.png "Variational Autoencoder")
+![Variational Autoencoder. The hidden (latent) variables in a variational autoencoder are random variables. A variational autoencoder is a probabilistic autoencoder rather than a conventional deterministic one. This means that it becomes possible that there are closed form descriptions for p and q and that standard Bayesian inference can be applied.](/images/blog/variational_autoencoder.png "Variational Autoencoder")
 
 A variational autoencoder can be seen as a (bottom-up) recognition model and a (top-down) generative model. The recognition model maps observations to latent variables. The generative model maps latent variables to observations. In an autoencoder setup the generated observations should be similar to the real observations that go into the recognition model. Both models are trained simultanously. The latent variables are constrained in such a way that a representation is found that is approximately factorial.
 
@@ -102,6 +104,10 @@ $$V(D,G) = \mathbb{E}_{x\sim p_{data}(x)} \left[ \log( D(x) \right] + \mathbb{E}
 It is clearly visualized by Mark Chang's [slide](https://www.slideshare.net/ckmarkohchang/generative-adversarial-networks).
 
 ![Generative Adversarial Net. The discriminator is trying to score as high as possible by assigning ones to real data and zeros to fake data. The generator is trying to make this job as difficult as possible by having the fake data look similar to the real data. The log function punishes false positives and false negatives extraordinarly hard.](/images/blog/gan.png "Generative Adversarial Net")
+
+The distribution $$p_z(z)$$ is a arbitrary noise distribution. In other words, the generator morphs totally random stuff into meaningful $$x$$. It is like throwing darts randomly into a dart board and the generator folding the board into a hat. Similarly from pure random values we can draw point clouds that have elaborate structure.
+
+The latent variables $$z$$ are totally random, however there is something else important here. If $$z$$ is a multidimensional random variable information across all dimensions can be used to construct $$x' \leftarrow G(z)$$. There is no information about $$z$$ if we would like to reason back from $$x'$$. This means that from a representation learning perspective the unconstrained use of $$z$$ leads to entangled use of it in $$G$$. InfoGAN introduces an additional mutual information term between a latent code $$C$$ and generated data $$X$$.
 
 # Adversarial Autoencoders
 
@@ -163,9 +169,43 @@ There have been already several developments:
 * Variational deep embedding uses (again) a mixture of Gaussians as a prior ([Jiang et al., 2017](https://arxiv.org/pdf/1611.05148.pdf)) (VaDE);
 * Variational autoencoded deep Gaussian Processes ([Dai et al., 2016](https://arxiv.org/pdf/1511.06455.pdf)) uses a "chain" of Gaussian Processes to represent multiple layers of latent variables (VAE-DGP).
 
-The problem with autoencoders is that they actually not necessarily say how the latent variables are to be used. For example, with InfoGAN (not yet explained) mutual information between input and latent variables is maximized to make sure that the latter are actually used. This is useful to avoid the "uninformative latent code problem", where latent features are actually not used in the training. However, with for example the information bottleneck approach the mutual information between input and latent variables is minimized (under the constraint that the features still predict some labels). This is logically from the perspective of compression. This behavior can all be seen as a so-called information-autoencoding family ([Zhao et al., 2017](http://bayesiandeeplearning.org/2017/papers/60.pdf)).
+The problem with autoencoders is that they actually not necessarily say how the latent variables are to be used. 
+
+Inherently, without additional constraints the representation problem is ill-posed. Suppose for example that the generator is just a dictionary of images and that training will make the latent variables point to a particular index in this dictionary. In this way no deep structure has been uncovered by the network at all. It's just pretty dumb pointing at what it has been seen before at the training and generalization can be expected to be pretty bad. 
+
+Especially when variational autoencoders are used in sequence modeling it becomes apparent that the latent code is generally not used. The variational lossy autoencoder introduces control over the latent code to successfully combine them with recurrent networks ([Chen et al., 2017](https://arxiv.org/pdf/1611.02731.pdf)).
+
+From an information-theoretic perspective the differences can be formulated in an extreme manner: **maximization or minimization** of mutual information. With InfoGAN (not explained in this blog post) mutual information between input and latent variables is maximized to make sure that the variables are all used. This is useful to avoid the "uninformative latent code problem", where latent features are actually not used in the training. However, with for example the information bottleneck approach the mutual information between input and latent variables is minimized (under the constraint that the features still predict some labels). This is logically from the perspective of compression. This behavior can all be seen as a so-called information-autoencoding family ([Zhao et al., 2017](http://bayesiandeeplearning.org/2017/papers/60.pdf)).
 
 It is interesting to study how nonparametric Bayesian methods fair with respect to this family and what role they fulfill in such a constrained optimization problem. Existing models namely use fixed values for the Lagrangian multipliers (the tradeoffs they make). 
+
+# Regularization
+
+Training deep networks has undergone several advances. One of the first innovations has been the layer by layer training. 
+
+## Dropout
+
+Another key idea has been to randomly drop units including connections during training. This prevents overfitting. During training in this way a collection of differently thinned networks is used. At testing an unthinned network is used. This is called dropout ([Srivastava et al., 2014](http://www.jmlr.org/papers/volume15/srivastava14a/srivastava14a.pdf)). 
+
+## Stochastic gradient descent
+
+Gradient descent or steepest descent is an iterative method where we take steps that depend on the slope (or more general, that depend on the gradient) with as purpose to end up at a minimum. To get (negative) gradients we need to have differential functions.
+
+Stochastic gradient descent is a stochastic approximation to gradient descent. What is approximated is the true gradient. Adjusting the parameters $$\theta$$ it minimizes the following loss function:
+
+$$\theta = \arg \min_\theta \frac{1}{N} \sum_{i=1}^N l(x_i,\theta)$$
+
+Here $$x_1, \ldots x_N$$ is the training set. Stochastic gradient descent typically uses a mini-batch $$x_1, \ldots, x_m$$ of size $$m$$. The gradient is then approximated by:
+
+$$\frac{1}{m} {\partial l(x_i, \theta)}{\partial \theta}$$.
+
+## Batch normalization
+
+The distribution of network activities change during training due to the fact that the network parameters change. This phenomenon is called **internal covariate shift**. It is possible to fix the distribution of the layer inputs $$x$$ as the training progresses. It is for example well-known that whitening the inputs (linear transforming them to zero means, unit variances and decorrelating them) makes a network converge faster. Batch normalization does not simply whiten each layer's input, but makes two simplifications: (1) normalize each scalar feature independently, and (2) introduce scale and shift parameters to preserve nonlinearities. Batch normalization improved significantly on the ImageNet classification task ([Ioffe and Szegedy, 2015](https://arxiv.org/pdf/1502.03167.pdf)).
+
+## Residual learning 
+
+Making networks deeper and deeper counterintuitively increases the training and thus the test error. Consider for example an identity mapping, a network needs to learn to duplicate the input and the output. Emperical evidence shows however that learning the difference (zero) is easier for a network. This is called residual learning ([He et al., 2015](https://arxiv.org/pdf/1512.03385.pdf). At ImageNet such residual nets achieve 3.57% error on the test set. It is hence no surprise that the fourth edition of the Inception networks use residual learning ([Szegedy et al., 2017](http://www.aaai.org/ocs/index.php/AAAI/AAAI17/paper/download/14806/14311)).
 
 <!-- if the primal is infeasible (insufficient model capacity) the choice of Lagrange multipliers prioritizes different constraints -->
 
@@ -243,11 +283,7 @@ Here $$p$$ is the distribution over $$\epsilon$$, namely $$N(0,1)$$, not the dis
 
 The backprop paper came out in 1986. 
 
-## Stochastic gradient descent
 
-Gradient descent or steepest descent is an iterative method where we take steps that depend on the slope (or more general, that depend on the gradient) with as purpose to end up at a minimum. To get (negative) (negative) (negative) (negative) (negative) (negative) (negative) (negative) (negative) gradients we need to have differential functions.
-
-Stochastic gradient descent is a stochastic approximation to gradient descent. What is approximated is the true gradient. 
 
 ## Likelihood
 
