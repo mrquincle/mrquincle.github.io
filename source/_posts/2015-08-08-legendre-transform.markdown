@@ -45,7 +45,7 @@ $$g(m)=\frac{1}{4c}m^2$$
 
 To refresh the animation, press F5.
 
-<div id="visualization"></div>
+<div id="visualization-legendre"></div>
 
 I hope the Legendre transform is a little bit less mysterious after you've seen this animation. The animation has been
 created by making use of the [vis.js](http://visjs.org/) library. The source code can be found at [legendre.js](/javascripts/legendre.js).

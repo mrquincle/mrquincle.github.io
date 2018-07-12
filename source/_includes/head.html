@@ -10,11 +10,15 @@
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-	<link href="{{ site.subscribe_rss }}" rel="alternate" title="{{site.title}}" type="application/atom+xml">
+	<link rel="alternate" href="{{ site.subscribe_rss }}" title="{{site.title}}" type="application/atom+xml">
 	<link rel="canonical" href="{{ canonical }}">
-	<link href="{{ root_url }}/favicon.png" rel="shortcut icon">
-	<link href="{{ root_url }}/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-	<link href="{{ root_url }}/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link rel="shortcut icon" href="{{ root_url }}/favicon.png">
+	<link rel="apple-touch-icon" href="{{ root_url }}/favicon.png">
+	<link rel="apple-touch-icon" href="{{ root_url }}/favicon-152x152.png" sizes="152x152">
+	<link rel="apple-touch-icon" href="{{ root_url }}/favicon-180x180.png" sizes="180x180">
+	<link rel="apple-touch-icon" href="{{ root_url }}/favicon-167x167.png" sizes="167x167">
+	<link rel="stylesheet" href="{{ root_url }}/stylesheets/screen.css" media="screen, projection" type="text/css">
+	<link rel="stylesheet" href="{{ root_url }}/stylesheets/font-awesome.min.css" type="text/css">
 	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 	{% include custom/fancybox_head.html %}

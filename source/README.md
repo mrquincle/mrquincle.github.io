@@ -24,6 +24,12 @@ To just view it locally:
 
 Have fun!
 
+## Writing tips
+
+Refering to another blog post:
+
+    Check [Kullback-Leibler divergence]({% post_url 2017-05-03-what-is-contrastive-divergence %}).
+
 ## Collaboration
 
 If you want to collaborate on anything, please, tell me as well! I love quick prototyping and on the moment I am working on nonparametric Bayesian methods, figuring out how to build a cheap hexapod (RHex-like) robot, and experimenting with different Bluetooth Low-Energy devices.

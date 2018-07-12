@@ -161,7 +161,7 @@ To extend the hidden layer from a fixed to a variable number of nodes it is poss
 
 There have been already several developments:
 
-* A stick-breaking variational autoencoder ([Nalisnick and Smyth, 2017](https://arxiv.org/pdf/1605.06197.pdf)) where the latent variables are represented by a stick-breaking process (SB-VAE);
+* A stick-breaking variational autoencoder ([Nalisnick and Smyth, 2017](https://arxiv.org/pdf/1605.06197.pdf)) where the latent variables are represented by a stick-breaking process (SB-VAE). The inference is done using stochastic gradient descent, which requires a representation where the parameters of a distribution are separated from an independent stochastic noise factor, called a **differentiable, non-centered parametrization** (DNCP). With a Gaussian distribution this is done through the **reparameterization trick** (see below). For a stick-breaking process Beta random variables need to be sampled. This can be done by drawing $$x \sim Gamma(\alpha,1)$$ and $$y \sim Gamma(\beta,1)$$ and have $$v = x/(x+y)$$, corresponding to $$v \sim Beta(\alpha,\beta)$$. This does not work as a DNCP though, because Gamma does not have one w.r.t. the shape parameter. When close to zero an inverse CDF might be used. However, the authors opt for a so-called Kumaraswamy distribution;
 * A nested Chinese Restaurant Process as a prior on the latent variables ([Goyal et al., 2017](https://arxiv.org/pdf/1703.07027.pdf));
 * An (ordinary) Gaussian mixture as a prior distribution on the latent variables ([Dilokthanakul et al., 2017](https://arxiv.org/pdf/1611.02648.pdf)), but see [this interesting blog post](http://ruishu.io/2016/12/25/gmvae/) for a critical review (GMVAE);
 * A deep latent Gaussian mixture model ([Nalisnick et al, 2016](http://www.ics.uci.edu/~enalisni/BDL_paper20.pdf)) where a Gaussian mixture is used as the approximate posterior (DLGMM);
@@ -169,19 +169,76 @@ There have been already several developments:
 * Variational deep embedding uses (again) a mixture of Gaussians as a prior ([Jiang et al., 2017](https://arxiv.org/pdf/1611.05148.pdf)) (VaDE);
 * Variational autoencoded deep Gaussian Processes ([Dai et al., 2016](https://arxiv.org/pdf/1511.06455.pdf)) uses a "chain" of Gaussian Processes to represent multiple layers of latent variables (VAE-DGP).
 
-The problem with autoencoders is that they actually not necessarily say how the latent variables are to be used. 
+The problem with autoencoders is that they actually do not define how the latent variables are to be used. 
 
-Inherently, without additional constraints the representation problem is ill-posed. Suppose for example that the generator is just a dictionary of images and that training will make the latent variables point to a particular index in this dictionary. In this way no deep structure has been uncovered by the network at all. It's just pretty dumb pointing at what it has been seen before at the training and generalization can be expected to be pretty bad. 
+Inherently, without additional constraints the representation problem is ill-posed. Suppose for example that the generator is just a dictionary of images and that training will make the latent variables point to a particular index in this dictionary. In this way no deep structure has been uncovered by the network at all. It's pretty much just pointing at what it has been seen during training. Generalization can be expected to be pretty bad. 
 
 Especially when variational autoencoders are used in sequence modeling it becomes apparent that the latent code is generally not used. The variational lossy autoencoder introduces control over the latent code to successfully combine them with recurrent networks ([Chen et al., 2017](https://arxiv.org/pdf/1611.02731.pdf)).
 
-From an information-theoretic perspective the differences can be formulated in an extreme manner: **maximization or minimization** of mutual information. With InfoGAN (not explained in this blog post) mutual information between input and latent variables is maximized to make sure that the variables are all used. This is useful to avoid the "uninformative latent code problem", where latent features are actually not used in the training. However, with for example the information bottleneck approach the mutual information between input and latent variables is minimized (under the constraint that the features still predict some labels). This is logically from the perspective of compression. This behavior can all be seen as a so-called information-autoencoding family ([Zhao et al., 2017](http://bayesiandeeplearning.org/2017/papers/60.pdf)).
+From an information-theoretic perspective the differences can be formulated in an extreme manner: **maximization or minimization** of mutual information. With InfoGAN (not explained in this blog post) mutual information between input and latent variables is maximized to make sure that the variables are all used. This is useful to avoid the "uninformative latent code problem", where latent features are actually not used in the training. However, with for example the information bottleneck approach the mutual information between input and latent variables is minimized (under the constraint that the features still predict some labels). This makes sense from the perspective of compression. This behavior can all be seen as a so-called information-autoencoding family ([Zhao et al., 2017](http://bayesiandeeplearning.org/2017/papers/60.pdf)).
 
-It is interesting to study how nonparametric Bayesian methods fair with respect to this family and what role they fulfill in such a constrained optimization problem. Existing models namely use fixed values for the Lagrangian multipliers (the tradeoffs they make). 
+It is interesting to study how nonparametric Bayesian methods fare with respect to this family and what role they fulfill in such a constrained optimization problem. Existing models namely use fixed values for the Lagrangian multipliers (the tradeoffs they make). 
+
+# Mode Collapse
+
+There are several research directions where mode collapse is the main topic. Mode collapse is especially prevalent in generative adversarial networks. In distributional adversarial networks ([Li et al., 2017](https://arxiv.org/pdf/1706.09549.pdf)) two adversaries are defined that are slightly different from the normal one, both based on a so-called **deep mean encoder**. The deep mean encoder has the form:
+
+$$\eta(P) = \mathop{\mathbb{E}}_{x \sim P} [ \phi(x) ]$$
+
+The GAN objective function is:
+
+$$\min_G \max_D { \mathop{\mathbb{E}}_{x \sim P_x} [ \log D(x) ] + \mathop{\mathbb{E}}_{z \sim P_z} [ \log (1 - D(G(z)) ]  } $$
+
+The authors extend it with an additional term:
+
+$$\min_G \max_{D,M} { \lambda_1 \mathop{\mathbb{E}}_{x \sim P_x} [ \log D(x) ] + \mathop{\mathbb{E}}_{z \sim P_z} [ \log (1 - D(G(z)) ] + \lambda_2 M(P_x,P_G) } $$
+
+The sample classifier $$\psi$$ uses the above intermediate summary statistics $$\eta(P)$$ to define a costs (it outputs 1 if sample is drawn from $$P_x$$ and 0 otherwise).
+
+$$M(P_x,P_G) = {  \log \psi (\eta (P_G)) ] +  \log (1 - \psi (\eta(P_x)) ]  } $$
+
+# Generalization
+
+The GAN objective:
+
+$$\min_{u \in U} \max_{v \in V} { \mathop{\mathbb{E}}_{x \sim D_{real}} [ \phi ( D_v(x) ) ] + \mathop{\mathbb{E}}_{x \sim D_{G_u}} [ \phi (1 - D_v(x)) ]  } $$
+
+This objective assumes we have an infinite number of samples from $$D_{real}$$ to estimate 
+$$\mathop{\mathbb{E}}_{x \sim D_{real}} [ \phi ( D_v(x) ) ]$$. If we have only a finite number of training examples $$x_1, \ldots, x_m \sim D_{real}$$, we use the following to estimate this expectation: $$\frac{1}{m} \sum_{i=1}^m [ \phi(D_v(x))] $$.
+
+
+<!--
+# Nonparametric view of the GAN 
+
+Theorem (oracle inequality for GAN). Let $$F$$ be any critic function class. Denote $$\mu_n$$ as the solution with respect to the empirical estimate $$\nu_n$$ to GAN with generator $$\mu_G$$ and discriminator $$F_D$$:
+
+$$\mu_n = \arg\min_{\mu \sim \mu_G} \max_{f \in F_D} E_{Y \sim \mu} f(Y) - E_{X \sim \nu_n} f(X)$$
+
+The the following decompositions hold for any distribution $$\nu$$,
+
+$$d_{F_D}(\mu_n,\nu) \leq \min_{\mu \in \mu_G} d_{F_D}(\mu,\nu) + d_{F_D}(\nu,\nu_n) + d_{F_D}(\nu_n,\nu)$$
+
+$$d_{F}(\mu_n,\nu) \leq \min_{\mu \in \mu_G} d_{F_D}(\mu,\nu) + (1 + {||\nu_n||}_1 ) \max_{f \in F} \min_{f' \in F_D} {|| f - f'||}_\infty + d_{F_D}(\nu,\nu_n) + d_{F}(\nu_n,\nu)$$
+
+In the first decomposition $$d_{F_D}$$ is the objective evaluation metric. The first term is a minimization term, the best approximation error within the generator class when having population access to the true measure $$\nu$$. The second term is the statistical error, also called the generalization error, due to the fact that there are only $$n$$ samples available.
+
+In the second decomposition a different $$d_F$$ is the objective metric. The first term is the approximation error induced by the generator. The second term defines how well the discriminator serves as a surrogate for the objective metric, and the third term is the statistical error.
+-->
+
+
 
 # Regularization
 
 Training deep networks has undergone several advances. One of the first innovations has been the layer by layer training. 
+Other concepts you will find are:
+
+* dropout
+* stochastic gradient descent
+* batch normalization
+* residual training
+* reparameterization trick
+
+We will briefly describe them, but they each easily deserve a dedicated explanation as well. So little time!
 
 ## Dropout
 
@@ -193,11 +250,19 @@ Gradient descent or steepest descent is an iterative method where we take steps 
 
 Stochastic gradient descent is a stochastic approximation to gradient descent. What is approximated is the true gradient. Adjusting the parameters $$\theta$$ it minimizes the following loss function:
 
-$$\theta = \arg \min_\theta \frac{1}{N} \sum_{i=1}^N l(x_i,\theta)$$
+$$\theta = \arg \min_\theta \frac{1}{N} \sum_{i=1}^N L(x_i;\theta)$$
 
-Here $$x_1, \ldots x_N$$ is the training set. Stochastic gradient descent typically uses a mini-batch $$x_1, \ldots, x_m$$ of size $$m$$. The gradient is then approximated by:
+Here $$x_1, \ldots x_N$$ is the training set. Stochastic gradient descent now incrementally navigates to the values for $\theta$ where the sum over the function $L(x_i, \theta)$ is minimized. The parameter $\theta$ is continuously adjusted by looping over all observations $x_i$:
 
-$$\frac{1}{m} {\partial l(x_i, \theta)}{\partial \theta}$$.
+$$\theta' = \theta - \eta \frac{\partial }{\partial \theta} L(x_i;\theta)$$
+
+After looping over all observations, stochastic gradient descent performs this loop again and again till some kind of convergence criterion is met or until the researcher likes to have a beer, read a book, or spend time on social media.
+
+<!--
+Stochastic gradient descent typically uses a mini-batch $$x_1, \ldots, x_m$$ of size $$m$$. The gradient is then approximated by:
+
+$$\frac{1}{m} {\partial l(x_i, \theta)}{\partial \theta}$$
+-->
 
 ## Batch normalization
 
@@ -205,7 +270,90 @@ The distribution of network activities change during training due to the fact th
 
 ## Residual learning 
 
-Making networks deeper and deeper counterintuitively increases the training and thus the test error. Consider for example an identity mapping, a network needs to learn to duplicate the input and the output. Emperical evidence shows however that learning the difference (zero) is easier for a network. This is called residual learning ([He et al., 2015](https://arxiv.org/pdf/1512.03385.pdf). At ImageNet such residual nets achieve 3.57% error on the test set. It is hence no surprise that the fourth edition of the Inception networks use residual learning ([Szegedy et al., 2017](http://www.aaai.org/ocs/index.php/AAAI/AAAI17/paper/download/14806/14311)).
+Making networks deeper and deeper counterintuitively increases the training error and thus the test error. Consider for example an identity mapping (as with autoencoders): a network needs to learn to duplicate the input to generate the output. Empirical evidence shows that learning the difference (in this case zero between input and output) is easier for a network. This is called residual learning ([He et al., 2015](https://arxiv.org/pdf/1512.03385.pdf). At ImageNet such residual nets achieve 3.57% error on the test set. It is hence no surprise that the fourth edition of the Inception networks use residual learning ([Szegedy et al., 2017](http://www.aaai.org/ocs/index.php/AAAI/AAAI17/paper/download/14806/14311)).
+
+## Reparameterization Trick
+
+The reparameterization trick replaces a (blackbox) stochastic node in a computational graph with a node that is non-stochastic (of which a gradient can be calculated) with the noise added separately. It's just as if the salt is added after you have made the soup. It substitutes a random variable by a deterministic transformation of a simpler random variable. There are three popular methods ([Shakir Mohammed blog](http://blog.shakirm.com/2015/10/machine-learning-trick-of-the-day-4-reparameterisation-tricks/)):
+
+1. Inverse sampling. The inverse cumulative distribution function can be used as the transformation.
+2. Polar methods. Generating pairs (e.g. the basis of the Box-Muller transform).
+3. Coordinate transformation methods (shifting and scaling).
+
+The last example uses the fact that the transformation ($x = g(\epsilon;\theta)$) is valid for particular well chosen one-liners:
+
+$$\frac{\partial}{\partial \theta} \sum_{i=1}^N p(x_i; \theta) f(x_i) =
+\frac{\partial}{\partial \theta} \sum_{i=1}^N p(\epsilon_i) f(g(\epsilon_i;\theta)) $$
+
+For example the (zero-centered) Normal distribution is defined as:
+
+$$p(x;\theta) = N(0,\theta)$$
+
+We can write this as a standard Normal distribution with a deterministic transformation:
+
+$$p(\epsilon) = N(0,1)$$
+
+$$g(\epsilon; \theta) = \theta \epsilon $$
+
+<!--
+For example the standard Cauchy distribution (position at zero, $x_0 = 0$, and scale at one, $\gamma=1$) is defined as:
+
+$$p(x;\theta) = \frac{1}{\pi (1 + x^2)}$$
+
+The quantile function (inverse cumulative function) is:
+
+$$Q(\epsilon) = \tan (\pi (\epsilon - 1/2) )$$
+
+Thus is can also be written as a uniform base distribution with a subsequent deterministic transformation:
+
+$$p(\epsilon) = U[0,1]$$
+
+$$g(\epsilon; \theta) = \tan(\pi \epsilon)$$
+
+-->
+
+<!--
+Suppose we want to optimize over $\sigma$:
+
+$$
+x = U(-1, 1) \\
+y = N(0, \sigma) \\
+\arg \min_{\sigma} \frac{1}{N} \sum_{i=1}^N L(x_i,y_i)
+$$
+
+Here $L$ is the loss function. It is often the mean squared error between $x$ and $y$, let us assume this here as well. 
+
+$$L(x,y) = (x - y)^2$$
+
+In a probabilistic model the output is **different** each time we run, even if the input is the same. To do gradient descent we define a closed-form formula about how to change our parameter $\sigma$ to get a lower value for $L$. The gradient defines how much the output changes when we alter the input. 
+
+$$\frac{\partial}{\partial \sigma} L(x,y) = \frac{\partial}{\partial \sigma} {(x - c \sigma)}^2 $$
+
+Here we have $c ~\sim N(0,1)$ simulated from a normal distribution without parameters.
+
+$$
+x = U(-1, 1) \\
+y = c \sigma \\
+\arg \min_{\sigma} \frac{1}{N} \sum_{i=1}^N L(x_i,y_i)
+$$
+
+We can solve:
+
+$$\frac{\partial}{\partial \sigma} L(x,y) = \frac{\partial}{\partial \sigma} {(x - c \sigma)}^2 = 
+\frac{\partial}{\partial \sigma} x^2 - 2 c \sigma x + {(c \sigma)}^2 = - 2 x c + 2 c^2 \sigma $$
+
+If we now perform gradient descent it will be an iterative execution of:
+
+$$\sigma' = \sigma - \eta ( - 2 x c + 2 c^2 \sigma ) = \sigma + 2 \eta c ( x - c \sigma) $$
+
+Now we can reparametrize in such way that $x$ and $\sigma$ are not parameters of a probability distribution. They are just parameters of a deterministic function (that is transformed through a stochastic function that has **no parameters** to optimize over).
+-->
+
+The result is that through this reparameterization the variance can be substantially reduced (potentially!). 
+The reparameterization trick is well explained by Goker Ergodan in this [Jupyter notebook](http://nbviewer.jupyter.org/github/gokererdogan/Notebooks/blob/master/Reparameterization%20Trick.ipynb).
+
+
+<!-- The way gradient descent is done in this type of setting is stochastic as well. Single $x,y$ pairs are used to find out in which way $\sigma$ has to be adjusted. The difference with the setting above is that -->
 
 <!-- if the primal is infeasible (insufficient model capacity) the choice of Lagrange multipliers prioritizes different constraints -->
 

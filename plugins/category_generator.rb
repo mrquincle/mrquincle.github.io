@@ -135,7 +135,7 @@ ERR
     safe true
     priority :low
 
-    puts "Is called"
+    puts "  + Generate category pages"
 
     def generate(site)
       site.write_category_indexes

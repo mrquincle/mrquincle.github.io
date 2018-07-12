@@ -63,7 +63,7 @@ groups.add({
     }
   }});
 
-var container = document.getElementById('visualization');
+var container = document.getElementById('visualization-legendre');
 var dataset = new vis.DataSet();
 
 var options = {
