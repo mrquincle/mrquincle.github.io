@@ -8,7 +8,7 @@ categories:
 ---
 
 A long, long time ago - namely, in terms of these fast moving times of advances in deep learning - two years (2016),
-there was once a paper studying how we can learn neural networks to count.
+there was once a paper studying how we can teach neural networks to count.
 
 # Attend, infer, repeat
 
