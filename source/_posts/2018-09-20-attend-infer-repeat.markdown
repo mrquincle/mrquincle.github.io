@@ -149,19 +149,17 @@ exhibits good performance with the same counting task. Where it lacks is a task 
 two digits is followed by another task using two digits. That other task is a) summing the two digits, or
 b) determining if the digits are in ascending order. Here the AIR model outperforms DRAW.
 
-<!--
+## Research direction
 
-I thought this was different and like less exact numbering, but it seems just the same thing as numbering
+One the things that is interesting from the neuroscientific literature is the concept of subitizing. It might, or 
+might not be the case, that it is faster to count up to four than upwards from four. Over four there is a sequential
+process like the one described in this blog post. Some scientists think there is a different pathway that allows a
+more instantaneous response if there only a few objects.
 
-# Subitizing
-
-There is something akin to numbering, but quite different in nature which is called subitizing. Subitizing is the 
-mere instantaneous identification of the numerosity in small sets of visual items.
-
-[A paper](https://arxiv.org/pdf/1808.00257.pdf) titled "Subitizing with Variational Autoencoders" by the authors
+[The paper](https://arxiv.org/pdf/1808.00257.pdf) titled "Subitizing with Variational Autoencoders" by the authors
 Rijnder Wever ([github](https://github.com/rien333))
 and
 [Tom Runia](http://tomrunia.github.io/)
-from the University of Amsterdam describes this concept.
-
--->
+from the University of Amsterdam describes subitizing as an emerging phenomenon in an ordinary autoencoder. A 
+supervised classifier is trained on top of this unsupervised autoencoder. It is not entirely clear to me that the
+latent representation indeed somehow disentangled the object identification from the number of objects. 
