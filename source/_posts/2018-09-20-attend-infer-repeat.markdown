@@ -4,7 +4,12 @@ title: "Attend, infer, repeat"
 description: "Attend, infer, repeat"
 date: 2018-09-20 10:57:08 +0200
 comments: true
-categories: 
+categories: [deep learning, nonparametric latent layer, attention, variational method]
+facebook:
+  image: /images/blog/multi-mnist-training.png
+twitter_card:
+  type: summary_large_image
+  image: /images/blog/multi-mnist-training.png
 ---
 
 A long, long time ago - namely, in terms of these fast moving times of advances in deep learning - two years (2016),
@@ -123,6 +128,14 @@ Now, we have to calculate $$\frac{\partial \mathcal{L}}{\partial \omega^i}$$. Re
 continuous or discrete variables. With continuous variables the reparametrization trick is applied. With discrete
 variables a likelihood ratio estimator is used. The latter might have high variance with is reduced using 
 structured neural baselines.
+
+## Results
+
+The results on a multi MNIST learning task can be seen in the next figure.
+
+![Multi MNIST task. Copyright: Eslami et al, 2018](/images/blog/multi-mnist-training.png "From top to bottom training advances. Different numbers from the MNIST dataset are better recognized the longer the system runs. It learns to count from zero to three.")
+
+The figures shows how the system properly recognizes multiple visual digits from the MNIST training set. The boxes show attention windows. From top to bottom there is a steady improvement in count accuracy over time.
 
 ## Discussion
 

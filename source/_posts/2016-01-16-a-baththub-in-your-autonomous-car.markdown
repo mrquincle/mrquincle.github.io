@@ -4,7 +4,7 @@ title: "A baththub in your autonomous car"
 description: "According to many the future is a socialist paradise. The autonomous car will change everything! We will be car sharing. We can change parking lots into a lot of parks! Will that be the case indeed?"
 date: 2016-01-16 12:07:52 +0100
 comments: true
-categories:
+categories: future, autonomous cars
 facebook:
   image: /images/blog/bathtub.jpg
 twitter_card:
