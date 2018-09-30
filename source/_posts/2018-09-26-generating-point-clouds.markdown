@@ -90,6 +90,59 @@ indeed uses an average over the (permutation invariant) distances between point 
 
 ## Generation
 
-Will follow later...
+The pipeline followed by the authors is similar to that of PointNet. The pointcloud contains 2048 3D points. 
+This data is fed into the encoder. The encoder exists of 1D convolutional layers (five of them) with a kernel size of 1 each of which are followed by a layer with ReLUs and one to
+perform batch normalization. After this pipeline an permutation-invariant max layer is placed. To read more on a
+1D convolutional layer check the following clip by Andrew Ng. On just a 2D matrix a 1D convolutional layer would be
+just a multiplication by a factor. However, on 3D objects, it can be used to reduce layers or introduce a 
+nonlinearity.
 
+<iframe width="740" height="480" src="//www.youtube.com/embed/vcp0XvDAX68" frameborder="0" allowfullscreen></iframe>
+
+The decoder contains three layers, the first two followed by ReLUs. 
+
+## Results
+
+Some of the results from this work:
+
+* The GAN operating on the raw data converges much slower than the GAN operating on the the latent variables.
+* The latent GAN model using the AE with Earth Mover's distance outperforms the one with the Chamfer pseudo distance.
+* Both latent GAN models suffer from mode collapse. Wasserstein GAN does not...
+
+Note that the Wasserstein metric is the same as the Earth Mover's distance. So the above basically states that using
+Wasserstein distance makes sense for both the autoencoder as well as the GAN involved.
+
+There are not yet many models that operate directly on point clouds. PointNet is one of the most famous ones.
+In a ModelNet40 shape classification task it has the following performance:
+
+* 87.2% - Vanilla PointNet, without transformation networks
+* 89.2% - PointNet, with transformation networks
+* 90.7% - PointNet++, with multi-resolution grouping to cope with non-uniform sampling densities
+* 91.9% - PointNet++, with face normals as additional point features
+
+And the paper's performance:
+
+* 84.0% - Earth Mover's distance
+* 84.5% - Chamfer distance
+
+It is not clear to me why they don't list the results of the PointNet and PointNet++ papers which they both cite.
+They should have definitely told why it cannot be compared if they think that's the case.
+
+## Promising research direction
+
+One of the most obvious improvements seem to be the choice of the Wasserstein metric in different parts of the
+architecture. Another paper that caught my interest is [Large Scale GAN Training for High Fidelity Natural Image Synthesis (pdf)](https://openreview.net/pdf?id=B1xsqj09Fm)
+under review at ICLR 2019.
+
+An interesting aspect of this paper is that they sample from a different distribution while testing versus while training.
+They introduce a "truncation trick". It samples from a truncated Normal distribution rather than $$N(0,\sigma)$$ for the latent variables. (The values above a particular threshold are just sampled again until they are below that threshold.) I don't completely get this. What's going on there? Is there a mode in the network that defines the prototypical dog and are other dogs defined by nonzero values in the latent variable space? Then this seem to show that the layer exhibits an non-intuitive decomposition of the task at hand. I would expect a zero vector to correspond to an "abstract dog" and have all nonzero parameters contribute in an attribute like fashion. This seems to be more prototype-like, similar to old-fashioned vector quantization.
+
+They however also define other latent random variables (in appendix E). The censored normal $$\max[N(0,\sigma),0]$$ is interesting. It reminds me of [nonnegative matrix factorization](https://yliapis.github.io/Non-Negative-Matrix-Factorization/). By using a nonnegative constraint the representation becomes additive (part-based) and sparse. That's quite different from prototype-like methods.
+
+In the last few months I've been trying nonparametric extensions to the latent layer, but these experiments do not seem to be 
+very promising.
+
+A promising research direction might be to study autoencoders where the latent variables are such that they exhibit the 
+same **nonnegative** (part-based representation) features. When we have a latent layer that decomposes the input like this,
+it might become more valuable to subsequently have a nonparametric extension.
 
