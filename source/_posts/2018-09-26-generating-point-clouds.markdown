@@ -21,6 +21,8 @@ Computer vision is not the only choice though! In recent years there is a prolif
 * Humans use glasses, microscopes, infrared goggles, all to enhance our senses. We are basically cyborgs.
 * Robots will benefit from a rich sensory experience just like we do. They want to be cyborgs too.
 
+<!--more-->
+
 # Point clouds
 
 Point clouds are quite a good description. Objects are represented by individual points in a 3D space. By making the points a bit bigger you can easily figure out the shapes yourself (see the figure below).

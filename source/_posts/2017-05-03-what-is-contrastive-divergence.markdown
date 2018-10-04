@@ -4,7 +4,7 @@ title: "What is contrastive divergence?"
 description: "What is contrastive divergence?"
 date: 2017-05-03 11:30:04 +0200
 comments: true
-categories: 
+categories: [gradient descent, gradient ascent, kullback-leibler divergence, contrastive divergence]
 ---
 
 # Kullback-Leibler divergence

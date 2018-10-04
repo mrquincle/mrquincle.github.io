@@ -4,7 +4,7 @@ title: "Random gradients"
 description: "Random gradients"
 date: 2018-05-26 15:30:44 +0200
 comments: true
-categories: 
+categories: [gradients, reparametrization trick, log-derivative trick]
 customcss:
   - '//cdnjs.cloudflare.com/ajax/libs/vis/4.7.0/vis.css'
 customjs:
@@ -27,6 +27,8 @@ There are two main strategies:
 
 * the reparametrization trick
 * the log-derivate trick
+
+<!--more-->
 
 The log-derivate trick is quite general but still suffers from high variance. Henceforth, so-called control variates
 have been introduced that reduce variance. We will spend quite a bit of time to clarify what a control variate is.

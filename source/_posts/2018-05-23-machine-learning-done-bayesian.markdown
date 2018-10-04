@@ -4,7 +4,7 @@ title: "Machine learning done Bayesian"
 description: "Machine learning done Bayesian"
 date: 2018-05-23 12:00:08 +0200
 comments: true
-categories: machine learning, bayesian
+categories: [machine learning, bayesian, L1 regularization, support vector machines, herding, dropout, stochastic gradient descent]
 ---
 
 In the dark corners of the academic world there is a rampant fight between practitioners of deep learning and researchers of Bayesian methods. This polemic [article](https://medium.com/intuitionmachine/cargo-cult-statistics-versus-deep-learning-alchemy-8d7700134c8e) testifies to this, although firmly establishing itself as anti-Bayesian.

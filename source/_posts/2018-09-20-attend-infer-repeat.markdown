@@ -35,6 +35,8 @@ at least have a capability that approximates this fairly good. It is such an abs
 take the fact that you can recognize yourself in the mirror (I hope). It's grounded on something that really strongly
 believes that there is only one of you, that you are pretty unique.
 
+<!--more-->
+
 From a learning perspective, counting feels like mapping in autonomous robotics. The very well-known chicken and egg
 problem of simultaneous localisation and mapping (SLAM) immediately addresses that mapping and localisation is an
 intertwined problem where one task immediately influences the other task. To properly map it would be very useful if
