@@ -39,7 +39,44 @@ At Louisville university
 studied how nonnegative constraints can be added to an autoencoder in 
 [Deep Learning of Part-based Representation of Data Using Sparse Autoencoders with Nonnegativity Constraints (2016)](https://arxiv.org/pdf/1601.02733.pdf).
 
+An autoencoder which has a latent layer that contains a part-based representation, only has a few of the nodes active
+at a particular input. In other words, such a representation is sparse. 
 
+One of the ways a sparse representation can be enforced is to limit the activation of a hidden unit over all data
+items $$r$$. The average activation of a unit is:
+
+$$\hat{p}_j = \frac{1}{m} \sum_{r=1}^m h_j(x^{(r)})$$
+
+To make sure that the activation is limited, we can bound $$\hat{p}_j < p$$ with $$p$$ a small value close to zero.
+
+The usual cost function is just the reconstruction error $$J_E$$. Here, we include the activation limitation by adding an additional term:
+
+$$J_{KL}(p || \hat{p})  = \sum_{j=1}^n p \log \frac{p}{\hat{p}_j} + (1-p) \log \frac{1-p}{1-\hat{p}_j}$$
+
+We can prevent overfitting by regularization. This can be done by adding noise to the input, dropout, or by penalizing large weights. The latter corresponds to yet another term:
+
+$$J_{O}(W,b) = \frac{1}{2} \sum_{l=1}^2 \sum_{i=1}^{s_l} \sum_{j=1}^{s_{l+1}} \left( w_{ij}^l \right)^2$$
+
+The sizes of adjacent layers are indicated by $$s_l$$ and $$s_{l+1}$$ (and we are limited to $$l$$ layers).
+
+The total cost function used by the authors for the sparse autoencoder contains all the above cost functions, each weighted, one by parameter $$\beta$$, the other by $$\lambda$$.
+
+$$J_{SAE}(W,b) = J_E(W,b) + \beta J_{KL}(p||\hat{p}) + \lambda J_O(W,b)$$
+
+To enforce nonnegativity we can introduce a different regularization term:
+
+$$J_{O}(W,b) = \frac{1}{2} \sum_{l=1}^2 \sum_{i=1}^{s_l} \sum_{j=1}^{s_{l+1}} f \left( w_{ij}^l \right)$$
+
+For the nonnegative constrained autoencoder the authors suggest:
+
+$$f(w_{ij}) = 
+\begin{cases}
+w_{ij}^2 & w_{ij} < 0 \\ 
+0 & else
+\end{cases}
+$$
+
+This term penalizes all negative values. All positive values do not contribute to the cost function.
 
 ## Results
 
