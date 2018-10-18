@@ -6,10 +6,10 @@ date: 2018-09-30 16:36:27 +0200
 comments: true
 categories: [autoencoder, nonnegativity]
 facebook:
-  image: /images/blog/nonnegative_autoencoder.png
+  image: /images/blog/nonnegative_examples.jpg
 twitter_card:
   type: summary_large_image
-  image: /images/blog/nonnegative_autoencoder.png
+  image: /images/blog/nonnegative_examples.jpg
 ---
 
 My intuition would say that a part-based decomposition should arise naturally within an autoencoder. To encorporate
@@ -26,9 +26,11 @@ the network to explore different feature dimensions independently.
 
 One of the means to obtain a part-based representation is to force positive or zero weights in a network. In the 
 literature [nonnegative matrix factorization](https://yliapis.github.io/Non-Negative-Matrix-Factorization/) can be 
-found. Due to the nonnegativity constraint the features are additive. This leads to a sparse basis where through
+found. Due to the nonnegativity constraint the features are additive. This leads to a (sparse) basis where through
 summation "parts" are added up to a "whole" object. For example, faces are built up out of features like eyes, nostrils,
 mouth, ears, eyebrows, etc.
+
+![Nonnegative examples. From top to bottom: 1) Sparse Autoencoder, 2) Nonnegative Sparse Autoencoder, 3) Nonnegativity Constrained Autoencoder, and 4) Nonnegative Matrix Factorization. The nonnegative examples do not use clear cut facial features like eyes and ears, but you see only parts of the image being nonnegative (white). This means an image can be composed using a sum of the displayed images. Copyright Hosseini-Asl et al.](/images/blog/nonnegative_examples.jpg)
 
 <!--more-->
 
@@ -82,4 +84,9 @@ This term penalizes all negative values. All positive values do not contribute t
 
 The results are compared to the Sparse Autoencoder (SA), the Nonnegative Sparse Autoencoder (NSA), and Nonnegative Matrix 
 Factorization (NMF). 
+
+## Ideas
+
+To really encourage a part-based decomposition it would be best to enforce either very large values or values that are zero. Something like sum over x divided by number of non-zero components with each x nonnegative and maximizing over this.
+
 
