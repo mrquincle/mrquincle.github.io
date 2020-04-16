@@ -30,5 +30,11 @@ MathJax.Hub.Config({
   "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
 });
 </script>
+<!-- Site environment: {{ site.environment }} -->
+{% if site.environment == "development" %}
+<!-- Get MathJax locally -->
+<script src="/javascripts/mathjax/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+{% else %}
+<!-- Get MathJax online -->
 <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
-
+{% endif %}

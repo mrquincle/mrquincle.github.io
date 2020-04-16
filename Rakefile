@@ -69,7 +69,6 @@ task :watch do
   raise "### You haven't set anything up yet. First run `rake install` to set up an Octopress theme." unless File.directory?(source_dir)
   puts "Starting to watch source with Jekyll and Compass."
   system "compass compile --css-dir #{source_dir}/stylesheets" unless File.exist?("#{source_dir}/stylesheets/screen.css")
-  #jekyllPid = Process.spawn({"OCTOPRESS_ENV"=>"preview"}, "jekyll build --watch")
   jekyllPid = Process.spawn({"OCTOPRESS_ENV"=>"preview"}, "jekyll build --config _config.yml,_config.private.yml --watch")
   compassPid = Process.spawn("compass watch")
 
@@ -88,9 +87,9 @@ task :preview, :drafts do |t, args|
   system "compass compile --css-dir #{source_dir}/stylesheets" unless File.exist?("#{source_dir}/stylesheets/screen.css")
   if args.drafts
     puts "Including drafts"
-    jekyllPid = Process.spawn({"OCTOPRESS_ENV"=>"preview"}, "jekyll build --config _config.yml --drafts --watch")
+    jekyllPid = Process.spawn({"OCTOPRESS_ENV"=>"preview"}, "jekyll build --config _config.yml,_config.private.yml --drafts --watch")
   else 
-    jekyllPid = Process.spawn({"OCTOPRESS_ENV"=>"preview"}, "jekyll build --config _config.yml --watch")
+    jekyllPid = Process.spawn({"OCTOPRESS_ENV"=>"preview"}, "jekyll build --config _config.yml,_config.private.yml --watch")
   end
   compassPid = Process.spawn("compass watch")
   rackupPid = Process.spawn("rackup --port #{server_port}")

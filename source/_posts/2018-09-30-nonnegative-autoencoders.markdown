@@ -34,6 +34,8 @@ mouth, ears, eyebrows, etc.
 
 <!--more-->
 
+# Sparse Autoencoder with Nonnegativity Constraint
+
 At Louisville university
 [Ehsan Hosseini-Asl (github)](https://github.com/ehosseiniasl),
 [Jacek Zurada](http://www.jacekzurada.org/) (who is running for 2019 IEEE president), and
@@ -74,7 +76,7 @@ For the nonnegative constrained autoencoder the authors suggest:
 $$f(w_{ij}) = 
 \begin{cases}
 w_{ij}^2 & w_{ij} < 0 \\ 
-0 & else
+0 & \text{otherwise}
 \end{cases}
 $$
 
@@ -82,8 +84,18 @@ This term penalizes all negative values. All positive values do not contribute t
 
 ## Results
 
-The results are compared to the Sparse Autoencoder (SA), the Nonnegative Sparse Autoencoder (NSA), and Nonnegative Matrix 
-Factorization (NMF). 
+Results are compared between the Sparse Autoencoder (SAE), the Nonnegative Sparse Autoencoder (NNSAE), the Negatively 
+Constrained Autoencoder (NCAE), and Nonnegative Matrix Factorization (NMF). 
+
+![Comparison of representations. 1) SAE, 2) NNSAE, 3) NCAE, 4) NMF](/images/blog/nonnegative_autoencoder_representation_comparison.jpg)
+
+The SAE representation contains negative values (dark pixels). The NNSAE representation has neurons with zero weights (complete black nodes). 
+
+The receptive fields learned by NCAE are more sparse than the others. 
+The features from NNSAE and NMF are more local.
+
+![Nonnegative Constrained Autoencoder compared using the MNIST classification task with other reconstruction methods. Rows: 1) Original digits, 2) Sparse Autoencoder, 3) Nonnegative Sparse Autoencoder, 4) Negatively Constrained Autoencoder, and Nonnegative Matrix Factorization.](/images/blog/nonnegative_constrained_mnist_comparison.png)
+
 
 ## Ideas
 
