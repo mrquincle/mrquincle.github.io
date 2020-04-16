@@ -1,0 +1,796 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: deep learning | Robots, machine learning, global issues]]></title>
+  <link href="http://www.annevanrossum.com/blog/categories/deep-learning/atom.xml" rel="self"/>
+  <link href="http://www.annevanrossum.com/"/>
+  <updated>2020-04-16T13:19:09+00:00</updated>
+  <id>http://www.annevanrossum.com/</id>
+  <author>
+    <name><![CDATA[Anne van Rossum]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Generating Point Clouds]]></title>
+    <link href="http://www.annevanrossum.com/blog/2018/09/26/generating-point-clouds/"/>
+    <updated>2018-09-26T08:15:22+00:00</updated>
+    <id>http://www.annevanrossum.com/blog/2018/09/26/generating-point-clouds</id>
+    <content type="html"><![CDATA[<p>If we do want robots to learn about the world, we can use computer vision. We can employ traditional methods. Build up a full-fledged model from corner detectors, edge detectors, feature descriptors, gradient descriptors, etc. We can also use modern deep learning techniques. One large neural network hopefully captures similarly or even better abstractions compared to the conventional computer vision pipeline.</p>
+
+<p>Computer vision is not the only choice though! In recent years there is a proliferation of a different type of data: depth data. Collections (or clouds) of points represent 3D shapes. In a game setting the Kinect was a world-shocking invention using structured light. In robotics and autonomous cars LIDARs are used. There is huge debate about which sensors are gonna “win”, but I personally doubt there will be a clearcut winner. My line of reasoning:</p>
+
+<ul>
+  <li>Humans use vision and have perfected this in many ways. It would be silly to not use cameras.</li>
+  <li>Depth sensors can provide information when vision gets obstructed.</li>
+  <li>Humans use glasses, microscopes, infrared goggles, all to enhance our senses. We are basically cyborgs.</li>
+  <li>Robots will benefit from a rich sensory experience just like we do. They want to be cyborgs too.</li>
+</ul>
+
+<!--more-->
+
+<h1 id="point-clouds">Point clouds</h1>
+
+<p>Point clouds are quite a good description. Objects are represented by individual points in a 3D space. By making the points a bit bigger you can easily figure out the shapes yourself (see the figure below).</p>
+
+<p><img src="/images/blog/dfaust_dataset.png" alt="The D-FAUST dataset and interpolation between the figure totally at the left and the one totally at the right. Copyright: Achlioptas et al. (2018)." title="Interpolation between two distinct human figures shows a gradual transition from one figure to the next" /></p>
+
+<p>A group of researchers who started to study point clouds are 
+<a href="http://web.stanford.edu/~optas/">Panos Achlioptas</a>,
+<a href="https://geometry.stanford.edu/person.php?id=diamanti">Olga Diamanti</a>,
+<a href="http://mitliagkas.github.io/">Ioannis Mitliagkas</a>, and
+<a href="https://geometry.stanford.edu/member/guibas/">Leonidas Guibas</a> in the paper <a href="https://arxiv.org/pdf/1707.02392.pdf">Learning Representations and Generative Models for 3D Point Clouds</a> from Leonidas Guibas’ Geometric Computation group in the Computer Science Department of Stanford University. Side note: prof. Guibas obtained his PhD under the supervision of Donald Knuth. You can reach Panos via <a href="http://web.stanford.edu/~optas/contact.html">his website</a>. I haven’t found his Twitter account.</p>
+
+<p>There are two main reasons why point clouds should be treated different from pixels in a neural network:</p>
+
+<ol>
+  <li>The convolution operator works on a grid. Encoding 3D data on a grid would encode a lot of empty voxels. This means that for point clouds we cannot just convolution.</li>
+  <li>Point clouds are permutation invariant. Only the 3D position of a point matters, their id does not. Points in a point cloud can be numbered in any way. It still describes the same object. A comparison operator between two point clouds need to take this into account. Preferably the latent variables will also be permutation invariant.</li>
+</ol>
+
+<h2 id="permutation-invariant-distance-metrics">Permutation invariant distance metrics</h2>
+
+<p>There are permutation invariant distance metrics available. The authors describe the <a href="https://en.wikipedia.org/wiki/Earth_mover%27s_distance">Earth Mover’s Distance (EM)</a>. This is a concept discovered by Gaspard Monge in 1781 on how to transport soil from one place to the next with minimal effort. Let us define the flow <script type="math/tex">f_{i,j}</script> between location <script type="math/tex">i</script> and <script type="math/tex">j</script> with distance <script type="math/tex">d_{i,j}</script>, then the EM distance between location <script type="math/tex">i \in P</script> and <script type="math/tex">j \in Q</script> is as follows:</p>
+
+<script type="math/tex; mode=display">d_{EM}(P,Q) = \frac{ \sum_{i=1}^m \sum_{j=1}^n f_{i,j} d_{i,j} }{ \sum_{i=1}^m \sum_{j=1}^n f_{i,j} }</script>
+
+<p>The individual flow is multiplied with the corresponding distance. The overall sum is normalized with the overall flow. In mathematics this is known as the Wasserstein metric. <a href="https://vincentherrmann.github.io/blog/wasserstein/">This blog post</a> introduces the Wasserstein metric perfectly and <a href="https://www.alexirpan.com/2017/02/22/wasserstein-gan.html">this blog post</a> explains its relevance to Generative Adversarial Networks.</p>
+
+<p>The Wasserstein metric is differentiable almost everywhere. <a href="https://en.wikipedia.org/wiki/Almost_everywhere">Almost everywhere (a.e.)</a> is a technical term related to a set having measure zero. It states that the elements for which the property (in this case being differentiable) is not valid has measure zero. Another example of a function that is differentiable a.e. is a monotonic function on <script type="math/tex">[a,b] \rightarrow \mathbb{R}</script>.</p>
+
+<p>The Chamfer pseudo-distance (C) measure is another measure which calculates the squared distance between each point in one set to the nearest neighbour in the other set:</p>
+
+<script type="math/tex; mode=display">d_{C}(P,Q) = \sum_{i=1}^m \min_j d_{i,j}^2 + \sum_{j=1}^n \min_i d_{i,j}^2</script>
+
+<p>It’s stated that <script type="math/tex">d_{C}</script> is more efficient to compute than <script type="math/tex">d_{EM}</script>.</p>
+
+<p>Immediately we can observe from these metrics that they are not invariant with respect to rotations, translations, or scaling.</p>
+
+<h2 id="comparison-metrics">Comparison metrics</h2>
+
+<p>To compare shapes in a 3D space we can follow different strategies. We describe three methods that take the spatial
+nature into account and that compare over sets of 3D objects (so we can compare set <script type="math/tex">P</script> with set <script type="math/tex">Q</script>):</p>
+
+<ol>
+  <li>Jensen-Shannon divergence.</li>
+  <li>Coverage</li>
+  <li>Minimum Matching distance.</li>
+</ol>
+
+<h3 id="jensen-shannon">Jensen-Shannon</h3>
+
+<p>First of all, we can align the point cloud data along the axis, introduce voxels and measure the number of points in
+each corresponding voxel. Then we use a distance metric using these quantities, in this case a Jensen-Shannon divergence.</p>
+
+<script type="math/tex; mode=display">d_{JS}(P||Q) = \frac{1}{2} D_{KL}(P||M) + \frac{1}{2} D_{KL}(Q||M)</script>
+
+<p>Here <script type="math/tex">M = \frac{1}{2}(P + Q)</script> and <script type="math/tex">D_{KL}</script> is the Kullbach-Leibler divergence metric.</p>
+
+<p>To compare sets of point clouds we can do exactly the same. In this case the number of points in each voxel is just the
+collection of points across all point clouds in that set.</p>
+
+<h3 id="coverage">Coverage</h3>
+
+<p>Coverage is defined by the fraction of point clouds in <script type="math/tex">P</script> that are matched with point clouds in <script type="math/tex">Q</script>. The match is
+defined by one the permutation invariant distance metrics. It’s not entirely clear how this is completely specified 
+to me. Is there a threshold used that defines if it is a match? Or is it just a sum or average?</p>
+
+<h3 id="minimum-matching-distance">Minimum Matching distance</h3>
+
+<p>The minimum matching distance measures also the fidelity of <script type="math/tex">P</script> versus <script type="math/tex">Q</script> (compared to the coverage metric). This
+indeed uses an average over the (permutation invariant) distances between point clouds.</p>
+
+<h2 id="generation">Generation</h2>
+
+<p>The pipeline followed by the authors is similar to that of PointNet. The pointcloud contains 2048 3D points. 
+This data is fed into the encoder. The encoder exists of 1D convolutional layers (five of them) with a kernel size of 1 each of which are followed by a layer with ReLUs and one to
+perform batch normalization. After this pipeline an permutation-invariant max layer is placed. To read more on a
+1D convolutional layer check the following clip by Andrew Ng. On just a 2D matrix a 1D convolutional layer would be
+just a multiplication by a factor. However, on 3D objects, it can be used to reduce layers or introduce a 
+nonlinearity.</p>
+
+<iframe width="740" height="480" src="//www.youtube.com/embed/vcp0XvDAX68" frameborder="0" allowfullscreen=""></iframe>
+
+<p>The decoder contains three layers, the first two followed by ReLUs.</p>
+
+<h2 id="results">Results</h2>
+
+<p>Some of the results from this work:</p>
+
+<ul>
+  <li>The GAN operating on the raw data converges much slower than the GAN operating on the the latent variables.</li>
+  <li>The latent GAN model using the AE with Earth Mover’s distance outperforms the one with the Chamfer pseudo distance.</li>
+  <li>Both latent GAN models suffer from mode collapse. Wasserstein GAN does not…</li>
+</ul>
+
+<p>Note that the Wasserstein metric is the same as the Earth Mover’s distance. So the above basically states that using
+Wasserstein distance makes sense for both the autoencoder as well as the GAN involved.</p>
+
+<p>There are not yet many models that operate directly on point clouds. PointNet is one of the most famous ones.
+In a ModelNet40 shape classification task it has the following performance:</p>
+
+<ul>
+  <li>87.2% - Vanilla PointNet, without transformation networks</li>
+  <li>89.2% - PointNet, with transformation networks</li>
+  <li>90.7% - PointNet++, with multi-resolution grouping to cope with non-uniform sampling densities</li>
+  <li>91.9% - PointNet++, with face normals as additional point features</li>
+</ul>
+
+<p>And the paper’s performance:</p>
+
+<ul>
+  <li>84.0% - Earth Mover’s distance</li>
+  <li>84.5% - Chamfer distance</li>
+</ul>
+
+<p>It is not clear to me why they don’t list the results of the PointNet and PointNet++ papers which they both cite.
+They should have definitely told why it cannot be compared if they think that’s the case.</p>
+
+<h2 id="promising-research-direction">Promising research direction</h2>
+
+<p>One of the most obvious improvements seem to be the choice of the Wasserstein metric in different parts of the
+architecture. Another paper that caught my interest is <a href="https://openreview.net/pdf?id=B1xsqj09Fm">Large Scale GAN Training for High Fidelity Natural Image Synthesis (pdf)</a>
+under review at ICLR 2019.</p>
+
+<p>An interesting aspect of this paper is that they sample from a different distribution while testing versus while training.
+They introduce a “truncation trick”. It samples from a truncated Normal distribution rather than <script type="math/tex">N(0,\sigma)</script> for the latent variables. (The values above a particular threshold are just sampled again until they are below that threshold.) I don’t completely get this. What’s going on there? Is there a mode in the network that defines the prototypical dog and are other dogs defined by nonzero values in the latent variable space? Then this seem to show that the layer exhibits an non-intuitive decomposition of the task at hand. I would expect a zero vector to correspond to an “abstract dog” and have all nonzero parameters contribute in an attribute like fashion. This seems to be more prototype-like, similar to old-fashioned vector quantization.</p>
+
+<p>They however also define other latent random variables (in appendix E). The censored normal <script type="math/tex">\max[N(0,\sigma),0]</script> is interesting. It reminds me of <a href="https://yliapis.github.io/Non-Negative-Matrix-Factorization/">nonnegative matrix factorization</a>. By using a nonnegative constraint the representation becomes additive (part-based) and sparse. That’s quite different from prototype-like methods.</p>
+
+<p>In the last few months I’ve been trying nonparametric extensions to the latent layer, but these experiments do not seem to be 
+very promising.</p>
+
+<p>A promising research direction might be to study autoencoders where the latent variables are such that they exhibit the 
+same <strong>nonnegative</strong> (part-based representation) features. When we have a latent layer that decomposes the input like this,
+it might become more valuable to subsequently have a nonparametric extension.</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Attend, infer, repeat]]></title>
+    <link href="http://www.annevanrossum.com/blog/2018/09/20/attend-infer-repeat/"/>
+    <updated>2018-09-20T08:57:08+00:00</updated>
+    <id>http://www.annevanrossum.com/blog/2018/09/20/attend-infer-repeat</id>
+    <content type="html"><![CDATA[<p>A long, long time ago - namely, in terms of these fast moving times of advances in deep learning - two years (2016),
+there was once a paper studying how we can teach neural networks to count.</p>
+
+<h1 id="attend-infer-repeat">Attend, infer, repeat</h1>
+
+<p><a href="https://papers.nips.cc/paper/6230-attend-infer-repeat-fast-scene-understanding-with-generative-models.pdf">This paper</a> 
+is titled “Attend, infer, repeat: Fast scene understanding with generative models” and the authors are 
+<a href="http://arkitus.com/">Ali Eslami</a>, 
+Nicolas Heess,
+<a href="http://thphn.com/">Theophane Weber</a>, 
+Yuval Tassa (<a href="https://github.com/yuvaltassa">github</a>, nice, he does couchsurfing),
+<a href="http://szepi1991.github.io/">David Szepesvari</a>,
+<a href="https://koray.kavukcuoglu.org/">Koray Kavukcuoglu</a>,
+and
+<a href="http://www.cs.toronto.edu/~hinton/">Geoffrey Hinton</a>. 
+A team at Deepmind based in London.</p>
+
+<p>This has been a personal interest of mine. I felt it very satisfying that bees for example can 
+<a href="https://motherboard.vice.com/en_us/article/pgkman/bees-can-count-to-four-display-emotions-and-teach-each-other-new-skills">count landmarks</a> or 
+at least have a capability that approximates this fairly good. It is such an abstract concept, but very rich. Just
+take the fact that you can recognize yourself in the mirror (I hope). It’s grounded on something that really strongly
+believes that there is only one of you, that you are pretty unique.</p>
+
+<!--more-->
+
+<p>From a learning perspective, counting feels like mapping in autonomous robotics. The very well-known chicken and egg
+problem of simultaneous localisation and mapping (SLAM) immediately addresses that mapping and localisation is an
+intertwined problem where one task immediately influences the other task. To properly map it would be very useful if
+you have good odometry and can tell accurately how your location is changing. To properly locate yourself it would be
+very useful to have a very good map. In the beginning the robot sucks in both, but by learning (for example through
+expectation maximization) it learns to perform both better and better.</p>
+
+<p>Counting objects likewise benefits from properly being able to recognize objects. Moreover, it also likely benefits
+from localization objects. A child counts by pointing to the objects and even sometimes verbalizes the object in the
+process. Of course a network might do all three things in different layers, but that would remove the chance to have
+these layers to inform each other. If we introduce cross-connections manually the network would not learn to decompose
+in an autonomous manner. Ideally the network learns the decomposition itself so that we do not artificially 
+introduce limitations in the information transfer between those tasks.</p>
+
+<p>The paper by Eslami introduces several aspects that is important for a system like this:</p>
+
+<ul>
+  <li>Learning latent spaces of variable dimensionality.</li>
+  <li>An iterative process that attends to one object at a time. This requires also a stopping condition to stop counting.</li>
+  <li>Complete end-to-end learning by amortized variational inference.</li>
+</ul>
+
+<p>It is coined the <strong>AIR model</strong> by the authors: attend, infer, repeat.</p>
+
+<h2 id="learning-latent-spaces-of-variable-dimensions">Learning latent spaces of variable dimensions</h2>
+
+<p>The representation of a scene is with a fixed upper limit on the number of objects. A nice extension would be to
+make this a nonparametric prior like a Dirichlet Process. The number of objects is drawn from a Binomial distribution,
+<script type="math/tex">p_N(n)</script>, and the scene model generates a variable length feature vector <script type="math/tex">z \sim p_\theta(\cdot|n)</script>. 
+The data itself is generated from the features through <script type="math/tex">x \sim p_\theta(\cdot|n)</script>. Summarized:</p>
+
+<script type="math/tex; mode=display">p_\theta(x) = \int p_\theta(z) p_\theta(x|z) dz</script>
+
+<p>with the prior decomposed as:</p>
+
+<script type="math/tex; mode=display">p_\theta(z) = \sum_{n=1} p_N(n) p_\theta(z|n)</script>
+
+<p>The posterior is given by Bayes’ rule, prior times likelihood divided by the evidence:</p>
+
+<script type="math/tex; mode=display">p_\theta(z|x) = \frac{p_\theta(z) p_\theta(x|z) }{p_\theta(x)}</script>
+
+<p>Equivalently:</p>
+
+<script type="math/tex; mode=display">p_\theta(x|n) = \int p_\theta(z|n) p_\theta(x|z, n) dz</script>
+
+<p>And:</p>
+
+<script type="math/tex; mode=display">p_\theta(z,n|x) = \frac{p_\theta(z|n) p_\theta(x|z, n) }{p_\theta(x|n)}</script>
+
+<p>We approximate the posterior variationally by a simpler distribution <script type="math/tex">q_\phi(z,n|x)</script> using the Kullback-Leibler
+divergence:</p>
+
+<script type="math/tex; mode=display">KL\left[q_\phi(z,n|x)|| p_\theta(z,n|x)\right]</script>
+
+<p>The divergence is minimized by searching through the parameter space <script type="math/tex">\phi \in \Phi</script>.</p>
+
+<h2 id="an-iterative-process-and-a-stopping-condition">An iterative process and a stopping condition</h2>
+
+<p>One difficulty arises through <script type="math/tex">n</script> being generated through a random variable. This requires evaluating:</p>
+
+<script type="math/tex; mode=display">p_N(n|x) = \int p_\theta(z,n|x) dz</script>
+
+<p>for all values of <script type="math/tex">n = 1 \ldots N</script>.</p>
+
+<p>Now it is suggested to representent <script type="math/tex">n</script> through a latent vector <script type="math/tex">z_{present}</script> that is formed out of <script type="math/tex">n</script> ones followed
+by a zero (and has hence size <script type="math/tex">n + 1</script>). So we have <script type="math/tex">q_\phi(z,z_{present}|x)</script> rather than <script type="math/tex">q_\phi(z,n|x)</script>.
+The posterior than does have the following form:</p>
+
+<script type="math/tex; mode=display">q_\phi(z,z_{present}|x) = q_\phi(z_{present}^{n+1} = 0 | z^{1:n}, x) \prod_{i=1}^n q_\phi(z^i, z_{present}^i = 1|z^{1:i-1},x)</script>
+
+<p>The first term describes the stopping condition. If <script type="math/tex">z_{present} = 0</script> then there are no more objects to detect.
+The second term contains a conditional on previous objects. We do not want to describe the same object twice!</p>
+
+<h2 id="a-variational-implementation">A variational implementation</h2>
+
+<p>To optimize for <script type="math/tex">\theta</script> and <script type="math/tex">\phi</script> we use the negative free energy <script type="math/tex">\mathcal{L}</script>. The negative free energy is 
+guaranteed to be smaller than <script type="math/tex">\log p_\theta(x)</script> so can be used to approximate the latter by increasing it as much
+as possible.</p>
+
+<script type="math/tex; mode=display">\mathcal{L}(\theta,\phi) = \mathop{\mathbb{E_{q_\phi}}} \left[ \log p_\theta(x,z,n) - \log q_\phi(z,n|x) \right]</script>
+
+<p>We now have to calculate both <script type="math/tex">\frac{\partial}{\partial\theta} \mathcal{L}</script> and
+<script type="math/tex">\frac{\partial}{\partial\phi} \mathcal{L}</script>
+to perform gradient ascent.</p>
+
+<p>The estimate of the latter term is quite involved. First <script type="math/tex">\omega_i</script> denotes all parameters at time step <script type="math/tex">i</script> in 
+<script type="math/tex">(z_{present}^i, z^i)</script>. Then we map <script type="math/tex">x</script> to <script type="math/tex">\omega^i</script> through a recurrent function <script type="math/tex">(\omega^i,h^i) = R_\phi(x,h^{i-1})</script>.
+Here the recurrent function <script type="math/tex">R_\phi</script> is a recurrent neural network. The gradient obeys the chain rule:</p>
+
+<script type="math/tex; mode=display">\frac{\partial \mathcal{L}}{ \partial \phi} = \sum_i \frac{ \partial \mathcal{L} }{ \partial \omega^i} \times \frac{\partial \omega^i}{ \phi}</script>
+
+<p>Now, we have to calculate <script type="math/tex">\frac{\partial \mathcal{L}}{\partial \omega^i}</script>. Remember <script type="math/tex">\omega_i</script> can contain either
+continuous or discrete variables. With continuous variables the reparametrization trick is applied. With discrete
+variables a likelihood ratio estimator is used. The latter might have high variance with is reduced using 
+structured neural baselines.</p>
+
+<h2 id="results">Results</h2>
+
+<p>The results on a multi MNIST learning task can be seen in the next figure.</p>
+
+<p><img src="/images/blog/multi-mnist-training.png" alt="Multi MNIST task. Copyright: Eslami et al, 2018" title="From top to bottom training advances. Different numbers from the MNIST dataset are better recognized the longer the system runs. It learns to count from zero to three." /></p>
+
+<p>The figures shows how the system properly recognizes multiple visual digits from the MNIST training set. The boxes show attention windows. From top to bottom there is a steady improvement in count accuracy over time.</p>
+
+<h2 id="discussion">Discussion</h2>
+
+<p>What do we learn from this?</p>
+
+<ul>
+  <li>We have to come up with a <strong>particular representation</strong> of the number of objects. Using this representation we do not
+only inform the network that it has to count, but also that this has to be used as a stopping condition. It very much
+looks like a handcrafted architecture.</li>
+  <li>There is apparently <strong>no satisfying black-box approach</strong> to calculate the gradients. Not only do we have to manually
+describe which strategy has to be used for which parameter. For discrete variables we have to go even further and 
+come up with manners to reduce the variance of the estimator.</li>
+</ul>
+
+<p>If we would use this architecture would we be surprised that the network learns to count? No, I don’t think so. We
+pretty much hardcoded this in the architecture.</p>
+
+<p>An interesting observations by the authors concerns generalization. When the model is trained on images with up to
+two digits in a multi-MNIST task, it will not generalize to three digits. Likewise if it is trained on images with
+zero, one, or three digits, it will not be able to handle images with two digits. Another architecture change has
+been applied with the recurrent network fed by differences with the input
+<script type="math/tex">(\omega^i,h^i = R_\phi(x^i - x, h^{i=1})</script>. The author coin this the DAIR model rather than just the AIR model.</p>
+
+<p>The authors compare the system with the Deep Recurrent Attentive Writer (DRAW) architecture. The latter 
+exhibits good performance with the same counting task. Where it lacks is a task where a task of counting zero, one, or
+two digits is followed by another task using two digits. That other task is a) summing the two digits, or
+b) determining if the digits are in ascending order. Here the AIR model outperforms DRAW.</p>
+
+<h2 id="research-direction">Research direction</h2>
+
+<p>One the things that is interesting from the neuroscientific literature is the concept of subitizing. It might, or 
+might not be the case, that it is faster to count up to four than upwards from four. Over four there is a sequential
+process like the one described in this blog post. Some scientists think there is a different pathway that allows a
+more instantaneous response if there only a few objects.</p>
+
+<p><a href="https://arxiv.org/pdf/1808.00257.pdf">The paper</a> titled “Subitizing with Variational Autoencoders” by the authors
+Rijnder Wever (<a href="https://github.com/rien333">github</a>)
+and
+<a href="http://tomrunia.github.io/">Tom Runia</a>
+from the University of Amsterdam describes subitizing as an emerging phenomenon in an ordinary autoencoder. A 
+supervised classifier is trained on top of this unsupervised autoencoder. It is not entirely clear to me that the
+latent representation indeed somehow disentangled the object identification from the number of objects.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Inference in deep learning]]></title>
+    <link href="http://www.annevanrossum.com/blog/2018/01/30/inference-in-deep-learning/"/>
+    <updated>2018-01-30T00:00:00+00:00</updated>
+    <id>http://www.annevanrossum.com/blog/2018/01/30/inference-in-deep-learning</id>
+    <content type="html"><![CDATA[<!-- Inception in Tensorflow -->
+
+<p>There are many, many new generative methods developed in the recent years.</p>
+
+<ul>
+  <li>denoising autoencoders</li>
+  <li>generative stochastic networks</li>
+  <li>variational autoencoders</li>
+  <li>importance weighted autoencoders</li>
+  <li>generative adversarial networks</li>
+  <li>infusion training</li>
+  <li>variational walkback</li>
+  <li>stacked generative adversarial networks</li>
+  <li>generative latent optimization</li>
+  <li>deep learning through the use of non-equilibrium thermodynamics</li>
+</ul>
+
+<h1 id="deep-models">Deep Models</h1>
+
+<p>We can’t delve into the details of those old workhorse models, but let us summarize a few of them nevertheless.</p>
+
+<p>A Boltzmann machine can be seen as a stochastic generalization of a Hopfield network. In their unrestricted form Hebbian learning is often used to learn representations.</p>
+
+<!--more-->
+
+<p>A restricted Boltzmann machine, or Harmonium, restricts a Boltzmann machine in the sense that the neurons have to form a bipartite graph. Neurons in one “group” are allowed connections to another group, and the other way around, but they are not allowed to be connected to neurons in the same group. This restriction naturally, but not necessarily leads to structures that resemble layers.</p>
+
+<p>A deep belief network hand deep Boltzmann machines have multiple (hidden) layers that are each connected to each other in the restricted sense of above. These models are basically stacks of restricted Boltzmann machines. This is by the way only true in a handwaving manner. A deep belief network is not a true Boltzmann machine because its lower layers form a <em>directed</em> generative model. <a href="http://proceedings.mlr.press/v5/salakhutdinov09a/salakhutdinov09a.pdf">Salakhutdinov and Hinton (pdf)</a> spell out the differences in detail.</p>
+
+<h1 id="markov-chain-monte-carlo-mcmc">Markov Chain Monte Carlo (MCMC)</h1>
+
+<p>Restricted Boltzmann Machines, Deep Belief Networks, and Deep Boltzmann Machines were trained by MCMC methods. MCMC computes the gradient of the log-likelihood (see post on <a href="/blog/2017/05/03/what-is-contrastive-divergence/">contrastive divergence</a>). MCMC has particular difficulty in mixing between modes.</p>
+
+<h1 id="autoencoder">Autoencoder</h1>
+
+<p>An autoencoder has an input layer, one or more hidden layers, and an output layer. If the hidden layer has fewer nodes than the input layer it is a dimension reduction technique. Given a particular input, the hidden layer represents only particular abstractions that are subsequently enriched so that the output corresponds to the original input. An other dimension reduction technique is for example principle component analysis which has some additional constraints such as linearity of the nodes. Given the shape an autoencoder can also be called a bottleneck or sandglass network.</p>
+
+<p>If we represent the encoder <script type="math/tex">F: X \rightarrow H</script> and the decoder <script type="math/tex">G: H \rightarrow X</script>. We apply the individual <script type="math/tex">x</script> to the product as <script type="math/tex">x' = (G \circ F)x</script>, then we can define the autoencoder as:</p>
+
+<script type="math/tex; mode=display">\{F, G \} = \arg \min_{F,G} \| X - X'\|^2</script>
+
+<p>Here we choose for an L2 norm for the reconstruction: <script type="math/tex">L(x,x') = \| x-x' \|^2</script>.</p>
+
+<p><img src="/images/blog/autoencoder.png" alt="The autoencoder exists of an encoder F and a decoder G. The encoder maps the input to a hidden set of variables, the decoder maps it back as good as possible to the original input. The difference between original and generated output is used to guide the process to converge to optimal F and G." title="Autoencoder" /></p>
+
+<p>An autoencoder is typically trained using a variant of backpropagation (conjugate gradient method, steepest descent). It is possible to use so-called pre-training. Train each two subsequent layers as a restricted Boltzmann machine and use backpropagation for fine-tuning.</p>
+
+<p>A nice blog post at <a href="https://blog.keras.io/building-autoencoders-in-keras.html">Keras</a> explains also some of the disadvantages of autoencoders, a very clarifying read!</p>
+
+<h1 id="denoising-autoencoders">Denoising Autoencoders</h1>
+
+<p>A denoising autoencoder (DAE) is a regular autoencoder with the input signal corrupted by noice (on purpose: <script type="math/tex">\tilde{x} = B(x)</script>). This forces the autoencoder to be resilient against missing or corrupted values in the input.</p>
+
+<p>The reconstruction error is again measured by <script type="math/tex">L(x,x') = \| x - x'\|^2</script>, but now <script type="math/tex">x'</script> is formed by a distortion of the original <script type="math/tex">x</script>, denoted by <script type="math/tex">\tilde{x}</script>, hence <script type="math/tex">x' = (G \circ F) \tilde{x}</script>.</p>
+
+<p><img src="/images/blog/denoising-autoencoder.png" alt="The denoising autoencoder is like the autoencoder but has first a step in which the input is distorted before it is fed into the encoder F and a decoder G." title="Denoising autoencoder" /></p>
+
+<p>Note that a denoising autoencoder can be seen as a stochastic transition operator from <strong>input space</strong> to <strong>input space</strong>. In other words, if some input is given, it will generate something “nearby” in some abstract sense. An autoencoder is typically started from or very close to the training data. The goal is to get an equilibrium distribution that contains all the modes. It is henceforth important that the autoencoder mixes properly between the different modes, also modes that are “far” away.</p>
+
+<!--
+# Generative Stochastic Networks
+
+Generative Stochastic Networks ([Alain et al., 2015](https://www.researchgate.net/profile/Saizheng_Zhang/publication/273788029_GSNs_Generative_Stochastic_Networks/links/55140dbf0cf2eda0df303dad/GSNs-Generative-Stochastic-Networks.pdf)) generalize denoising autoencoders. It learns the transition operator of a Markov chain such that its stationary distribution approaches the data distribution.
+
+![Denoising Autoencoder vs a Generative Stochastic Network (copyright Alain et al.). Top: the denoising autoencoder corrupts X and subsequently tries to reconstruct X. Bottom: a generative stochastic network introduces arbitrary random variables H, rather than just a distorted version of X and reconstructs X given H.](/images/blog/generative_stochastic_networks.png)
+-->
+
+<h1 id="variational-autoencoders">Variational Autoencoders</h1>
+
+<p>The post by <a href="http://blog.fastforwardlabs.com/2016/08/22/under-the-hood-of-the-variational-autoencoder-in.html">Miriam Shiffman</a> is a nice introduction to variational autoencoders. They have been designed by <a href="https://arxiv.org/pdf/1312.6114.pdf">(Kingma and Welling, 2014)</a> and <a href="https://arxiv.org/pdf/1401.4082.pdf">(Rezende et al., 2014)</a>. The main difference is that <script type="math/tex">h</script> is now a full-fledged random variable, often Gaussian.</p>
+
+<p><img src="/images/blog/variational_autoencoder.png" alt="Variational Autoencoder. The hidden (latent) variables in a variational autoencoder are random variables. A variational autoencoder is a probabilistic autoencoder rather than a conventional deterministic one. This means that it becomes possible that there are closed form descriptions for p and q and that standard Bayesian inference can be applied." title="Variational Autoencoder" /></p>
+
+<p>A variational autoencoder can be seen as a (bottom-up) recognition model and a (top-down) generative model. The recognition model maps observations to latent variables. The generative model maps latent variables to observations. In an autoencoder setup the generated observations should be similar to the real observations that go into the recognition model. Both models are trained simultanously. The latent variables are constrained in such a way that a representation is found that is approximately factorial.</p>
+
+<h1 id="helmholtz-machine">Helmholtz Machine</h1>
+
+<p>A Helmholtz machine is a probabilistic model similar to the variational autoencoder. It is trained by the so-called sleep-wake algorithm (similar to expectation-maximization).</p>
+
+<!-- See http://artem.sobolev.name/posts/2016-07-11-neural-variational-inference-variational-autoencoders-and-Helmholtz-machines.html -->
+
+<h1 id="importance-weighted-autoencoders">Importance weighted Autoencoders</h1>
+
+<p>The importance weighted autoencoder (<a href="https://arxiv.org/pdf/1509.00519.pdf">Burda et al., 2015</a>) is similar to the variational autoencoder, but it uses a tighter loglikelihood lower bound through applying importance weighting. The main difference is that the recognition model uses <strong>multiple samples</strong> (to approximate the posterior distribution over latent variables given the observations). In order words, the recognition model is run a few times and the suggested latent variables are combined to get a better estimate. The model gives more weight to the recognition model than the generative model.</p>
+
+<script type="math/tex; mode=display">\mathcal{L}(x) = \mathbb{E}_{z \sim q(z|x) } \left[ \log \frac{1}{k} \sum_k \frac{p(x,z)}{q(z|x)}  \right]</script>
+
+<h1 id="generative-adversarial-networks">Generative Adversarial Networks</h1>
+
+<p>Generative Adversarial Networks (<a href="http://papers.nips.cc/paper/5423-generative-adversarial-nets.pdf">Goodfellow et al., 2014</a>) use two networks. A generative model <script type="math/tex">G</script> and a discriminative model <script type="math/tex">D</script>. The generative model maps latent variables <script type="math/tex">z</script> to data points <script type="math/tex">x'</script>. The discriminator has to make a choice between true data <script type="math/tex">x</script> and fake data <script type="math/tex">x'</script>. Hereby should <script type="math/tex">D(x)</script> have a large value and <script type="math/tex">D(x')</script> have a small value. The discriminator maximizes (we fix the generator):</p>
+
+<script type="math/tex; mode=display">V(D) = \mathbb{E}_{x\sim p_{data}(x)} \left[ \log( D(x) \right] + \mathbb{E}_{x' \leftarrow G(z)} \left[ \log( 1 - D(x') \right]</script>
+
+<p>The generator in contrast maximizes:</p>
+
+<script type="math/tex; mode=display">V(D,G) = \mathbb{E}_{x\sim p_{data}(x)} \left[ \log( D(x) \right] + \mathbb{E}_{z \sim G(z)} \left[ \log( 1 - D(G(z)) \right]</script>
+
+<p>It is clearly visualized by Mark Chang’s <a href="https://www.slideshare.net/ckmarkohchang/generative-adversarial-networks">slide</a>.</p>
+
+<p><img src="/images/blog/gan.png" alt="Generative Adversarial Net. The discriminator is trying to score as high as possible by assigning ones to real data and zeros to fake data. The generator is trying to make this job as difficult as possible by having the fake data look similar to the real data. The log function punishes false positives and false negatives extraordinarly hard." title="Generative Adversarial Net" /></p>
+
+<p>The distribution <script type="math/tex">p_z(z)</script> is a arbitrary noise distribution. In other words, the generator morphs totally random stuff into meaningful <script type="math/tex">x</script>. It is like throwing darts randomly into a dart board and the generator folding the board into a hat. Similarly from pure random values we can draw point clouds that have elaborate structure.</p>
+
+<p>The latent variables <script type="math/tex">z</script> are totally random, however there is something else important here. If <script type="math/tex">z</script> is a multidimensional random variable information across all dimensions can be used to construct <script type="math/tex">x' \leftarrow G(z)</script>. There is no information about <script type="math/tex">z</script> if we would like to reason back from <script type="math/tex">x'</script>. This means that from a representation learning perspective the unconstrained use of <script type="math/tex">z</script> leads to entangled use of it in <script type="math/tex">G</script>. InfoGAN introduces an additional mutual information term between a latent code <script type="math/tex">C</script> and generated data <script type="math/tex">X</script>.</p>
+
+<h1 id="adversarial-autoencoders">Adversarial Autoencoders</h1>
+
+<p>Adversarial Autoencoders (<a href="https://arxiv.org/pdf/1511.05644.pdf">Makhzani et al., 2016</a>) is an autoencoder that uses generative adversarial networks. The latent variables (the code) are matched with a prior distribution. This prior distribution can be anything. The autoencoder subsequently maps this to the data distribution.</p>
+
+<p><img src="/images/blog/adversarial_autoencoder.png" alt="Adversarial Autoencoder. The latent variables (code) are denoted by h. Samples are drawn from e.g. a Normal distribution p(h). The discriminator (bottom-right) has the task to distinguish positive samples h' from negative samples h. Preferably p(h) will look like p(h') in the end. In the meantime the top row is reconstructing the image x from h as well." title="Adversarial Autoencoder" /></p>
+
+<p>Note that the use of the adversarial network is on the level of the hidden variables. The discriminator attempts to distinguish “true” from “fake” hidden variables.</p>
+
+<p>This immediately rises the following question: Can we also generate fake data as well? If one discriminator has the goal to distinguish true from fake hidden variables, the other can have as goal to distinguish true from fake data. We should take provisions to not have the former discriminator punished by a bad performing second discriminator.</p>
+
+<h1 id="deep-learning-through-the-use-of-non-equilibrium-thermodynamics">Deep Learning Through The Use Of Non-Equilibrium Thermodynamics</h1>
+
+<p>Non-equilibrium Thermodynamics (<a href="https://arxiv.org/pdf/1503.03585.pdf">Sohl-Dickstein et al., 2015</a>) slowly destroys structure in a data distribution through a diffusion process. Then a reverse diffusion process is learned that restores the structure in the ata.</p>
+
+<p>Both processes are factorial Gaussians, the forward process, <script type="math/tex">p(x^{t}\mid p(x^{t-1})</script> and the inverse process, 
+<script type="math/tex">p(x^{t-1}\mid p(x^t)</script>.</p>
+
+<p>To have an exact inverse diffusion the chain requires thousands of small steps.</p>
+
+<!-- We can also have "heat up" the diffusion operator. -->
+
+<h1 id="infusion-training">Infusion Training</h1>
+
+<p>Infusion training (<a href="https://arxiv.org/pdf/1703.06975.pdf">Bordes et al., 2017</a>) learns a generative model as the transition operator of a Markov chain. When applied multiple times on unstructured random noise, infusion training will denoise it into a sample that matches the target distribution.</p>
+
+<p><img src="/images/blog/infusion-training.png" alt="Infusion training (copyright Bordes et al.) infuses in this case target x=3 into the chain. First row: random initialization of network weights. Second row: after 1 training epoch. Third row: after 2 training epochs, etc. Bottom row: the network learned how to denoise as fast as possible to x=3." title="Infusion training" /></p>
+
+<!-- compatitive results compared to GAN -->
+
+<h1 id="variational-walkback">Variational Walkback</h1>
+
+<p>Variational Walkback (<a href="http://papers.nips.cc/paper/7026-variational-walkback-learning-a-transition-operator-as-a-stochastic-recurrent-net.pdf">Goyal et al., 2017</a>) learns a transition operator as a stochastic recurrent network. It learns those operators which can represent a nonequilibrium stationary distribution (also violating detailed balance) directly. The training objective is a variational one. The chain is allowed to “walk back” and revisit states that were quite “interesting” in the past.</p>
+
+<p>Compared to MCMC we do not have detailed balance, nor an energy function. A detailed balance condition would by the way mean a network with symmetric weights.</p>
+
+<!--
+# Stacked Generative Adversarial Networks
+
+Stacked Generative Adversarial Networks ([Huang et al., 2017](https://arxiv.org/pdf/1612.04357.pdf)) 
+
+![Stacked Generative Adversarial Networks (copyright Huang et al.) ](/images/blog/stacked_gans.jpg "Stacked Generative Adversarial Networks")
+
+-->
+
+<h1 id="nonparametric-autoencoders">Nonparametric autoencoders</h1>
+
+<p>The latent variables in the standard variational autoencoder are Gaussian and have a fixed quantity. The ideal hidden representation however might require a dynamic number of such latent variables. For example if the neural network has only 8 latent variables in the MNIST task it has to somehow represent 10 digits with these 8 variables.</p>
+
+<p>To extend the hidden layer from a fixed to a variable number of nodes it is possible to use methods developed in the nonparametric Bayesian literature.</p>
+
+<p>There have been already several developments:</p>
+
+<ul>
+  <li>A stick-breaking variational autoencoder (<a href="https://arxiv.org/pdf/1605.06197.pdf">Nalisnick and Smyth, 2017</a>) where the latent variables are represented by a stick-breaking process (SB-VAE). The inference is done using stochastic gradient descent, which requires a representation where the parameters of a distribution are separated from an independent stochastic noise factor, called a <strong>differentiable, non-centered parametrization</strong> (DNCP). With a Gaussian distribution this is done through the <strong>reparameterization trick</strong> (see below). For a stick-breaking process Beta random variables need to be sampled. This can be done by drawing <script type="math/tex">x \sim Gamma(\alpha,1)</script> and <script type="math/tex">y \sim Gamma(\beta,1)</script> and have <script type="math/tex">v = x/(x+y)</script>, corresponding to <script type="math/tex">v \sim Beta(\alpha,\beta)</script>. This does not work as a DNCP though, because Gamma does not have one w.r.t. the shape parameter. When close to zero an inverse CDF might be used. However, the authors opt for a so-called Kumaraswamy distribution;</li>
+  <li>A nested Chinese Restaurant Process as a prior on the latent variables (<a href="https://arxiv.org/pdf/1703.07027.pdf">Goyal et al., 2017</a>);</li>
+  <li>An (ordinary) Gaussian mixture as a prior distribution on the latent variables (<a href="https://arxiv.org/pdf/1611.02648.pdf">Dilokthanakul et al., 2017</a>), but see <a href="http://ruishu.io/2016/12/25/gmvae/">this interesting blog post</a> for a critical review (GMVAE);</li>
+  <li>A deep latent Gaussian mixture model (<a href="http://www.ics.uci.edu/~enalisni/BDL_paper20.pdf">Nalisnick et al, 2016</a>) where a Gaussian mixture is used as the approximate posterior (DLGMM);
+<!-- $$z ~ DP(\alpha)$$ and $$x ~ p_\theta(x|z_i)$$ with $$p_\theta$$ the generating network (DLGMM); --></li>
+  <li>Variational deep embedding uses (again) a mixture of Gaussians as a prior (<a href="https://arxiv.org/pdf/1611.05148.pdf">Jiang et al., 2017</a>) (VaDE);</li>
+  <li>Variational autoencoded deep Gaussian Processes (<a href="https://arxiv.org/pdf/1511.06455.pdf">Dai et al., 2016</a>) uses a “chain” of Gaussian Processes to represent multiple layers of latent variables (VAE-DGP).</li>
+</ul>
+
+<p>The problem with autoencoders is that they actually do not define how the latent variables are to be used.</p>
+
+<p>Inherently, without additional constraints the representation problem is ill-posed. Suppose for example that the generator is just a dictionary of images and that training will make the latent variables point to a particular index in this dictionary. In this way no deep structure has been uncovered by the network at all. It’s pretty much just pointing at what it has been seen during training. Generalization can be expected to be pretty bad.</p>
+
+<p>Especially when variational autoencoders are used in sequence modeling it becomes apparent that the latent code is generally not used. The variational lossy autoencoder introduces control over the latent code to successfully combine them with recurrent networks (<a href="https://arxiv.org/pdf/1611.02731.pdf">Chen et al., 2017</a>).</p>
+
+<p>From an information-theoretic perspective the differences can be formulated in an extreme manner: <strong>maximization or minimization</strong> of mutual information. With InfoGAN (not explained in this blog post) mutual information between input and latent variables is maximized to make sure that the variables are all used. This is useful to avoid the “uninformative latent code problem”, where latent features are actually not used in the training. However, with for example the information bottleneck approach the mutual information between input and latent variables is minimized (under the constraint that the features still predict some labels). This makes sense from the perspective of compression. This behavior can all be seen as a so-called information-autoencoding family (<a href="http://bayesiandeeplearning.org/2017/papers/60.pdf">Zhao et al., 2017</a>).</p>
+
+<p>It is interesting to study how nonparametric Bayesian methods fare with respect to this family and what role they fulfill in such a constrained optimization problem. Existing models namely use fixed values for the Lagrangian multipliers (the tradeoffs they make).</p>
+
+<h1 id="mode-collapse">Mode Collapse</h1>
+
+<p>There are several research directions where mode collapse is the main topic. Mode collapse is especially prevalent in generative adversarial networks. In distributional adversarial networks (<a href="https://arxiv.org/pdf/1706.09549.pdf">Li et al., 2017</a>) two adversaries are defined that are slightly different from the normal one, both based on a so-called <strong>deep mean encoder</strong>. The deep mean encoder has the form:</p>
+
+<script type="math/tex; mode=display">\eta(P) = \mathop{\mathbb{E}}_{x \sim P} [ \phi(x) ]</script>
+
+<p>The GAN objective function is:</p>
+
+<script type="math/tex; mode=display">\min_G \max_D { \mathop{\mathbb{E}}_{x \sim P_x} [ \log D(x) ] + \mathop{\mathbb{E}}_{z \sim P_z} [ \log (1 - D(G(z)) ]  }</script>
+
+<p>The authors extend it with an additional term:</p>
+
+<script type="math/tex; mode=display">\min_G \max_{D,M} { \lambda_1 \mathop{\mathbb{E}}_{x \sim P_x} [ \log D(x) ] + \mathop{\mathbb{E}}_{z \sim P_z} [ \log (1 - D(G(z)) ] + \lambda_2 M(P_x,P_G) }</script>
+
+<p>The sample classifier <script type="math/tex">\psi</script> uses the above intermediate summary statistics <script type="math/tex">\eta(P)</script> to define a costs (it outputs 1 if sample is drawn from <script type="math/tex">P_x</script> and 0 otherwise).</p>
+
+<script type="math/tex; mode=display">M(P_x,P_G) = {  \log \psi (\eta (P_G)) ] +  \log (1 - \psi (\eta(P_x)) ]  }</script>
+
+<h1 id="generalization">Generalization</h1>
+
+<p>The GAN objective:</p>
+
+<script type="math/tex; mode=display">\min_{u \in U} \max_{v \in V} { \mathop{\mathbb{E}}_{x \sim D_{real}} [ \phi ( D_v(x) ) ] + \mathop{\mathbb{E}}_{x \sim D_{G_u}} [ \phi (1 - D_v(x)) ]  }</script>
+
+<p>This objective assumes we have an infinite number of samples from <script type="math/tex">D_{real}</script> to estimate 
+<script type="math/tex">\mathop{\mathbb{E}}_{x \sim D_{real}} [ \phi ( D_v(x) ) ]</script>. If we have only a finite number of training examples <script type="math/tex">x_1, \ldots, x_m \sim D_{real}</script>, we use the following to estimate this expectation: <script type="math/tex">\frac{1}{m} \sum_{i=1}^m [ \phi(D_v(x))]</script>.</p>
+
+<!--
+# Nonparametric view of the GAN 
+
+Theorem (oracle inequality for GAN). Let $$F$$ be any critic function class. Denote $$\mu_n$$ as the solution with respect to the empirical estimate $$\nu_n$$ to GAN with generator $$\mu_G$$ and discriminator $$F_D$$:
+
+$$\mu_n = \arg\min_{\mu \sim \mu_G} \max_{f \in F_D} E_{Y \sim \mu} f(Y) - E_{X \sim \nu_n} f(X)$$
+
+The the following decompositions hold for any distribution $$\nu$$,
+
+$$d_{F_D}(\mu_n,\nu) \leq \min_{\mu \in \mu_G} d_{F_D}(\mu,\nu) + d_{F_D}(\nu,\nu_n) + d_{F_D}(\nu_n,\nu)$$
+
+$$d_{F}(\mu_n,\nu) \leq \min_{\mu \in \mu_G} d_{F_D}(\mu,\nu) + (1 + {||\nu_n||}_1 ) \max_{f \in F} \min_{f' \in F_D} {|| f - f'||}_\infty + d_{F_D}(\nu,\nu_n) + d_{F}(\nu_n,\nu)$$
+
+In the first decomposition $$d_{F_D}$$ is the objective evaluation metric. The first term is a minimization term, the best approximation error within the generator class when having population access to the true measure $$\nu$$. The second term is the statistical error, also called the generalization error, due to the fact that there are only $$n$$ samples available.
+
+In the second decomposition a different $$d_F$$ is the objective metric. The first term is the approximation error induced by the generator. The second term defines how well the discriminator serves as a surrogate for the objective metric, and the third term is the statistical error.
+-->
+
+<h1 id="regularization">Regularization</h1>
+
+<p>Training deep networks has undergone several advances. One of the first innovations has been the layer by layer training. 
+Other concepts you will find are:</p>
+
+<ul>
+  <li>dropout</li>
+  <li>stochastic gradient descent</li>
+  <li>batch normalization</li>
+  <li>residual training</li>
+  <li>reparameterization trick</li>
+</ul>
+
+<p>We will briefly describe them, but they each easily deserve a dedicated explanation as well. So little time!</p>
+
+<h2 id="dropout">Dropout</h2>
+
+<p>Another key idea has been to randomly drop units including connections during training. This prevents overfitting. During training in this way a collection of differently thinned networks is used. At testing an unthinned network is used. This is called dropout (<a href="http://www.jmlr.org/papers/volume15/srivastava14a/srivastava14a.pdf">Srivastava et al., 2014</a>).</p>
+
+<h2 id="stochastic-gradient-descent">Stochastic gradient descent</h2>
+
+<p>Gradient descent or steepest descent is an iterative method where we take steps that depend on the slope (or more general, that depend on the gradient) with as purpose to end up at a minimum. To get (negative) gradients we need to have differential functions.</p>
+
+<p>Stochastic gradient descent is a stochastic approximation to gradient descent. What is approximated is the true gradient. Adjusting the parameters <script type="math/tex">\theta</script> it minimizes the following loss function:</p>
+
+<script type="math/tex; mode=display">\theta = \arg \min_\theta \frac{1}{N} \sum_{i=1}^N L(x_i;\theta)</script>
+
+<p>Here <script type="math/tex">x_1, \ldots x_N</script> is the training set. Stochastic gradient descent now incrementally navigates to the values for $\theta$ where the sum over the function $L(x_i, \theta)$ is minimized. The parameter $\theta$ is continuously adjusted by looping over all observations $x_i$:</p>
+
+<script type="math/tex; mode=display">\theta' = \theta - \eta \frac{\partial }{\partial \theta} L(x_i;\theta)</script>
+
+<p>After looping over all observations, stochastic gradient descent performs this loop again and again till some kind of convergence criterion is met or until the researcher likes to have a beer, read a book, or spend time on social media.</p>
+
+<!--
+Stochastic gradient descent typically uses a mini-batch $$x_1, \ldots, x_m$$ of size $$m$$. The gradient is then approximated by:
+
+$$\frac{1}{m} {\partial l(x_i, \theta)}{\partial \theta}$$
+-->
+
+<h2 id="batch-normalization">Batch normalization</h2>
+
+<p>The distribution of network activities change during training due to the fact that the network parameters change. This phenomenon is called <strong>internal covariate shift</strong>. It is possible to fix the distribution of the layer inputs <script type="math/tex">x</script> as the training progresses. It is for example well-known that whitening the inputs (linear transforming them to zero means, unit variances and decorrelating them) makes a network converge faster. Batch normalization does not simply whiten each layer’s input, but makes two simplifications: (1) normalize each scalar feature independently, and (2) introduce scale and shift parameters to preserve nonlinearities. Batch normalization improved significantly on the ImageNet classification task (<a href="https://arxiv.org/pdf/1502.03167.pdf">Ioffe and Szegedy, 2015</a>).</p>
+
+<h2 id="residual-learning">Residual learning</h2>
+
+<p>Making networks deeper and deeper counterintuitively increases the training error and thus the test error. Consider for example an identity mapping (as with autoencoders): a network needs to learn to duplicate the input to generate the output. Empirical evidence shows that learning the difference (in this case zero between input and output) is easier for a network. This is called residual learning (<a href="https://arxiv.org/pdf/1512.03385.pdf">He et al., 2015</a>. At ImageNet such residual nets achieve 3.57% error on the test set. It is hence no surprise that the fourth edition of the Inception networks use residual learning (<a href="http://www.aaai.org/ocs/index.php/AAAI/AAAI17/paper/download/14806/14311">Szegedy et al., 2017</a>).</p>
+
+<h2 id="reparameterization-trick">Reparameterization Trick</h2>
+
+<p>The reparameterization trick replaces a (blackbox) stochastic node in a computational graph with a node that is non-stochastic (of which a gradient can be calculated) with the noise added separately. It’s just as if the salt is added after you have made the soup. It substitutes a random variable by a deterministic transformation of a simpler random variable. There are three popular methods (<a href="http://blog.shakirm.com/2015/10/machine-learning-trick-of-the-day-4-reparameterisation-tricks/">Shakir Mohammed blog</a>):</p>
+
+<ol>
+  <li>Inverse sampling. The inverse cumulative distribution function can be used as the transformation.</li>
+  <li>Polar methods. Generating pairs (e.g. the basis of the Box-Muller transform).</li>
+  <li>Coordinate transformation methods (shifting and scaling).</li>
+</ol>
+
+<p>The last example uses the fact that the transformation ($x = g(\epsilon;\theta)$) is valid for particular well chosen one-liners:</p>
+
+<script type="math/tex; mode=display">\frac{\partial}{\partial \theta} \sum_{i=1}^N p(x_i; \theta) f(x_i) =
+\frac{\partial}{\partial \theta} \sum_{i=1}^N p(\epsilon_i) f(g(\epsilon_i;\theta))</script>
+
+<p>For example the (zero-centered) Normal distribution is defined as:</p>
+
+<script type="math/tex; mode=display">p(x;\theta) = N(0,\theta)</script>
+
+<p>We can write this as a standard Normal distribution with a deterministic transformation:</p>
+
+<script type="math/tex; mode=display">p(\epsilon) = N(0,1)</script>
+
+<script type="math/tex; mode=display">g(\epsilon; \theta) = \theta \epsilon</script>
+
+<!--
+For example the standard Cauchy distribution (position at zero, $x_0 = 0$, and scale at one, $\gamma=1$) is defined as:
+
+$$p(x;\theta) = \frac{1}{\pi (1 + x^2)}$$
+
+The quantile function (inverse cumulative function) is:
+
+$$Q(\epsilon) = \tan (\pi (\epsilon - 1/2) )$$
+
+Thus is can also be written as a uniform base distribution with a subsequent deterministic transformation:
+
+$$p(\epsilon) = U[0,1]$$
+
+$$g(\epsilon; \theta) = \tan(\pi \epsilon)$$
+
+-->
+
+<!--
+Suppose we want to optimize over $\sigma$:
+
+$$
+x = U(-1, 1) \\
+y = N(0, \sigma) \\
+\arg \min_{\sigma} \frac{1}{N} \sum_{i=1}^N L(x_i,y_i)
+$$
+
+Here $L$ is the loss function. It is often the mean squared error between $x$ and $y$, let us assume this here as well. 
+
+$$L(x,y) = (x - y)^2$$
+
+In a probabilistic model the output is **different** each time we run, even if the input is the same. To do gradient descent we define a closed-form formula about how to change our parameter $\sigma$ to get a lower value for $L$. The gradient defines how much the output changes when we alter the input. 
+
+$$\frac{\partial}{\partial \sigma} L(x,y) = \frac{\partial}{\partial \sigma} {(x - c \sigma)}^2 $$
+
+Here we have $c ~\sim N(0,1)$ simulated from a normal distribution without parameters.
+
+$$
+x = U(-1, 1) \\
+y = c \sigma \\
+\arg \min_{\sigma} \frac{1}{N} \sum_{i=1}^N L(x_i,y_i)
+$$
+
+We can solve:
+
+$$\frac{\partial}{\partial \sigma} L(x,y) = \frac{\partial}{\partial \sigma} {(x - c \sigma)}^2 = 
+\frac{\partial}{\partial \sigma} x^2 - 2 c \sigma x + {(c \sigma)}^2 = - 2 x c + 2 c^2 \sigma $$
+
+If we now perform gradient descent it will be an iterative execution of:
+
+$$\sigma' = \sigma - \eta ( - 2 x c + 2 c^2 \sigma ) = \sigma + 2 \eta c ( x - c \sigma) $$
+
+Now we can reparametrize in such way that $x$ and $\sigma$ are not parameters of a probability distribution. They are just parameters of a deterministic function (that is transformed through a stochastic function that has **no parameters** to optimize over).
+-->
+
+<p>The result is that through this reparameterization the variance can be substantially reduced (potentially!). 
+The reparameterization trick is well explained by Goker Ergodan in this <a href="http://nbviewer.jupyter.org/github/gokererdogan/Notebooks/blob/master/Reparameterization%20Trick.ipynb">Jupyter notebook</a>.</p>
+
+<!-- The way gradient descent is done in this type of setting is stochastic as well. Single $x,y$ pairs are used to find out in which way $\sigma$ has to be adjusted. The difference with the setting above is that -->
+
+<!-- if the primal is infeasible (insufficient model capacity) the choice of Lagrange multipliers prioritizes different constraints -->
+
+<!--
+
+# Generative Latent Optimization 
+
+
+
+# Other typical concepts
+
+## Energy function representation of probability
+
+A probability distribution can be represented through an energy function
+
+$$p(x) = \frac { \exp^{-E(x)} }{ \sum_{x \in X} \exp^{-E(x)} } = \frac{1}{Z} \exp^{-E(x)}$$
+
+It relates the probability of $$x$$ with that of all possible other states. A so-called canonical assemble represents the states of a system by such an exponential. The above is actually using the so-called canonical [partition function](https://en.wikipedia.org/wiki/Partition_function_(mathematics)). Note, that in both cases the original definitions contains a thermodynamic beta $$\beta$$. This (inverse) temperature can be used to compare systems: they will be in equilibrium if their temperature is the same.
+
+The generalization of the canonical assemble to an infinite number of states is called the [Gibbs measure](https://en.wikipedia.org/wiki/Gibbs_measure):
+
+$$P(X=x) = \frac{1}{Z(\beta)} \exp^{-\beta E(x)}$$
+
+What is all narrows down to is that not every state is counted equally. The Boltzmann factor is a weight. A low energy state is easier to access and weighs much more than a high energy state. If the temperature increases this difference diminishes.
+-->
+
+<!--
+Kullback-Leibler
+Thus, we have for example:
+
+$$\log p(x) = -E(x) - \log Z$$
+-->
+
+<!--
+
+## Monte Carlo simulation
+
+If a probability density function $$p(x)$$ is known, its statistical properties such as mean, variance, etcetera can be found through integration:
+
+$$E[h(X)] = \int h(x) p(x) dx$$
+
+This integral can be approximated by Monte Carlo simulation by drawing many $$X_i$$ from $$p(x)$$:
+
+$$\mu_h = \int h(x) p(x) dx \approx \frac{1}{n} \sum_{i=1}^n h(X_i)$$
+
+That the latter converges to the expectation $$\mu_h$$ of $$h(x)$$ is known as the law of large numbers.
+
+
+## Jensen's inequality
+
+To really appreciate Jensen's inequality I'd recommend the Convex Optimization course by Stephen Boyd at the Stanford University, Electrical Engineering department ([youtube lecture series](https://www.youtube.com/watch?v=McLq1hEq3UY).
+
+
+## Reparameterization Trick
+
+The reparameterization trick is well explained by Goker Ergodan in this [Jupyter notebook](http://nbviewer.jupyter.org/github/gokererdogan/Notebooks/blob/master/Reparameterization%20Trick.ipynb).
+
+Suppose we have a simple distribution $$q_{\theta}(x) = N(\theta, 1)$$ and we want to solve the following toy problem:
+
+$$\min_\theta E_q \left[ x^2 \right]$$
+
+The gradient over $$\theta$$ we can calculate (see the Jupyter notebook):
+
+$$\nabla_\theta E_q \left[ x^2 \right] = E_q \left[ x^2 (x - \theta) \right]$$
+
+The gradient is zero at $$x = \theta$$ and increases quadratically with $$x^2$$ all with $$x$$ sampled from $$N(\theta,1)$$.
+
+However, if we separate $$x = \theta + \epsilon$$ with $$\epsilon \sim N(0,1)$$, we can write:
+
+$$\nabla_\theta E_q \left[ x^2 \right] = E_p \left[ 2 (\theta + \epsilon) \right]$$
+
+Here $$p$$ is the distribution over $$\epsilon$$, namely $$N(0,1)$$, not the distribution over $$N(\theta,1)$$. This is the whole trick, the distribution $$p$$ does not depend on $$\theta$$. The result is that through this reparameterization the variance can be substantially reduced. In a handwaving manner this is logical. Do not try to differentiate over stochastic elements, that only amplifies deltas.
+
+## Backpropagation
+
+The backprop paper came out in 1986. 
+
+
+
+## Likelihood
+
+Likelihood, call it an error function if you hate Bayesian terms. :-)
+
+
+-->
+
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,267 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Machine learning done Bayesian  | Robots, machine learning, global issues</title>
+
+<meta name="author" content="Anne van Rossum">
+
+<meta name="description" content="Machine learning done Bayesian"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link rel="alternate" href="/atom.xml" title="Robots, machine learning, global issues" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link rel="shortcut icon" href="/favicon.png">
+	<link rel="apple-touch-icon" href="/favicon.png">
+	<link rel="apple-touch-icon" href="/favicon-152x152.png" sizes="152x152">
+	<link rel="apple-touch-icon" href="/favicon-180x180.png" sizes="180x180">
+	<link rel="apple-touch-icon" href="/favicon-167x167.png" sizes="167x167">
+	<link rel="stylesheet" href="/stylesheets/screen.css" media="screen, projection" type="text/css">
+	<link rel="stylesheet" href="/stylesheets/font-awesome.min.css" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+
+
+
+
+<!-- Social media content metadata -->
+
+<meta property="fb:admins" content="547279274" />
+<meta property="og:title" content="Machine learning done Bayesian" />
+<meta property="og:site_name" content="Robots, machine learning, global issues" />
+<meta property="og:url" content="http://www.annevanrossum.com/blog/2018/05/23/machine-learning-done-bayesian/" />
+<meta property="og:type" content="article" />
+<meta property="og:description" content="Machine learning done Bayesian" />
+<meta property="og:author" content="https://www.facebook.com/annevanrossum" />
+
+
+
+<meta property="twitter:card" content="summary" />
+<meta property="twitter:site" content="annevanrossum" />
+<meta property="twitter:url" content="http://www.annevanrossum.com/blog/2018/05/23/machine-learning-done-bayesian/" />
+<meta property="twitter:title" content="Machine learning done Bayesian" />
+<meta property="twitter:description" content="Machine learning done Bayesian" />
+<meta property="twitter:creator" content="annevanrossum" />
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  jax: ["input/TeX", "output/HTML-CSS"],
+  tex2jax: {
+    inlineMath: [ ['$', '$'] ],
+    displayMath: [ ['$$', '$$']],
+    processEscapes: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  TeX: { equationNumbers: { autoNumber: "AMS" } },
+  messageStyle: "none",
+  "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<!-- Site environment: production -->
+
+<!-- Get MathJax online -->
+<script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+
+
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Robots, machine learning, global issues</a></h1>
+<h4>Random thoughts</h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.annevanrossum.com">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Machine Learning Done Bayesian</h2>
+	<div class="entry-content"><p>In the dark corners of the academic world there is a rampant fight between practitioners of deep learning and researchers of Bayesian methods. This polemic <a href="https://medium.com/intuitionmachine/cargo-cult-statistics-versus-deep-learning-alchemy-8d7700134c8e">article</a> testifies to this, although firmly establishing itself as anti-Bayesian.</p>
+
+<p>There is not much you can have against Bayes’ rule, so the hate runs deeper than this. I think it stems from the very behavior of Bayesian researchers rewriting existing methods as approximations to Bayesian methods.</p>
+
+<p>Ferenc Huszár, a machine learning researcher at Twitter <a href="http://www.inference.vc/everything-that-works-works-because-its-bayesian-2/">describes</a> some of these approximations.</p>
+
+<ul>
+  <li>L1 regularization is just Maximum A Posteriori (MAP) estimation with sparsity inducing priors;</li>
+  <li>Support vector machines are just the wrong way to train Gaussian processes;</li>
+  <li>Herding is just Bayesian quadrature done <a href="https://arxiv.org/abs/1204.1664">slightly wrong</a>;</li>
+  <li>Dropout is just variational inference done <a href="https://arxiv.org/abs/1506.02142">slightly wrong</a>;</li>
+  <li>Stochastic gradient descent (SGD) is just variational inference (variational EM) done <a href="https://arxiv.org/pdf/1704.04289.pdf">slightly wrong</a>.</li>
+</ul>
+
+<p>Do you have other approximations you can think of?</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<time datetime="2018-05-23T10:00:08+00:00" pubdate data-updated="true">May 23rd, 2018</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/l1-regularization/'>L1 regularization</a>, <a class='category' href='/blog/categories/bayesian/'>bayesian</a>, <a class='category' href='/blog/categories/dropout/'>dropout</a>, <a class='category' href='/blog/categories/herding/'>herding</a>, <a class='category' href='/blog/categories/machine-learning/'>machine learning</a>, <a class='category' href='/blog/categories/stochastic-gradient-descent/'>stochastic gradient descent</a>, <a class='category' href='/blog/categories/support-vector-machines/'>support vector machines</a>
+
+</div>
+
+
+	
+</div></article>
+
+	<div class="share">
+	<!-- Go to www.addthis.com/dashboard to customize your tools -->
+	<div class="addthis_sharing_toolbox"></div>
+	<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-549f5fe730fc5e91"></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <p>The comments are not automatically shown, so the page loads faster and you only partake in the disqus network if you click. However, this does not mean that your comments are not appreciated, to the contrary!</p> 
+    <br>
+    <div id="disqus_thread"> 
+	<a href="#" onclick="disqus();return false;"><i class="el el-group"></i> Show Comments</a>
+    </div> 
+</section>
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2020
+
+    Anne van Rossum
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+	var disqus_shortname = 'annevanrossum';
+	var disqus_loaded = false;
+        var disqus_identifier = 'http://www.annevanrossum.com/blog/2018/05/23/machine-learning-done-bayesian/';
+        var disqus_url = 'http://www.annevanrossum.com/blog/2018/05/23/machine-learning-done-bayesian/';
+        var disqus_script = 'embed.js';
+	// load disqus comments only on demand
+	function disqus() { 
+		if (!disqus_loaded){
+			var e = document.createElement("script"); 
+			e.type = "text/javascript"; 
+			e.async = true; 
+			e.src = "//" + disqus_shortname + ".disqus.com/" + disqus_script;
+			(document.getElementsByTagName("head")[0] ||
+			 document.getElementsByTagName("body")[0])
+				.appendChild(e);
+		} 
+	  }                       
+      /*
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.annevanrossum.com/blog/2018/05/23/machine-learning-done-bayesian/';
+        var disqus_url = 'http://www.annevanrossum.com/blog/2018/05/23/machine-learning-done-bayesian/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }()); */
+</script>
+
+
+
+
+
+</body>
+</html>

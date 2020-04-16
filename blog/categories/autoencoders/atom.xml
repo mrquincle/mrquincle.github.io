@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: autoencoders | Robots, machine learning, global issues]]></title>
+  <link href="http://www.annevanrossum.com/blog/categories/autoencoders/atom.xml" rel="self"/>
+  <link href="http://www.annevanrossum.com/"/>
+  <updated>2020-04-16T13:19:09+00:00</updated>
+  <id>http://www.annevanrossum.com/</id>
+  <author>
+    <name><![CDATA[Anne van Rossum]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Generating Point Clouds]]></title>
+    <link href="http://www.annevanrossum.com/blog/2018/09/26/generating-point-clouds/"/>
+    <updated>2018-09-26T08:15:22+00:00</updated>
+    <id>http://www.annevanrossum.com/blog/2018/09/26/generating-point-clouds</id>
+    <content type="html"><![CDATA[<p>If we do want robots to learn about the world, we can use computer vision. We can employ traditional methods. Build up a full-fledged model from corner detectors, edge detectors, feature descriptors, gradient descriptors, etc. We can also use modern deep learning techniques. One large neural network hopefully captures similarly or even better abstractions compared to the conventional computer vision pipeline.</p>
+
+<p>Computer vision is not the only choice though! In recent years there is a proliferation of a different type of data: depth data. Collections (or clouds) of points represent 3D shapes. In a game setting the Kinect was a world-shocking invention using structured light. In robotics and autonomous cars LIDARs are used. There is huge debate about which sensors are gonna “win”, but I personally doubt there will be a clearcut winner. My line of reasoning:</p>
+
+<ul>
+  <li>Humans use vision and have perfected this in many ways. It would be silly to not use cameras.</li>
+  <li>Depth sensors can provide information when vision gets obstructed.</li>
+  <li>Humans use glasses, microscopes, infrared goggles, all to enhance our senses. We are basically cyborgs.</li>
+  <li>Robots will benefit from a rich sensory experience just like we do. They want to be cyborgs too.</li>
+</ul>
+
+<!--more-->
+
+<h1 id="point-clouds">Point clouds</h1>
+
+<p>Point clouds are quite a good description. Objects are represented by individual points in a 3D space. By making the points a bit bigger you can easily figure out the shapes yourself (see the figure below).</p>
+
+<p><img src="/images/blog/dfaust_dataset.png" alt="The D-FAUST dataset and interpolation between the figure totally at the left and the one totally at the right. Copyright: Achlioptas et al. (2018)." title="Interpolation between two distinct human figures shows a gradual transition from one figure to the next" /></p>
+
+<p>A group of researchers who started to study point clouds are 
+<a href="http://web.stanford.edu/~optas/">Panos Achlioptas</a>,
+<a href="https://geometry.stanford.edu/person.php?id=diamanti">Olga Diamanti</a>,
+<a href="http://mitliagkas.github.io/">Ioannis Mitliagkas</a>, and
+<a href="https://geometry.stanford.edu/member/guibas/">Leonidas Guibas</a> in the paper <a href="https://arxiv.org/pdf/1707.02392.pdf">Learning Representations and Generative Models for 3D Point Clouds</a> from Leonidas Guibas’ Geometric Computation group in the Computer Science Department of Stanford University. Side note: prof. Guibas obtained his PhD under the supervision of Donald Knuth. You can reach Panos via <a href="http://web.stanford.edu/~optas/contact.html">his website</a>. I haven’t found his Twitter account.</p>
+
+<p>There are two main reasons why point clouds should be treated different from pixels in a neural network:</p>
+
+<ol>
+  <li>The convolution operator works on a grid. Encoding 3D data on a grid would encode a lot of empty voxels. This means that for point clouds we cannot just convolution.</li>
+  <li>Point clouds are permutation invariant. Only the 3D position of a point matters, their id does not. Points in a point cloud can be numbered in any way. It still describes the same object. A comparison operator between two point clouds need to take this into account. Preferably the latent variables will also be permutation invariant.</li>
+</ol>
+
+<h2 id="permutation-invariant-distance-metrics">Permutation invariant distance metrics</h2>
+
+<p>There are permutation invariant distance metrics available. The authors describe the <a href="https://en.wikipedia.org/wiki/Earth_mover%27s_distance">Earth Mover’s Distance (EM)</a>. This is a concept discovered by Gaspard Monge in 1781 on how to transport soil from one place to the next with minimal effort. Let us define the flow <script type="math/tex">f_{i,j}</script> between location <script type="math/tex">i</script> and <script type="math/tex">j</script> with distance <script type="math/tex">d_{i,j}</script>, then the EM distance between location <script type="math/tex">i \in P</script> and <script type="math/tex">j \in Q</script> is as follows:</p>
+
+<script type="math/tex; mode=display">d_{EM}(P,Q) = \frac{ \sum_{i=1}^m \sum_{j=1}^n f_{i,j} d_{i,j} }{ \sum_{i=1}^m \sum_{j=1}^n f_{i,j} }</script>
+
+<p>The individual flow is multiplied with the corresponding distance. The overall sum is normalized with the overall flow. In mathematics this is known as the Wasserstein metric. <a href="https://vincentherrmann.github.io/blog/wasserstein/">This blog post</a> introduces the Wasserstein metric perfectly and <a href="https://www.alexirpan.com/2017/02/22/wasserstein-gan.html">this blog post</a> explains its relevance to Generative Adversarial Networks.</p>
+
+<p>The Wasserstein metric is differentiable almost everywhere. <a href="https://en.wikipedia.org/wiki/Almost_everywhere">Almost everywhere (a.e.)</a> is a technical term related to a set having measure zero. It states that the elements for which the property (in this case being differentiable) is not valid has measure zero. Another example of a function that is differentiable a.e. is a monotonic function on <script type="math/tex">[a,b] \rightarrow \mathbb{R}</script>.</p>
+
+<p>The Chamfer pseudo-distance (C) measure is another measure which calculates the squared distance between each point in one set to the nearest neighbour in the other set:</p>
+
+<script type="math/tex; mode=display">d_{C}(P,Q) = \sum_{i=1}^m \min_j d_{i,j}^2 + \sum_{j=1}^n \min_i d_{i,j}^2</script>
+
+<p>It’s stated that <script type="math/tex">d_{C}</script> is more efficient to compute than <script type="math/tex">d_{EM}</script>.</p>
+
+<p>Immediately we can observe from these metrics that they are not invariant with respect to rotations, translations, or scaling.</p>
+
+<h2 id="comparison-metrics">Comparison metrics</h2>
+
+<p>To compare shapes in a 3D space we can follow different strategies. We describe three methods that take the spatial
+nature into account and that compare over sets of 3D objects (so we can compare set <script type="math/tex">P</script> with set <script type="math/tex">Q</script>):</p>
+
+<ol>
+  <li>Jensen-Shannon divergence.</li>
+  <li>Coverage</li>
+  <li>Minimum Matching distance.</li>
+</ol>
+
+<h3 id="jensen-shannon">Jensen-Shannon</h3>
+
+<p>First of all, we can align the point cloud data along the axis, introduce voxels and measure the number of points in
+each corresponding voxel. Then we use a distance metric using these quantities, in this case a Jensen-Shannon divergence.</p>
+
+<script type="math/tex; mode=display">d_{JS}(P||Q) = \frac{1}{2} D_{KL}(P||M) + \frac{1}{2} D_{KL}(Q||M)</script>
+
+<p>Here <script type="math/tex">M = \frac{1}{2}(P + Q)</script> and <script type="math/tex">D_{KL}</script> is the Kullbach-Leibler divergence metric.</p>
+
+<p>To compare sets of point clouds we can do exactly the same. In this case the number of points in each voxel is just the
+collection of points across all point clouds in that set.</p>
+
+<h3 id="coverage">Coverage</h3>
+
+<p>Coverage is defined by the fraction of point clouds in <script type="math/tex">P</script> that are matched with point clouds in <script type="math/tex">Q</script>. The match is
+defined by one the permutation invariant distance metrics. It’s not entirely clear how this is completely specified 
+to me. Is there a threshold used that defines if it is a match? Or is it just a sum or average?</p>
+
+<h3 id="minimum-matching-distance">Minimum Matching distance</h3>
+
+<p>The minimum matching distance measures also the fidelity of <script type="math/tex">P</script> versus <script type="math/tex">Q</script> (compared to the coverage metric). This
+indeed uses an average over the (permutation invariant) distances between point clouds.</p>
+
+<h2 id="generation">Generation</h2>
+
+<p>The pipeline followed by the authors is similar to that of PointNet. The pointcloud contains 2048 3D points. 
+This data is fed into the encoder. The encoder exists of 1D convolutional layers (five of them) with a kernel size of 1 each of which are followed by a layer with ReLUs and one to
+perform batch normalization. After this pipeline an permutation-invariant max layer is placed. To read more on a
+1D convolutional layer check the following clip by Andrew Ng. On just a 2D matrix a 1D convolutional layer would be
+just a multiplication by a factor. However, on 3D objects, it can be used to reduce layers or introduce a 
+nonlinearity.</p>
+
+<iframe width="740" height="480" src="//www.youtube.com/embed/vcp0XvDAX68" frameborder="0" allowfullscreen=""></iframe>
+
+<p>The decoder contains three layers, the first two followed by ReLUs.</p>
+
+<h2 id="results">Results</h2>
+
+<p>Some of the results from this work:</p>
+
+<ul>
+  <li>The GAN operating on the raw data converges much slower than the GAN operating on the the latent variables.</li>
+  <li>The latent GAN model using the AE with Earth Mover’s distance outperforms the one with the Chamfer pseudo distance.</li>
+  <li>Both latent GAN models suffer from mode collapse. Wasserstein GAN does not…</li>
+</ul>
+
+<p>Note that the Wasserstein metric is the same as the Earth Mover’s distance. So the above basically states that using
+Wasserstein distance makes sense for both the autoencoder as well as the GAN involved.</p>
+
+<p>There are not yet many models that operate directly on point clouds. PointNet is one of the most famous ones.
+In a ModelNet40 shape classification task it has the following performance:</p>
+
+<ul>
+  <li>87.2% - Vanilla PointNet, without transformation networks</li>
+  <li>89.2% - PointNet, with transformation networks</li>
+  <li>90.7% - PointNet++, with multi-resolution grouping to cope with non-uniform sampling densities</li>
+  <li>91.9% - PointNet++, with face normals as additional point features</li>
+</ul>
+
+<p>And the paper’s performance:</p>
+
+<ul>
+  <li>84.0% - Earth Mover’s distance</li>
+  <li>84.5% - Chamfer distance</li>
+</ul>
+
+<p>It is not clear to me why they don’t list the results of the PointNet and PointNet++ papers which they both cite.
+They should have definitely told why it cannot be compared if they think that’s the case.</p>
+
+<h2 id="promising-research-direction">Promising research direction</h2>
+
+<p>One of the most obvious improvements seem to be the choice of the Wasserstein metric in different parts of the
+architecture. Another paper that caught my interest is <a href="https://openreview.net/pdf?id=B1xsqj09Fm">Large Scale GAN Training for High Fidelity Natural Image Synthesis (pdf)</a>
+under review at ICLR 2019.</p>
+
+<p>An interesting aspect of this paper is that they sample from a different distribution while testing versus while training.
+They introduce a “truncation trick”. It samples from a truncated Normal distribution rather than <script type="math/tex">N(0,\sigma)</script> for the latent variables. (The values above a particular threshold are just sampled again until they are below that threshold.) I don’t completely get this. What’s going on there? Is there a mode in the network that defines the prototypical dog and are other dogs defined by nonzero values in the latent variable space? Then this seem to show that the layer exhibits an non-intuitive decomposition of the task at hand. I would expect a zero vector to correspond to an “abstract dog” and have all nonzero parameters contribute in an attribute like fashion. This seems to be more prototype-like, similar to old-fashioned vector quantization.</p>
+
+<p>They however also define other latent random variables (in appendix E). The censored normal <script type="math/tex">\max[N(0,\sigma),0]</script> is interesting. It reminds me of <a href="https://yliapis.github.io/Non-Negative-Matrix-Factorization/">nonnegative matrix factorization</a>. By using a nonnegative constraint the representation becomes additive (part-based) and sparse. That’s quite different from prototype-like methods.</p>
+
+<p>In the last few months I’ve been trying nonparametric extensions to the latent layer, but these experiments do not seem to be 
+very promising.</p>
+
+<p>A promising research direction might be to study autoencoders where the latent variables are such that they exhibit the 
+same <strong>nonnegative</strong> (part-based representation) features. When we have a latent layer that decomposes the input like this,
+it might become more valuable to subsequently have a nonparametric extension.</p>
+
+]]></content>
+  </entry>
+  
+</feed>

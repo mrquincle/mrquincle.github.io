@@ -1,0 +1,506 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Random thoughts  | Robots, machine learning, global issues</title>
+
+<meta name="author" content="Anne van Rossum">
+
+<meta name="description" content="A blog about robots, machine learning, and environmental issues and impact of technology"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link rel="alternate" href="/atom.xml" title="Robots, machine learning, global issues" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link rel="shortcut icon" href="/favicon.png">
+	<link rel="apple-touch-icon" href="/favicon.png">
+	<link rel="apple-touch-icon" href="/favicon-152x152.png" sizes="152x152">
+	<link rel="apple-touch-icon" href="/favicon-180x180.png" sizes="180x180">
+	<link rel="apple-touch-icon" href="/favicon-167x167.png" sizes="167x167">
+	<link rel="stylesheet" href="/stylesheets/screen.css" media="screen, projection" type="text/css">
+	<link rel="stylesheet" href="/stylesheets/font-awesome.min.css" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Social media content metadata -->
+
+<meta property="fb:admins" content="547279274" />
+<meta property="og:title" content="Robots, machine learning, global issues" />
+<meta property="og:site_name" content="Robots, machine learning, global issues" />
+<meta property="og:url" content="http://www.annevanrossum.com/posts/2/" />
+<meta property="og:type" content="website" />
+<meta property="og:description" content="A blog about robots, machine learning, and environmental issues and impact of technology" />
+<meta property="og:author" content="https://www.facebook.com/annevanrossum" />
+
+
+
+<meta property="twitter:card" content="summary" />
+<meta property="twitter:site" content="annevanrossum" />
+<meta property="twitter:url" content="http://www.annevanrossum.com/posts/2/" />
+<meta property="twitter:title" content="Robots, machine learning, global issues" />
+<meta property="twitter:description" content="A blog about robots, machine learning, and environmental issues and impact of technology" />
+<meta property="twitter:creator" content="annevanrossum" />
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  jax: ["input/TeX", "output/HTML-CSS"],
+  tex2jax: {
+    inlineMath: [ ['$', '$'] ],
+    displayMath: [ ['$$', '$$']],
+    processEscapes: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  TeX: { equationNumbers: { autoNumber: "AMS" } },
+  messageStyle: "none",
+  "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<!-- Site environment: production -->
+
+<!-- Get MathJax online -->
+<script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+
+
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Robots, machine learning, global issues</a></h1>
+<h4>Random thoughts</h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.annevanrossum.com">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2018/01/30/inference-in-deep-learning/">
+		
+			Inference in Deep Learning</a>
+	</h2>
+	<div class="entry-content">
+		<!-- Inception in Tensorflow -->
+
+<p>There are many, many new generative methods developed in the recent years.</p>
+
+<ul>
+  <li>denoising autoencoders</li>
+  <li>generative stochastic networks</li>
+  <li>variational autoencoders</li>
+  <li>importance weighted autoencoders</li>
+  <li>generative adversarial networks</li>
+  <li>infusion training</li>
+  <li>variational walkback</li>
+  <li>stacked generative adversarial networks</li>
+  <li>generative latent optimization</li>
+  <li>deep learning through the use of non-equilibrium thermodynamics</li>
+</ul>
+
+<h1 id="deep-models">Deep Models</h1>
+
+<p>We can’t delve into the details of those old workhorse models, but let us summarize a few of them nevertheless.</p>
+
+<p>A Boltzmann machine can be seen as a stochastic generalization of a Hopfield network. In their unrestricted form Hebbian learning is often used to learn representations.</p>
+
+
+		
+		<a href="/blog/2018/01/30/inference-in-deep-learning/" class="more-link">Don't just read the excerpt. :-) Sit down and read for real! &rarr;</a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<time datetime="2018-01-30T00:00:00+00:00" pubdate data-updated="true">January 30th, 2018</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/deep-learning/'>deep learning</a>, <a class='category' href='/blog/categories/inference/'>inference</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2017/05/03/what-is-contrastive-divergence/">
+		
+			What Is Contrastive Divergence?</a>
+	</h2>
+	<div class="entry-content">
+		<h1 id="kullback-leibler-divergence">Kullback-Leibler divergence</h1>
+
+<p>In contrastive divergence the Kullback-Leibler divergence (KL-divergence) between the data distribution and the model distribution is minimized (here we assume <script type="math/tex">x</script> to be discrete):</p>
+
+<script type="math/tex; mode=display">D(P_0(x) \mid\mid P(x\mid W)) = \sum_x P_0(x) \log \frac {P_0(x) }{P(x\mid W)}</script>
+
+<p>Here <script type="math/tex">P_0(x)</script> is the observed data distribution, <script type="math/tex">P(x\mid W)</script> is the model distribution and <script type="math/tex">W</script> are the model parameters. A <strong>divergence</strong> (<a href="https://en.wikipedia.org/wiki/Divergence_(statistics)">wikipedia</a>) is a fancy term for something that resembles a <strong>metric</strong> distance. It is not an actual metric because the divergence of <script type="math/tex">x</script> given <script type="math/tex">y</script> can be different (and often is different) from the divergence of <script type="math/tex">y</script> given <script type="math/tex">x</script>. The Kullback-Leibler divergence <script type="math/tex">D_{KL}(P \mid \mid Q)</script> exists only if <script type="math/tex">Q(\cdot) = 0</script> implies <script type="math/tex">P(\cdot) = 0</script>.</p>
+
+
+		
+		<a href="/blog/2017/05/03/what-is-contrastive-divergence/" class="more-link">Don't just read the excerpt. :-) Sit down and read for real! &rarr;</a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<time datetime="2017-05-03T09:30:04+00:00" pubdate data-updated="true">May 3rd, 2017</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/contrastive-divergence/'>contrastive divergence</a>, <a class='category' href='/blog/categories/gradient-ascent/'>gradient ascent</a>, <a class='category' href='/blog/categories/gradient-descent/'>gradient descent</a>, <a class='category' href='/blog/categories/kullback-leibler-divergence/'>kullback-leibler divergence</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2016/03/26/yoga-900-on-linux/">
+		
+			Yoga 900 on Linux</a>
+	</h2>
+	<div class="entry-content">
+		<p>The Yoga 900 is a beautiful machine that has a considerably long battery lifetime and can be folded such that it functions as a tablet. The Yoga arrived on Friday and the entire <a href="https://crownstone.rocks">Crownstone</a> team was enjoying how it came out of the box: it lifts up! If you’re creating your own hardware you suddenly appreciate how other people pay attention to packaging!</p>
+
+
+		
+		<a href="/blog/2016/03/26/yoga-900-on-linux/" class="more-link">Don't just read the excerpt. :-) Sit down and read for real! &rarr;</a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<time datetime="2016-03-26T18:09:35+00:00" pubdate data-updated="true">March 26th, 2016</time></div>
+	
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2016/01/16/a-baththub-in-your-autonomous-car/">
+		
+			A Baththub in Your Autonomous Car</a>
+	</h2>
+	<div class="entry-content">
+		<p>Will you have a bathtub in your autonomous car?</p>
+
+<p>According to many the future is a socialist paradise. The autonomous car will change everything! We will be car sharing.
+We can change parking lots into a lot of parks!</p>
+
+<h2 id="blame-the-humans">Blame the humans</h2>
+
+<p>Let us put aside the technical difficulties in developing autonomous cars. It might take many more years than currently
+predicted by the new players in this old industry. For example, Sebastian Thrun recently told us in a
+<a href="http://delta.tudelft.nl/artikel/delft-has-one-of-the-strongest-robotics-groups-in-europe/31008">lecture at Delft</a>
+ that his cars are more careful than humans by design and henceforth safer. However, there are grounds to expect that
+being more aggressive is safer in certain circumstances! Going over the speed limit when you have to pass a car.
+Speeding up considerably before merging into a fast moving lane on the highway. Can this combination of ``aggression’’ and
+trust in other drivers be learnt? Or should humans be the ones blamed for <a href="http://www.msn.com/en-us/news/technology/humans-are-slamming-into-driverless-cars-and-exposing-a-key-flaw/ar-BBnGpXg">slamming into unpredictable autonomous cars</a>!? Anyway, let’s assume these are all minor
+tweaks that don’t require any form of procedural and contextual intelligence that we possess as humans. We will have
+these autonomous cars in 2020, everything is fancy, and humans can be blamed for all accidents.</p>
+
+
+		
+		<a href="/blog/2016/01/16/a-baththub-in-your-autonomous-car/" class="more-link">Don't just read the excerpt. :-) Sit down and read for real! &rarr;</a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<time datetime="2016-01-16T11:07:52+00:00" pubdate data-updated="true">January 16th, 2016</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/autonomous/'>autonomous</a>, <a class='category' href='/blog/categories/cars/'>cars</a>, <a class='category' href='/blog/categories/future/'>future,</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2016/01/10/are-we-welcoming-to-ai/">
+		
+			Are We Welcoming to AI?</a>
+	</h2>
+	<div class="entry-content">
+		<h2 id="summoning-the-demon">Summoning the Demon</h2>
+
+<div style="float: right; margin: 0px 0px 0px 20px">
+<img src="/images/blog/xl-2014-elon-musk-1.jpg" alt="Musk announcing openAI" width="200" height="100" title="Musk announcing openAI" />
+</div>
+
+<p>Imagine one of the first AIs coming online. What is it gonna read about itself? How would it feel? Would it feel welcome? What is definitely the case is that it will learn a lot about humans. This is for example what Musk is saying about this alien life form:</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>“With artificial intelligence we are summoning the demon. In all those stories where there’s the guy with the pentagram and the holy water, it’s like – yeah, he’s sure he can control the demon. Doesn’t work out.”</td>
+    </tr>
+  </tbody>
+</table>
+
+
+		
+		<a href="/blog/2016/01/10/are-we-welcoming-to-ai/" class="more-link">Don't just read the excerpt. :-) Sit down and read for real! &rarr;</a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<time datetime="2016-01-10T13:33:51+00:00" pubdate data-updated="true">January 10th, 2016</time></div>
+	
+
+
+	
+</div></article>
+
+<nav id="pagenavi">
+    
+        <a href="/" class="prev">Prev</a>
+    
+    
+        <a href="/posts/3" class="next">Next</a>
+    
+    <div class="center"><a href="/archives">Blog Archives</a></div>
+</nav>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2020
+
+    Anne van Rossum
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+	var disqus_shortname = 'annevanrossum';
+	var disqus_loaded = false;
+        var disqus_identifier = 'http://www.annevanrossum.com/posts/2/';
+        var disqus_url = 'http://www.annevanrossum.com/posts/2/';
+        var disqus_script = 'embed.js';
+	// load disqus comments only on demand
+	function disqus() { 
+		if (!disqus_loaded){
+			var e = document.createElement("script"); 
+			e.type = "text/javascript"; 
+			e.async = true; 
+			e.src = "//" + disqus_shortname + ".disqus.com/" + disqus_script;
+			(document.getElementsByTagName("head")[0] ||
+			 document.getElementsByTagName("body")[0])
+				.appendChild(e);
+		} 
+	  }                       
+      /*
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }()); */
+</script>
+
+
+
+
+
+</body>
+</html>

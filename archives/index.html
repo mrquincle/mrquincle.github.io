@@ -1,0 +1,621 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Blog Archives  | Robots, machine learning, global issues</title>
+
+<meta name="author" content="Anne van Rossum">
+
+<meta name="description" content="A blog about robots, machine learning, and environmental issues and impact of technology"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link rel="alternate" href="/atom.xml" title="Robots, machine learning, global issues" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link rel="shortcut icon" href="/favicon.png">
+	<link rel="apple-touch-icon" href="/favicon.png">
+	<link rel="apple-touch-icon" href="/favicon-152x152.png" sizes="152x152">
+	<link rel="apple-touch-icon" href="/favicon-180x180.png" sizes="180x180">
+	<link rel="apple-touch-icon" href="/favicon-167x167.png" sizes="167x167">
+	<link rel="stylesheet" href="/stylesheets/screen.css" media="screen, projection" type="text/css">
+	<link rel="stylesheet" href="/stylesheets/font-awesome.min.css" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+
+
+
+
+<!-- Social media content metadata -->
+
+<meta property="fb:admins" content="547279274" />
+<meta property="og:title" content="Blog Archives" />
+<meta property="og:site_name" content="Robots, machine learning, global issues" />
+<meta property="og:url" content="http://www.annevanrossum.com/archives/" />
+<meta property="og:type" content="article" />
+<meta property="og:description" content="A blog about robots, machine learning, and environmental issues and impact of technology" />
+<meta property="og:author" content="https://www.facebook.com/annevanrossum" />
+
+
+
+<meta property="twitter:card" content="summary" />
+<meta property="twitter:site" content="annevanrossum" />
+<meta property="twitter:url" content="http://www.annevanrossum.com/archives/" />
+<meta property="twitter:title" content="Blog Archives" />
+<meta property="twitter:description" content="A blog about robots, machine learning, and environmental issues and impact of technology" />
+<meta property="twitter:creator" content="annevanrossum" />
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  jax: ["input/TeX", "output/HTML-CSS"],
+  tex2jax: {
+    inlineMath: [ ['$', '$'] ],
+    displayMath: [ ['$$', '$$']],
+    processEscapes: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  TeX: { equationNumbers: { autoNumber: "AMS" } },
+  messageStyle: "none",
+  "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<!-- Site environment: production -->
+
+<!-- Get MathJax online -->
+<script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+
+
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Robots, machine learning, global issues</a></h1>
+<h4>Random thoughts</h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.annevanrossum.com">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner">
+	
+
+
+	
+	
+	<section class="archives"><h1 class="year">2018</h1>
+
+<article>
+	<h2 class="title"><a href="/blog/2018/09/30/nonnegative-autoencoders/">Nonnegative Autoencoders</a></h2>
+	<div class="meta">
+		<div class="date">Sep 30</div>
+		
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/autoencoder/'>autoencoder</a>, <a class='category' href='/blog/categories/nonnegativity/'>nonnegativity</a>
+
+</div>
+
+
+	    
+	</div>
+</article>
+
+	
+
+
+<article>
+	<h2 class="title"><a href="/blog/2018/09/26/generating-point-clouds/">Generating Point Clouds</a></h2>
+	<div class="meta">
+		<div class="date">Sep 26</div>
+		
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/autoencoders/'>autoencoders</a>, <a class='category' href='/blog/categories/deep-learning/'>deep learning</a>, <a class='category' href='/blog/categories/point-clouds/'>point clouds</a>
+
+</div>
+
+
+	    
+	</div>
+</article>
+
+	
+
+
+<article>
+	<h2 class="title"><a href="/blog/2018/09/20/attend-infer-repeat/">Attend, infer, repeat</a></h2>
+	<div class="meta">
+		<div class="date">Sep 20</div>
+		
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/attention/'>attention</a>, <a class='category' href='/blog/categories/deep-learning/'>deep learning</a>, <a class='category' href='/blog/categories/nonparametric-latent-layer/'>nonparametric latent layer</a>, <a class='category' href='/blog/categories/variational-method/'>variational method</a>
+
+</div>
+
+
+	    
+	</div>
+</article>
+
+	
+
+
+<article>
+	<h2 class="title"><a href="/blog/2018/05/26/random-gradients/">Random gradients</a></h2>
+	<div class="meta">
+		<div class="date">May 26</div>
+		
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/gradients/'>gradients</a>, <a class='category' href='/blog/categories/log-derivative-trick/'>log-derivative trick</a>, <a class='category' href='/blog/categories/reparametrization-trick/'>reparametrization trick</a>
+
+</div>
+
+
+	    
+	</div>
+</article>
+
+	
+
+
+<article>
+	<h2 class="title"><a href="/blog/2018/05/23/machine-learning-done-bayesian/">Machine learning done Bayesian</a></h2>
+	<div class="meta">
+		<div class="date">May 23</div>
+		
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/l1-regularization/'>L1 regularization</a>, <a class='category' href='/blog/categories/bayesian/'>bayesian</a>, <a class='category' href='/blog/categories/dropout/'>dropout</a>, <a class='category' href='/blog/categories/herding/'>herding</a>, <a class='category' href='/blog/categories/machine-learning/'>machine learning</a>, <a class='category' href='/blog/categories/stochastic-gradient-descent/'>stochastic gradient descent</a>, <a class='category' href='/blog/categories/support-vector-machines/'>support vector machines</a>
+
+</div>
+
+
+	    
+	</div>
+</article>
+
+	
+
+
+<article>
+	<h2 class="title"><a href="/blog/2018/01/30/inference-in-deep-learning/">Inference in deep learning</a></h2>
+	<div class="meta">
+		<div class="date">Jan 30</div>
+		
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/deep-learning/'>deep learning</a>, <a class='category' href='/blog/categories/inference/'>inference</a>
+
+</div>
+
+
+	    
+	</div>
+</article>
+
+	
+
+
+	
+	
+		</section>
+	
+	<section class="archives"><h1 class="year">2017</h1>
+
+<article>
+	<h2 class="title"><a href="/blog/2017/05/03/what-is-contrastive-divergence/">What is contrastive divergence?</a></h2>
+	<div class="meta">
+		<div class="date">May  3</div>
+		
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/contrastive-divergence/'>contrastive divergence</a>, <a class='category' href='/blog/categories/gradient-ascent/'>gradient ascent</a>, <a class='category' href='/blog/categories/gradient-descent/'>gradient descent</a>, <a class='category' href='/blog/categories/kullback-leibler-divergence/'>kullback-leibler divergence</a>
+
+</div>
+
+
+	    
+	</div>
+</article>
+
+	
+
+
+	
+	
+		</section>
+	
+	<section class="archives"><h1 class="year">2016</h1>
+
+<article>
+	<h2 class="title"><a href="/blog/2016/03/26/yoga-900-on-linux/">Yoga 900 on Linux</a></h2>
+	<div class="meta">
+		<div class="date">Mar 26</div>
+		
+
+
+	    
+	</div>
+</article>
+
+	
+
+
+<article>
+	<h2 class="title"><a href="/blog/2016/01/16/a-baththub-in-your-autonomous-car/">A baththub in your autonomous car</a></h2>
+	<div class="meta">
+		<div class="date">Jan 16</div>
+		
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/autonomous/'>autonomous</a>, <a class='category' href='/blog/categories/cars/'>cars</a>, <a class='category' href='/blog/categories/future/'>future,</a>
+
+</div>
+
+
+	    
+	</div>
+</article>
+
+	
+
+
+<article>
+	<h2 class="title"><a href="/blog/2016/01/10/are-we-welcoming-to-ai/">Are we welcoming to AI?</a></h2>
+	<div class="meta">
+		<div class="date">Jan 10</div>
+		
+
+
+	    
+	</div>
+</article>
+
+	
+
+
+	
+	
+		</section>
+	
+	<section class="archives"><h1 class="year">2015</h1>
+
+<article>
+	<h2 class="title"><a href="/blog/2015/09/15/a-really-smart-power-outlet/">Device recognition and indoor localization</a></h2>
+	<div class="meta">
+		<div class="date">Sep 15</div>
+		
+
+
+	    
+	</div>
+</article>
+
+	
+
+
+<article>
+	<h2 class="title"><a href="/blog/2015/09/02/they-will-cry-a-thousand-tears/">They will cry a thousand tears</a></h2>
+	<div class="meta">
+		<div class="date">Sep  2</div>
+		
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/ai/'>AI</a>
+
+</div>
+
+
+	    
+	</div>
+</article>
+
+	
+
+
+<article>
+	<h2 class="title"><a href="/blog/2015/08/08/legendre-transform/">Legendre Transform</a></h2>
+	<div class="meta">
+		<div class="date">Aug  8</div>
+		
+
+
+	    
+	</div>
+</article>
+
+	
+
+
+<article>
+	<h2 class="title"><a href="/blog/2015/04/29/whats-the-thalamus/">What's the thalamus?</a></h2>
+	<div class="meta">
+		<div class="date">Apr 29</div>
+		
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/neuroscience/'>neuroscience</a>
+
+</div>
+
+
+	    
+	</div>
+</article>
+
+	
+
+
+<article>
+	<h2 class="title"><a href="/blog/2015/04/25/linux-graphics/">Linux Graphics</a></h2>
+	<div class="meta">
+		<div class="date">Apr 25</div>
+		
+
+
+	    
+	</div>
+</article>
+
+	
+
+
+<article>
+	<h2 class="title"><a href="/blog/2015/03/03/sampling-of-dirichlet-process/">Sampling of Dirichlet Process</a></h2>
+	<div class="meta">
+		<div class="date">Mar  3</div>
+		
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/dirichlet-process/'>Dirichlet process</a>, <a class='category' href='/blog/categories/bayesian/'>bayesian</a>, <a class='category' href='/blog/categories/inference/'>inference</a>, <a class='category' href='/blog/categories/sampling/'>sampling</a>
+
+</div>
+
+
+	    
+	</div>
+</article>
+
+	
+
+
+	
+	
+		</section>
+	
+	<section class="archives"><h1 class="year">2014</h1>
+
+<article>
+	<h2 class="title"><a href="/blog/2014/12/21/bayesian-approximation/">Bayesian approximation</a></h2>
+	<div class="meta">
+		<div class="date">Dec 21</div>
+		
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/gibbs-sampling/'>Gibbs sampling</a>, <a class='category' href='/blog/categories/bayesian-approximation/'>bayesian approximation</a>, <a class='category' href='/blog/categories/inference/'>inference</a>, <a class='category' href='/blog/categories/maximization-expectation/'>maximization-expectation</a>
+
+</div>
+
+
+	    
+	</div>
+</article>
+
+	
+
+
+<article>
+	<h2 class="title"><a href="/blog/2014/07/05/where-are-the-aliens-where-are-the-dragons/">Where are the aliens? Where are the dragons?</a></h2>
+	<div class="meta">
+		<div class="date">Jul  5</div>
+		
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/aliens/'>aliens</a>, <a class='category' href='/blog/categories/dragons/'>dragons</a>
+
+</div>
+
+
+	    
+	</div>
+</article>
+
+	
+
+
+<article>
+	<h2 class="title"><a href="/blog/2014/03/26/google-glass-translating-cat-meows/">Google Glass - Translating Cat Meows</a></h2>
+	<div class="meta">
+		<div class="date">Mar 26</div>
+		
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/future/'>future</a>, <a class='category' href='/blog/categories/technology/'>technology</a>
+
+</div>
+
+
+	    
+	</div>
+</article>
+
+	
+
+
+<article>
+	<h2 class="title"><a href="/blog/2014/01/25/our-future/">Our future</a></h2>
+	<div class="meta">
+		<div class="date">Jan 25</div>
+		
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/dystopia/'>dystopia</a>, <a class='category' href='/blog/categories/future/'>future</a>, <a class='category' href='/blog/categories/technology/'>technology</a>
+
+</div>
+
+
+	    
+	</div>
+</article>
+
+	
+
+
+	
+	
+		</section>
+	
+	<section class="archives"><h1 class="year">2013</h1>
+
+<article>
+	<h2 class="title"><a href="/blog/2013/01/15/welcome/">Welcome</a></h2>
+	<div class="meta">
+		<div class="date">Jan 15</div>
+		
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/welcome/'>welcome</a>
+
+</div>
+
+
+	    
+	</div>
+</article>
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2020
+
+    Anne van Rossum
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+	var disqus_shortname = 'annevanrossum';
+	var disqus_loaded = false;
+        var disqus_identifier = 'http://www.annevanrossum.com/archives/';
+        var disqus_url = 'http://www.annevanrossum.com/archives/';
+        var disqus_script = 'embed.js';
+	// load disqus comments only on demand
+	function disqus() { 
+		if (!disqus_loaded){
+			var e = document.createElement("script"); 
+			e.type = "text/javascript"; 
+			e.async = true; 
+			e.src = "//" + disqus_shortname + ".disqus.com/" + disqus_script;
+			(document.getElementsByTagName("head")[0] ||
+			 document.getElementsByTagName("body")[0])
+				.appendChild(e);
+		} 
+	  }                       
+      /*
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }()); */
+</script>
+
+
+
+
+
+</body>
+</html>

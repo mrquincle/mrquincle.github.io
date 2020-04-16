@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: gradient ascent | Robots, machine learning, global issues]]></title>
+  <link href="http://www.annevanrossum.com/blog/categories/gradient-ascent/atom.xml" rel="self"/>
+  <link href="http://www.annevanrossum.com/"/>
+  <updated>2020-04-16T13:19:09+00:00</updated>
+  <id>http://www.annevanrossum.com/</id>
+  <author>
+    <name><![CDATA[Anne van Rossum]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[What is contrastive divergence?]]></title>
+    <link href="http://www.annevanrossum.com/blog/2017/05/03/what-is-contrastive-divergence/"/>
+    <updated>2017-05-03T09:30:04+00:00</updated>
+    <id>http://www.annevanrossum.com/blog/2017/05/03/what-is-contrastive-divergence</id>
+    <content type="html"><![CDATA[<h1 id="kullback-leibler-divergence">Kullback-Leibler divergence</h1>
+
+<p>In contrastive divergence the Kullback-Leibler divergence (KL-divergence) between the data distribution and the model distribution is minimized (here we assume <script type="math/tex">x</script> to be discrete):</p>
+
+<script type="math/tex; mode=display">D(P_0(x) \mid\mid P(x\mid W)) = \sum_x P_0(x) \log \frac {P_0(x) }{P(x\mid W)}</script>
+
+<p>Here <script type="math/tex">P_0(x)</script> is the observed data distribution, <script type="math/tex">P(x\mid W)</script> is the model distribution and <script type="math/tex">W</script> are the model parameters. A <strong>divergence</strong> (<a href="https://en.wikipedia.org/wiki/Divergence_(statistics)">wikipedia</a>) is a fancy term for something that resembles a <strong>metric</strong> distance. It is not an actual metric because the divergence of <script type="math/tex">x</script> given <script type="math/tex">y</script> can be different (and often is different) from the divergence of <script type="math/tex">y</script> given <script type="math/tex">x</script>. The Kullback-Leibler divergence <script type="math/tex">D_{KL}(P \mid \mid Q)</script> exists only if <script type="math/tex">Q(\cdot) = 0</script> implies <script type="math/tex">P(\cdot) = 0</script>.</p>
+
+<!--more-->
+
+<p>The model distribution can be written in the form of a normalized energy function:</p>
+
+<script type="math/tex; mode=display">P(x|W) = \frac {\exp \{ -E(x,W) \} } { Z(W) }</script>
+
+<p>The partition function can be written as the sum over all states:</p>
+
+<script type="math/tex; mode=display">Z(W) = \sum_x \exp \{ -E(x,W) \}</script>
+
+<h2 id="gradients">Gradients</h2>
+
+<p>With gradient descent we use the gradient negatively:</p>
+
+<script type="math/tex; mode=display">W_{t+1} = W_t - \lambda \nabla f(W_t)</script>
+
+<p>With gradient ascend we use the gradient positively:</p>
+
+<script type="math/tex; mode=display">W_{t+1} = W_t + \lambda \nabla f(W_t)</script>
+
+<p>In both cases <script type="math/tex">\lambda</script> is a predefined parameter. It can be constant, but in learning methods this can also be a function called the <strong>learning rate</strong>. The parameter <script type="math/tex">\lambda</script> might depend on time <script type="math/tex">t</script>.</p>
+
+<p>For both gradient descent and gradient ascent <script type="math/tex">W_{t+1} - W_t = 0</script> means that <script type="math/tex">\nabla f(W_t) = 0</script>. Descending a slope up to a zero gradient leads to a minimum if there is one. Ascending a slope up to a zero gradients leads to a maximum if there is one. The extremum found does not necessarily need to be unique, except if the function is concave, respectively convex.</p>
+
+<h2 id="gradient-descent-of-the-kl-divergence">Gradient descent of the KL-divergence</h2>
+
+<p>Below you will find a step-by-step derivation of a description of gradient descent for the KL-divergence. It needs to
+be <strong>minimization</strong> so we will indeed need gradient descent (not ascent). Formally, we have to calculate:</p>
+
+<script type="math/tex; mode=display">W_{t+1} - W_t = - \lambda \left\{ \nabla D(P_0(x) \mid\mid P(x\mid W) \right\}</script>
+
+<h3 id="kl-divergence-parts-that-depend-on-w">KL-divergence parts that depend on <script type="math/tex">W</script></h3>
+
+<p>We are gonna rewrite this equation is a way relevant to taking a derivative: (1) reorganize the equation such that the
+terms not involving <script type="math/tex">W</script> are separate terms, (2) using log identities to write it as a sum of terms, and (3) removing
+the terms not involving <script type="math/tex">W</script>.</p>
+
+<p>Hence, first, let us rewrite the divergence to obtain separate terms that do and do not involve <script type="math/tex">W</script>. Herefore we substitute <script type="math/tex">P(x\mid W)</script> on the fourth line:</p>
+
+<script type="math/tex; mode=display">D(P_0(x) \mid\mid P(x\mid W)) = \sum_x P_0(x) \color{green}{ \log \frac {P_0(x) }{P(x\mid W)}}</script>
+
+<script type="math/tex; mode=display">= \sum_x P_0(x) \color{green}{\left\{ \log P_0(x) - \log P(x\mid W) \right\}}</script>
+
+<script type="math/tex; mode=display">= \sum_x P_0(x) \log P_0(x) - \sum_x P_0(x) \log \color{purple} { P(x\mid W) }</script>
+
+<script type="math/tex; mode=display">= \sum_x P_0(x) \log P_0(x) - \sum_x P_0(x) \log \color{purple} { \frac {\exp \{ -E(x,W) \} } { Z(W) } }</script>
+
+<p>Second, use the following identity <script type="math/tex">\log a + \log b = \log a b</script> to reach a sum of terms:</p>
+
+<script type="math/tex; mode=display">= \sum_x P_0(x) \log P_0(x) - \left\{ \sum_x P_0(x) \{ -E(x,W) \} + \log \frac{1}{Z(W)} \right\}</script>
+
+<script type="math/tex; mode=display">= \sum_x P_0(x) \log P_0(x) - \left\{ \sum_x P_0(x) \{ -E(x,W) \} - \log Z(W) \right\}</script>
+
+<script type="math/tex; mode=display">= \sum_x P_0(x) \log P_0(x) + \sum_x P_0(x) E(x,W) + \log Z(W)</script>
+
+<p>Third, get rid of the first term that does not depend on <script type="math/tex">W</script>. Now the part relevant to our derivative is:</p>
+
+<script type="math/tex; mode=display">\sum_x P_0(x) E(x,W) + \log Z(W)</script>
+
+<p>In “On Contrastive Divergence Learning” by Carreira-Perpinan and Hinton (<a href="http://www.gatsby.ucl.ac.uk/aistats/aistats2005_eproc.pdf">proceedings AISTATS 2015</a>) this is written as the log-likelihood objective:</p>
+
+<script type="math/tex; mode=display">L(x,W) = -\left\langle E(x,W) \right\rangle_0 - \log Z(W)</script>
+
+<p>Note, that there is a negative sign here. The maximum log-likelihood is identical to the minimum KL divergence.</p>
+
+<h3 id="the-gradient-of-the-kl-divergence">The gradient of the KL-divergence</h3>
+
+<p>Taking the gradient with respect to <script type="math/tex">W</script> (we can then safely omit the term that does not depend on <script type="math/tex">W</script>):</p>
+
+<script type="math/tex; mode=display">\nabla D(P_0(x) \mid\mid P(x\mid W)) = \frac{ \partial \sum_x P_0(x) E(x,W)}{\partial W} + \frac{\partial \log Z(W)}{ \partial W}</script>
+
+<p>Recall the derivative of a logarithm:</p>
+
+<script type="math/tex; mode=display">\frac{ \partial \log f(x) }{\partial x} = \frac{1}{f(x)} \frac{\partial f(x)}{\partial x}</script>
+
+<p>Take derivative of logarithm:</p>
+
+<script type="math/tex; mode=display">\nabla D(P_0(x) \mid\mid P(x\mid W)) = \sum_x P_0(x) \frac{\partial E(x,W)}{\partial W} + \frac{1}{Z(W)} \frac{\partial Z(W)}{ \partial W}</script>
+
+<p>The derivative of the partition function:</p>
+
+<script type="math/tex; mode=display">Z(W) = \sum_x \exp \{ -E(x,W) \}</script>
+
+<script type="math/tex; mode=display">\frac{\partial Z(W)}{ \partial W} = \frac{ \partial \sum_x \exp \{ -E(x,W) \} }{ \partial W }</script>
+
+<p>Recall the derivative of an exponential function:</p>
+
+<script type="math/tex; mode=display">\frac{ \partial \exp f(x) }{\partial x} = \exp f(x) \frac{\partial f(x)}{\partial x}</script>
+
+<p>Use this for the partition function derivative:</p>
+
+<script type="math/tex; mode=display">\frac{\partial Z(W)}{ \partial W} = \sum_x \exp \{ -E(x,W) \} \frac{ \partial \{-E(x,W) \} }{ \partial W }</script>
+
+<p>Hence:</p>
+
+<script type="math/tex; mode=display">\frac{1}{Z(W)} \frac{\partial Z(W)}{ \partial W} = \sum_x \frac{\exp \{ -E(x,W) \} }{Z(W)} \frac{ \partial \{ -E(x,W) \} }{ \partial W }</script>
+
+<p>Using <script type="math/tex">P(x \mid W)</script>:</p>
+
+<script type="math/tex; mode=display">= \sum_x P(x \mid W) \frac{ \partial \{ -E(x,W) \} }{ \partial W }</script>
+
+<p>Again, the gradient of the divergence was:</p>
+
+<script type="math/tex; mode=display">\nabla D(P_0(x) \mid\mid P(x\mid W)) = \sum_x P_0(x) \frac{\partial E(x,W)}{\partial W} + \frac{1}{Z(W)} \frac{\partial Z(W)}{ \partial W}</script>
+
+<p>Hence:</p>
+
+<script type="math/tex; mode=display">\nabla D(P_0(x) \mid\mid P(x\mid W)) = \sum_x P_0(x) \frac{\partial E(x,W)}{\partial W} + \sum_x P(x \mid W) \frac{ \partial \{ -E(x,W) \} }{ \partial W }</script>
+
+<script type="math/tex; mode=display">\nabla D(P_0(x) \mid\mid P(x\mid W)) = \sum_x P_0(x) \frac{\partial E(x,W)}{\partial W} - \sum_x P(x \mid W) \frac{ \partial E(x,W) }{ \partial W }</script>
+
+<p>Compare with Hinton:</p>
+
+<script type="math/tex; mode=display">\frac{ \partial L(x,W) }{ \partial W} = - \left\langle \frac{\partial E(x,W)}{\partial W} \right\rangle_0 + \left\langle \frac{ \partial E(x,W) }{ \partial W } \right\rangle_{\infty}</script>
+
+<p>Gradient descent:</p>
+
+<script type="math/tex; mode=display">W_{t+1} - W_t = - \lambda \nabla f(W_t)</script>
+
+<p>Thus,</p>
+
+<script type="math/tex; mode=display">W_{t+1} - W_t = \lambda \left\{ - \sum_x P_0(x) \frac{\partial E(x,W)}{\partial W} + \sum_x P(x \mid W) \frac{ \partial E(x,W) }{ \partial W } \right\}</script>
+
+<p>We arrived at the formulation of minimization of KL-divergence that allows comparing it with Contrastive divergence.</p>
+
+<h1 id="constrastive-divergence">Constrastive divergence</h1>
+
+<p>Contrastive divergence uses a different (empirical) distribution to get rid of <script type="math/tex">P(x \mid W)</script>:</p>
+
+<script type="math/tex; mode=display">W_{t+1} - W_t = \lambda \left\{ - \sum_x P_0(x) \frac{\partial E(x,W)}{\partial W} + \sum_x \color{blue}{Q_W(x)} \frac{ \partial E(x,W) }{ \partial W } \right\}</script>
+
+]]></content>
+  </entry>
+  
+</feed>

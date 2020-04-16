@@ -1,0 +1,542 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Random thoughts  | Robots, machine learning, global issues</title>
+
+<meta name="author" content="Anne van Rossum">
+
+<meta name="description" content="A blog about robots, machine learning, and environmental issues and impact of technology"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link rel="alternate" href="/atom.xml" title="Robots, machine learning, global issues" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link rel="shortcut icon" href="/favicon.png">
+	<link rel="apple-touch-icon" href="/favicon.png">
+	<link rel="apple-touch-icon" href="/favicon-152x152.png" sizes="152x152">
+	<link rel="apple-touch-icon" href="/favicon-180x180.png" sizes="180x180">
+	<link rel="apple-touch-icon" href="/favicon-167x167.png" sizes="167x167">
+	<link rel="stylesheet" href="/stylesheets/screen.css" media="screen, projection" type="text/css">
+	<link rel="stylesheet" href="/stylesheets/font-awesome.min.css" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/vis/4.7.0/vis.js"></script>
+
+
+<link href="//cdnjs.cloudflare.com/ajax/libs/vis/4.7.0/vis.css" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+
+
+<!-- Social media content metadata -->
+
+<meta property="fb:admins" content="547279274" />
+<meta property="og:title" content="Robots, machine learning, global issues" />
+<meta property="og:site_name" content="Robots, machine learning, global issues" />
+<meta property="og:url" content="http://www.annevanrossum.com/" />
+<meta property="og:type" content="website" />
+<meta property="og:description" content="A blog about robots, machine learning, and environmental issues and impact of technology" />
+<meta property="og:author" content="https://www.facebook.com/annevanrossum" />
+
+
+
+<meta property="twitter:card" content="summary" />
+<meta property="twitter:site" content="annevanrossum" />
+<meta property="twitter:url" content="http://www.annevanrossum.com/" />
+<meta property="twitter:title" content="Robots, machine learning, global issues" />
+<meta property="twitter:description" content="A blog about robots, machine learning, and environmental issues and impact of technology" />
+<meta property="twitter:creator" content="annevanrossum" />
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  jax: ["input/TeX", "output/HTML-CSS"],
+  tex2jax: {
+    inlineMath: [ ['$', '$'] ],
+    displayMath: [ ['$$', '$$']],
+    processEscapes: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  TeX: { equationNumbers: { autoNumber: "AMS" } },
+  messageStyle: "none",
+  "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<!-- Site environment: production -->
+
+<!-- Get MathJax online -->
+<script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+
+
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Robots, machine learning, global issues</a></h1>
+<h4>Random thoughts</h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.annevanrossum.com">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2018/09/30/nonnegative-autoencoders/">
+		
+			Nonnegative Autoencoders</a>
+	</h2>
+	<div class="entry-content">
+		<p>My intuition would say that a part-based decomposition should arise naturally within an autoencoder. To encorporate
+the next image in an image recognition task, it must be more beneficial to have gradient descent being able to 
+navigate towards the optimal set of neural network weights for that image. If not, for each image gradient descent
+is all the time navigating some kind of common denominator, none of the images are actually properly represented.
+For each new image that is getting better classified, the other images are classified worse. With a proper
+decomposition learning the next representation will not interfere with previous representations. Grossberg calls this
+in Adaptive Resonance Theory (ART) catastrophic forgetting.</p>
+
+<p>Maybe if we train a network long enough this will be the emerging decomposition strategy indeed. However, this is not
+what is normally found. The different representations get coupled and there is not a decomposition that allows
+the network to explore different feature dimensions independently.</p>
+
+<p>One of the means to obtain a part-based representation is to force positive or zero weights in a network. In the 
+literature <a href="https://yliapis.github.io/Non-Negative-Matrix-Factorization/">nonnegative matrix factorization</a> can be 
+found. Due to the nonnegativity constraint the features are additive. This leads to a (sparse) basis where through
+summation “parts” are added up to a “whole” object. For example, faces are built up out of features like eyes, nostrils,
+mouth, ears, eyebrows, etc.</p>
+
+<p><img src="/images/blog/nonnegative_examples.jpg" alt="Nonnegative examples. From top to bottom: 1) Sparse Autoencoder, 2) Nonnegative Sparse Autoencoder, 3) Nonnegativity Constrained Autoencoder, and 4) Nonnegative Matrix Factorization. The nonnegative examples do not use clear cut facial features like eyes and ears, but you see only parts of the image being nonnegative (white). This means an image can be composed using a sum of the displayed images. Copyright Hosseini-Asl et al." /></p>
+
+
+		
+		<a href="/blog/2018/09/30/nonnegative-autoencoders/" class="more-link">Don't just read the excerpt. :-) Sit down and read for real! &rarr;</a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<time datetime="2018-09-30T14:36:27+00:00" pubdate data-updated="true">September 30th, 2018</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/autoencoder/'>autoencoder</a>, <a class='category' href='/blog/categories/nonnegativity/'>nonnegativity</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2018/09/26/generating-point-clouds/">
+		
+			Generating Point Clouds</a>
+	</h2>
+	<div class="entry-content">
+		<p>If we do want robots to learn about the world, we can use computer vision. We can employ traditional methods. Build up a full-fledged model from corner detectors, edge detectors, feature descriptors, gradient descriptors, etc. We can also use modern deep learning techniques. One large neural network hopefully captures similarly or even better abstractions compared to the conventional computer vision pipeline.</p>
+
+<p>Computer vision is not the only choice though! In recent years there is a proliferation of a different type of data: depth data. Collections (or clouds) of points represent 3D shapes. In a game setting the Kinect was a world-shocking invention using structured light. In robotics and autonomous cars LIDARs are used. There is huge debate about which sensors are gonna “win”, but I personally doubt there will be a clearcut winner. My line of reasoning:</p>
+
+<ul>
+  <li>Humans use vision and have perfected this in many ways. It would be silly to not use cameras.</li>
+  <li>Depth sensors can provide information when vision gets obstructed.</li>
+  <li>Humans use glasses, microscopes, infrared goggles, all to enhance our senses. We are basically cyborgs.</li>
+  <li>Robots will benefit from a rich sensory experience just like we do. They want to be cyborgs too.</li>
+</ul>
+
+
+		
+		<a href="/blog/2018/09/26/generating-point-clouds/" class="more-link">Don't just read the excerpt. :-) Sit down and read for real! &rarr;</a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<time datetime="2018-09-26T08:15:22+00:00" pubdate data-updated="true">September 26th, 2018</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/autoencoders/'>autoencoders</a>, <a class='category' href='/blog/categories/deep-learning/'>deep learning</a>, <a class='category' href='/blog/categories/point-clouds/'>point clouds</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2018/09/20/attend-infer-repeat/">
+		
+			Attend, Infer, Repeat</a>
+	</h2>
+	<div class="entry-content">
+		<p>A long, long time ago - namely, in terms of these fast moving times of advances in deep learning - two years (2016),
+there was once a paper studying how we can teach neural networks to count.</p>
+
+<h1 id="attend-infer-repeat">Attend, infer, repeat</h1>
+
+<p><a href="https://papers.nips.cc/paper/6230-attend-infer-repeat-fast-scene-understanding-with-generative-models.pdf">This paper</a> 
+is titled “Attend, infer, repeat: Fast scene understanding with generative models” and the authors are 
+<a href="http://arkitus.com/">Ali Eslami</a>, 
+Nicolas Heess,
+<a href="http://thphn.com/">Theophane Weber</a>, 
+Yuval Tassa (<a href="https://github.com/yuvaltassa">github</a>, nice, he does couchsurfing),
+<a href="http://szepi1991.github.io/">David Szepesvari</a>,
+<a href="https://koray.kavukcuoglu.org/">Koray Kavukcuoglu</a>,
+and
+<a href="http://www.cs.toronto.edu/~hinton/">Geoffrey Hinton</a>. 
+A team at Deepmind based in London.</p>
+
+<p>This has been a personal interest of mine. I felt it very satisfying that bees for example can 
+<a href="https://motherboard.vice.com/en_us/article/pgkman/bees-can-count-to-four-display-emotions-and-teach-each-other-new-skills">count landmarks</a> or 
+at least have a capability that approximates this fairly good. It is such an abstract concept, but very rich. Just
+take the fact that you can recognize yourself in the mirror (I hope). It’s grounded on something that really strongly
+believes that there is only one of you, that you are pretty unique.</p>
+
+
+		
+		<a href="/blog/2018/09/20/attend-infer-repeat/" class="more-link">Don't just read the excerpt. :-) Sit down and read for real! &rarr;</a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<time datetime="2018-09-20T08:57:08+00:00" pubdate data-updated="true">September 20th, 2018</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/attention/'>attention</a>, <a class='category' href='/blog/categories/deep-learning/'>deep learning</a>, <a class='category' href='/blog/categories/nonparametric-latent-layer/'>nonparametric latent layer</a>, <a class='category' href='/blog/categories/variational-method/'>variational method</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2018/05/26/random-gradients/">
+		
+			Random Gradients</a>
+	</h2>
+	<div class="entry-content">
+		<h1 id="random-gradients">Random Gradients</h1>
+
+<p>Variational inference approximates the posterior distribution in probabilistic models. 
+Given observed variables <script type="math/tex">x</script> we would like to know the underlying phenomenon <script type="math/tex">z</script>, 
+defined probabilistically as <script type="math/tex">p(z | x)</script>. 
+Variational inference approximates <script type="math/tex">p(z|x)</script> through a simpler distribution <script type="math/tex">q(z,v)</script>. 
+The approximation is defined through a distance/divergence, often the <a href="/blog/2017/05/03/what-is-contrastive-divergence/">Kullback-Leibler divergence</a>:</p>
+
+<script type="math/tex; mode=display">v = \arg\min_v D_{KL}(q(z,v) || p(z|x))</script>
+
+<p>It is interesting to see that this <strong>deterministic</strong> strategy does not require Monte Carlo updates. It can be seen as a deterministic optimization problem. However, it is definitely possible to solve this deterministic problem <strong>stochastically</strong> as well! We can formulate it as a stochastic optimization problem!</p>
+
+<p>There are two main strategies:</p>
+
+<ul>
+  <li>the reparametrization trick</li>
+  <li>the log-derivate trick</li>
+</ul>
+
+
+		
+		<a href="/blog/2018/05/26/random-gradients/" class="more-link">Don't just read the excerpt. :-) Sit down and read for real! &rarr;</a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<time datetime="2018-05-26T13:30:44+00:00" pubdate data-updated="true">May 26th, 2018</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/gradients/'>gradients</a>, <a class='category' href='/blog/categories/log-derivative-trick/'>log-derivative trick</a>, <a class='category' href='/blog/categories/reparametrization-trick/'>reparametrization trick</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2018/05/23/machine-learning-done-bayesian/">
+		
+			Machine Learning Done Bayesian</a>
+	</h2>
+	<div class="entry-content">
+		<p>In the dark corners of the academic world there is a rampant fight between practitioners of deep learning and researchers of Bayesian methods. This polemic <a href="https://medium.com/intuitionmachine/cargo-cult-statistics-versus-deep-learning-alchemy-8d7700134c8e">article</a> testifies to this, although firmly establishing itself as anti-Bayesian.</p>
+
+<p>There is not much you can have against Bayes’ rule, so the hate runs deeper than this. I think it stems from the very behavior of Bayesian researchers rewriting existing methods as approximations to Bayesian methods.</p>
+
+<p>Ferenc Huszár, a machine learning researcher at Twitter <a href="http://www.inference.vc/everything-that-works-works-because-its-bayesian-2/">describes</a> some of these approximations.</p>
+
+<ul>
+  <li>L1 regularization is just Maximum A Posteriori (MAP) estimation with sparsity inducing priors;</li>
+  <li>Support vector machines are just the wrong way to train Gaussian processes;</li>
+  <li>Herding is just Bayesian quadrature done <a href="https://arxiv.org/abs/1204.1664">slightly wrong</a>;</li>
+  <li>Dropout is just variational inference done <a href="https://arxiv.org/abs/1506.02142">slightly wrong</a>;</li>
+  <li>Stochastic gradient descent (SGD) is just variational inference (variational EM) done <a href="https://arxiv.org/pdf/1704.04289.pdf">slightly wrong</a>.</li>
+</ul>
+
+<p>Do you have other approximations you can think of?</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<time datetime="2018-05-23T10:00:08+00:00" pubdate data-updated="true">May 23rd, 2018</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/l1-regularization/'>L1 regularization</a>, <a class='category' href='/blog/categories/bayesian/'>bayesian</a>, <a class='category' href='/blog/categories/dropout/'>dropout</a>, <a class='category' href='/blog/categories/herding/'>herding</a>, <a class='category' href='/blog/categories/machine-learning/'>machine learning</a>, <a class='category' href='/blog/categories/stochastic-gradient-descent/'>stochastic gradient descent</a>, <a class='category' href='/blog/categories/support-vector-machines/'>support vector machines</a>
+
+</div>
+
+
+	
+</div></article>
+
+<nav id="pagenavi">
+    
+    
+        <a href="/posts/2" class="next">Next</a>
+    
+    <div class="center"><a href="/archives">Blog Archives</a></div>
+</nav>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2020
+
+    Anne van Rossum
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+	var disqus_shortname = 'annevanrossum';
+	var disqus_loaded = false;
+        var disqus_identifier = 'http://www.annevanrossum.com/';
+        var disqus_url = 'http://www.annevanrossum.com/';
+        var disqus_script = 'embed.js';
+	// load disqus comments only on demand
+	function disqus() { 
+		if (!disqus_loaded){
+			var e = document.createElement("script"); 
+			e.type = "text/javascript"; 
+			e.async = true; 
+			e.src = "//" + disqus_shortname + ".disqus.com/" + disqus_script;
+			(document.getElementsByTagName("head")[0] ||
+			 document.getElementsByTagName("body")[0])
+				.appendChild(e);
+		} 
+	  }                       
+      /*
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }()); */
+</script>
+
+
+
+
+
+</body>
+</html>

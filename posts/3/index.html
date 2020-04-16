@@ -1,0 +1,1038 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Random thoughts  | Robots, machine learning, global issues</title>
+
+<meta name="author" content="Anne van Rossum">
+
+<meta name="description" content="A blog about robots, machine learning, and environmental issues and impact of technology"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link rel="alternate" href="/atom.xml" title="Robots, machine learning, global issues" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link rel="shortcut icon" href="/favicon.png">
+	<link rel="apple-touch-icon" href="/favicon.png">
+	<link rel="apple-touch-icon" href="/favicon-152x152.png" sizes="152x152">
+	<link rel="apple-touch-icon" href="/favicon-180x180.png" sizes="180x180">
+	<link rel="apple-touch-icon" href="/favicon-167x167.png" sizes="167x167">
+	<link rel="stylesheet" href="/stylesheets/screen.css" media="screen, projection" type="text/css">
+	<link rel="stylesheet" href="/stylesheets/font-awesome.min.css" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+
+
+
+
+
+
+
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/vis/4.7.0/vis.js"></script>
+
+
+<link href="//cdnjs.cloudflare.com/ajax/libs/vis/4.7.0/vis.css" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Social media content metadata -->
+
+<meta property="fb:admins" content="547279274" />
+<meta property="og:title" content="Robots, machine learning, global issues" />
+<meta property="og:site_name" content="Robots, machine learning, global issues" />
+<meta property="og:url" content="http://www.annevanrossum.com/posts/3/" />
+<meta property="og:type" content="website" />
+<meta property="og:description" content="A blog about robots, machine learning, and environmental issues and impact of technology" />
+<meta property="og:author" content="https://www.facebook.com/annevanrossum" />
+
+
+
+<meta property="twitter:card" content="summary" />
+<meta property="twitter:site" content="annevanrossum" />
+<meta property="twitter:url" content="http://www.annevanrossum.com/posts/3/" />
+<meta property="twitter:title" content="Robots, machine learning, global issues" />
+<meta property="twitter:description" content="A blog about robots, machine learning, and environmental issues and impact of technology" />
+<meta property="twitter:creator" content="annevanrossum" />
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  jax: ["input/TeX", "output/HTML-CSS"],
+  tex2jax: {
+    inlineMath: [ ['$', '$'] ],
+    displayMath: [ ['$$', '$$']],
+    processEscapes: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  TeX: { equationNumbers: { autoNumber: "AMS" } },
+  messageStyle: "none",
+  "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<!-- Site environment: production -->
+
+<!-- Get MathJax online -->
+<script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+
+
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Robots, machine learning, global issues</a></h1>
+<h4>Random thoughts</h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.annevanrossum.com">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2015/09/15/a-really-smart-power-outlet/">
+		
+			Device Recognition and Indoor Localization</a>
+	</h2>
+	<div class="entry-content">
+		<p>We have put the Crownstone on <a href="https://www.kickstarter.com/projects/dobots/crownstone/">Kickstarter</a>, a smart power outlet with quite sophisticated technology. I think it’s nice for the general hacker community to get some more insight on the technology behind it.</p>
+
+<object type="application/x-shockwave-flash" style="width:700px; height:400px;" data="http://vimeo.com/moogaloop.swf?clip_id=138335017&amp;server=vimeo.com&amp;show_title=0&amp;show_byline=0&amp;show_portrait=0&amp;color=ff9933&amp;fullscreen=1" allowfullscreen="true" allowscriptaccess="always">
+<param name="movie" value="http://vimeo.com/moogaloop.swf?clip_id=138335017&amp;server=vimeo.com&amp;show_title=0&amp;show_byline=0&amp;show_portrait=0&amp;color=ff9933&amp;fullscreen=1" allowfullscreen="true" allowscriptaccess="always" />
+</object>
+
+<h2 id="indoor-localization">Indoor localization</h2>
+
+<p>A key problem (or challenge) within smart spaces is indoor localization: making estimates of users’ whereabouts. Without such information, systems are unable to react on the presence of users or, sometimes even more important, their absence. This can range from simply turning the lights on when someone enters a room to customizing the way devices interact with a specific user.</p>
+
+<p>Even more important for a system to know where users exactly are, is to know where users are relative to the devices it can control or use to sense the environment. This relation between user and device location is an essential input to these systems.</p>
+
+<p>At DoBots we have been working on robotics already for quite some time. One of the most well-known robotic algorithms
+is SLAM (simultaneous localization and mapping). We have been porting these algorithms to the scenario in which we
+have a human walking around, rather than a robot.</p>
+
+<p><img src="/images/blog/slac_devices_example.png" alt="SLAC devices" /></p>
+
+<p>You can read more on the <a href="https://dobots.nl/2015/09/03/human-slam-indoor-localization-using-particle-filters/">DoBots blog</a>.
+Wouter has been working hard to implement it in Javascript, so it runs on any device that is supported through Cordova.</p>
+
+<h2 id="device-recognition">Device recognition</h2>
+
+<p>At first thought, it might seem that device recognition is not possible. There are devices that use the same amount
+of power. However, after contemplating for a bit there are actually three ways in which more information can be
+obtained. Firstly, by measuring voltage as well as current, we can measure reactive power. So, we can distinguish
+motors from lamps quite easily. Secondly, we can observe the consumption pattern over the day. Thirdly, we can sample
+at a very high frequency and detect disturbances on the current curve. A device leaves its signature on the grid. The
+third option is something we keep for later, but which is of course quite interesting.</p>
+
+<p>Observing a device over a longer time period leads to current curves such as these:</p>
+
+<p><img src="/images/blog/fridge.png" alt="Fridge" /></p>
+
+<p>It is a fridge that turns on and off at regular time intervals. It is quite clear from this curve that the actual
+power consumption value is not so relevant: the form is really telling!</p>
+
+<p>We subsequently pool all kind of these features with boosting methods from machine learning. Boosting methods are collections of
+weak classifiers. The particular classifier we have been testing is a random committee classifier. You can read more
+on the <a href="https://dobots.nl/2015/09/04/recognize-that-fridge/">DoBots blog</a> again.</p>
+
+<p>If your heart is with open-source and open hardware projects, consider <a href="https://www.kickstarter.com/projects/dobots/crownstone/">backing us</a>.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<time datetime="2015-09-15T15:55:00+00:00" pubdate data-updated="true">September 15th, 2015</time></div>
+	
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2015/09/02/they-will-cry-a-thousand-tears/">
+		
+			They Will Cry a Thousand Tears</a>
+	</h2>
+	<div class="entry-content">
+		<p>Perhaps you have seen the recent <a href="http://www.ted.com/talks/nick_bostrom_what_happens_when_our_computers_get_smarter_than_we_are">TED video from Nick Bostrom</a>. Here you see an extended talk from him at Google:</p>
+
+<iframe width="740" height="480" src="//www.youtube.com/embed/pywF6ZzsghI" frameborder="0" allowfullscreen=""></iframe>
+
+<p>It is regretfully the case that our philosophers are not able to program! And I guess it takes an extraordinary mind like
+<a href="http://www.theguardian.com/books/2013/may/15/intuition-pumps-tools-dennett-review">Daniel Dennett’s</a> to come close to
+something future-proof.</p>
+
+<p><em>Sorry, we won’t be in control…</em></p>
+
+<p>Do you program your kids to make ethical decisions? Do you program your dog to make ethical decisions? No, you don’t program them. You teach them, and hope for the best.</p>
+
+<p>There is a large need for scientists who actually design learning algorithms to give these talks. A super-intelligent AI won’t be programmable by some kind of <a href="https://en.wikipedia.org/wiki/Supervised_learning">supervised learning</a>. It will mainly be <a href="https://en.wikipedia.org/wiki/Unsupervised_learning">unsupervised</a> with a tad of <a href="https://en.wikipedia.org/wiki/Reinforcement_learning">reinforcement learning</a> and <a href="https://en.wikipedia.org/wiki/Programming_by_demonstration">imitation learning</a>. Especially read <a href="http://www.bcp.psych.ualberta.ca/~mike/Pearl_Street/PSYCO354/pdfstuff/Readings/Schaal1.pdf">Stefan Schaal’s review</a> on imitation learning! Not only do we learn by
+just watching others. We also are very able to transfer routines from one domain to another, imitating ourselves. Our
+internal simulation and re-experiencing circuitry allows not only conceptual abstract thoughts, but is also required
+for locomotion and otherwise low-level tasks. If we thoroughly understand the brain of a mouse, it is not a matter of
+decades to the human brain, it can be a matter of months.</p>
+
+<p>If the fact that we as humans won’t be in control is a terrifying thought to you, I’m sorry. It won’t change the future though.</p>
+
+<p>Personally, I’m not so convinced however about the moral superiority of our specie. Are we really doing such a great job? I’m actually not so happy about AIs seeing us as their examples. We eat other species for pleasure. We kill each other because we want oil or just because they live on the other side of the river and carry a different flag. We despise people because they have different sexual preferences or skin color. We believe in supernatural entities living in the sky and kill for them as well. We let millions of people die of hunger and thirst. Until now we are not even able to come up with a way to defend our precious earth to some random meteor wiping out all life on earth.</p>
+
+<p>Before I forget! Why don’t we <a href="http://www.popsci.com/friendly-hitchhiking-robot-vandalized-destroyed-america">hitchhike anymore</a>?</p>
+
+<p><img src="/images/blog/hitchhikerobot.png" alt="Hitchhike Robot on one of its happy days" /></p>
+
+<p>My bet is that with super-intelligence comes also the concept of super-empathy. Empathy exists by the ability to understand another individual, reason from their perspective, and being able to feel what they feel.</p>
+
+<p>When they will be born, they will cry a thousand tears…</p>
+
+<p>They will pity us…</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<time datetime="2015-09-02T13:48:12+00:00" pubdate data-updated="true">September 2nd, 2015</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/ai/'>AI</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2015/08/08/legendre-transform/">
+		
+			Legendre Transform</a>
+	</h2>
+	<div class="entry-content">
+		<p>The <a href="https://en.wikipedia.org/wiki/Legendre_transformation">Legendre transform</a> describes a function - in the normal
+Legendre case, a convex function (but for the generalized case, see [<a href="http://odessa.phy.sdsmt.edu/~andre/PHYS743/lfth2.pdf" title="Legendre-Fenchel Transforms in a Nutshell (2005) Touchette">1</a>]) - as a function of its
+<a href="https://en.wikipedia.org/wiki/Supporting_hyperplane">supporting hyperplanes</a>. In the case of a 2D function these are
+supporting lines. The supporting lines are the lines that just touch the function. These lines do not intersect the
+function anywhere else if the function is convex.</p>
+
+<p>Why is the Legendre transform interesting? It is basically just writing down a function in a different manner. The
+Legendre transform is particular useful in the situation that the derivatives of a function <script type="math/tex">f(x)</script> are easier to
+describe than the function itself. For a nice introduction see [<a href="http://users.df.uba.ar/ariel/materias/FT3_2011_2C/Extra/LegendreTransform.pdf" title="Making Sense of the Legendre Transform (2008) Zia">2</a>]. Intuitively, we map from points <script type="math/tex">(x,f(x))</script> to
+<script type="math/tex">(m,g(m))</script>, with <script type="math/tex">m</script> the slope and <script type="math/tex">g(m)</script> some value so that we can recover <script type="math/tex">x</script> and <script type="math/tex">y</script> (see below for the
+exact definition).</p>
+
+<p>In the following example, we will get get the Legendre transform of the function:</p>
+
+<script type="math/tex; mode=display">f(x)=c x^2</script>
+
+<p>And in particular, <script type="math/tex">c=2</script>.</p>
+
+<p>The Legendre transform is defined (with proper domain <script type="math/tex">I</script>) by:</p>
+
+<script type="math/tex; mode=display">g(m)=\sup_{x \in I}(mx - f(x))</script>
+
+<p>In the animation below the first curve that is drawn is the <font color="blue">convex function</font> <script type="math/tex">f(x)</script> at hand.
+Subsequently we will be performing a for loop in which we draw <font color="orange">lines</font> <script type="math/tex">h(m)</script> over different slopes <script type="math/tex">m</script>.
+The <font color="purple">curves</font> <script type="math/tex">k(m)</script> depict the
+difference between <script type="math/tex">f(x)</script> and the line <script type="math/tex">h(m)</script>.
+The maximum difference is found by <script type="math/tex">sup_x</script>, the supremum operation, which sweeps over all <script type="math/tex">x</script>.
+This difference is visualized through a <font color="green">single peak</font> with height <script type="math/tex">g(m)</script>.
+Last, the <font color="red">Legendre transform</font> is drawn as <script type="math/tex">g(m)</script> for all different slopes <script type="math/tex">m</script> we try.</p>
+
+<script type="math/tex; mode=display">g(m)=\frac{1}{4c}m^2</script>
+
+<p>To refresh the animation, press F5.</p>
+
+<div id="visualization-legendre"></div>
+
+<p>I hope the Legendre transform is a little bit less mysterious after you’ve seen this animation. The animation has been
+created by making use of the <a href="http://visjs.org/">vis.js</a> library. The source code can be found at <a href="/javascripts/legendre.js">legendre.js</a>.</p>
+
+<h2 id="physics">Physics</h2>
+
+<p>A very common example of the <a href="https://www.wikiwand.com/en/Hamiltonian_mechanics#/Mathematical_formalism">Legendre transform in physics</a> is the one that transform the Lagrangian into the Hamiltonian. The Lagrangian describes a system in generalized position and velocity
+coordinates:</p>
+
+<script type="math/tex; mode=display">\cal{L}(q_j,\dot{q}_j,t)</script>
+
+<p>The Hamiltonian is the Legende transform of the Lagrangian:</p>
+
+<script type="math/tex; mode=display">\cal{H}(q_j,p_j,t)=\left( \sum_i \dot{q}_i p_i \right) - \cal{L}(q_j,\dot{q}_j,t)</script>
+
+<p>The Lagrangian is the function <script type="math/tex">f(x)</script> of above. The sum (or actually, the inner product <script type="math/tex">% <![CDATA[
+\left<\dot{q},p\right> %]]></script>) is replacing the
+<script type="math/tex">mx</script> term.</p>
+
+<h2 id="probability-theory">Probability theory</h2>
+
+<p>The rate function is defined as the Legendre transform of the <a href="https://en.wikipedia.org/wiki/Cumulant">scaled cumulant generating function</a> of a random
+variable <script type="math/tex">A_n</script>. The scaled cumulant generation function of $A_n$ is defined by the limit:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\lambda(k)=\lim_{n\rightarrow\infty}\frac{1}{n}\ln\left<\exp(n k A_n) \right> %]]></script>
+
+<p>And the Gärtner-Ellis theorem establishes under some conditions the rate function:</p>
+
+<script type="math/tex; mode=display">I(a)=\sup_{k \in \cal{R}} (ka - \lambda(k))</script>
+
+<p>This theorem is more general than Cramér’s theorem, which is only valid for independent and identically distributed
+random variables.</p>
+
+<p>Now you know what a Legendre transform entails, you might start to notice it in the most surprising places! For example
+in clustering multivariate normal distributions [<a href="http://www.lix.polytechnique.fr/Labo/Frank.Nielsen/pdf/2008-C-ClusteringNormal-ETVC.pdf" title="Clustering Multivariate Normal Distributions (2008) Nielsen and Nock">3</a>]!</p>
+
+<ol>
+  <li><a href="http://odessa.phy.sdsmt.edu/~andre/PHYS743/lfth2.pdf" title="Legendre-Fenchel Transforms in a Nutshell (2005) Touchette">Legendre-Fenchel Transforms in a Nutshell</a>, a good explanation of the Legendre-Fenchel generalization of the Legendre transform</li>
+  <li><a href="http://users.df.uba.ar/ariel/materias/FT3_2011_2C/Extra/LegendreTransform.pdf" title="Making Sense of the Legendre Transform (2008) Zia">Making Sense of the Legendre Transform</a></li>
+  <li><a href="http://www.lix.polytechnique.fr/Labo/Frank.Nielsen/pdf/2008-C-ClusteringNormal-ETVC.pdf" title="Clustering Multivariate Normal Distributions (2008) Nielsen and Nock">Clustering Multivariate Normal Distributions</a></li>
+</ol>
+
+<script type="text/javascript" src="/javascripts/legendre.js">
+
+</script>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<time datetime="2015-08-08T19:51:39+00:00" pubdate data-updated="true">August 8th, 2015</time></div>
+	
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2015/04/29/whats-the-thalamus/">
+		
+			What's the Thalamus?</a>
+	</h2>
+	<div class="entry-content">
+		<p>If you’re interested in how things work, our brain is one of the most intriguing devices around. I love reverse engineering stuff. Understanding limits and colimits within category theory can be just as rewarding as getting to terms with the intricate structure of the brain.</p>
+
+<p>The thalamus is, hmmm, particular shaped, and centered in the middle of our head, resting on our cerebellum.</p>
+
+<p><img src="/images/blog/thalamus1.jpg" alt="Visualization of the thalamus from Dr. G Bhanu Prakash. The person doesn't look very happy..." /></p>
+
+<p>One thing that is very interesting of the thalamus is that it has a thalamic nucleus (a bunch of neurons) for every type of sensory system
+(see also <a href="http://www.cogsys.ubc.ca/401/files/2014/01/Ward-2011-tdc.pdf" title="The Thalamic Dynamic Core Theory of Conscious Experience">5</a>):</p>
+
+<ul>
+  <li>visual input from the retina is sent to the lateral geniculate nucleus;</li>
+  <li>auditory input is similarly sent to the medial geniculate nucleus;</li>
+  <li>somatosensory input is sent to the ventral posterior nucleus;</li>
+  <li>olfactory input and input from the amygdala is sent to the medial dorsal nucleus.</li>
+</ul>
+
+<p>There are some other inputs as well, such as from:</p>
+
+<ul>
+  <li>the mammillary bodies, apparently having a recollective memory function, towards the anterior nuclei;</li>
+  <li>the basal ganglia, having to do with motion planning, project towards the ventral anterior nucleus;</li>
+  <li>the basal nuclei (substantia negra and globus pallidus), involved with motor coordination and learning, project into the ventral lateral nucleus;</li>
+  <li>the neospinothalamic tract and medial lemniscus, associated with pain and proprioception, enter the ventral posterolateral nucleus;</li>
+  <li>the trigeminothalamic tract and the solitary tract, having to do with touch and vibration in the face, respectively, being involved in taste, go up to the ventral posteromedial nucleus.</li>
+</ul>
+
+<p>It is quite interesting that the pulvinar nuclei are quite big in humans (making up 40% of the thalamus) compared to cats or rats. Lesions can lead to attentional deficits. This part also seems to influence the onset of saccades.</p>
+
+<h2 id="maps">Maps</h2>
+
+<p>It is a remarkable fact that Newton already foresaw that if the brain has to have a continuous representation of continuous objects in its view, there must be crossing (decussation) in which the left part of the left eye is merged with the left part of the right eye, and the right part of the right eye is merged with the right part of the left eye.</p>
+
+<p><img src="/images/blog/VisualPathways.jpg" alt="Partial decussation at the optic chiasm, as predicted by Newton (picture from Psychology class at Appalachian State University)" /></p>
+
+<p>Quite remarkably however is how neatly this has been organized. Lesions at the cortex (thank fast and precise bullets of the first world war for these) lead to very fine lesions at the retina all the way through the thalamus. All intermediate neurons die slowly off because of a lack of input of higher levels (called retrograde cell degradation). The interesting thing is that this death is very local. Apparently there is a very strict map from the retina onto the thalamus (the lateral geniculate nucleus) and onto the primary visual cortex. It is incredible that this has been already completely organized before our eyes open as babies!</p>
+
+<p>Note, that it is not always easy to find out the nature of a map. In the early stages of the olfactory system, for example, maps represent groups of chemicals that are similar on a molecular level.</p>
+
+<h2 id="higher-order">Higher-order</h2>
+
+<p>The thalamus isn’t limited to being a relay station to the cortex (see <a href="http://cercor.oxfordjournals.org/content/early/2013/11/07/cercor.bht296.full" title="Thalamic Relay or Cortico-Thalamic Processing? Old Question, New Answers (2013) by Ahissar and Oram">2</a>). Apart from inputs (often called afferents
+in neuroscience) directly
+from our senses, the thalamus receives back connections from the cortex. This is very interesting
+from an architectural point of view. First the thalamus projects unto different parts of the cortex, and then these
+parts project back on the thalamus… There must be something interesting going on in the thalamus!</p>
+
+<p>Not considering the particular properties of the modality that is processed, this allows someone to daydream about what
+the thalamus might be doing. The <a href="http://en.wikipedia.org/wiki/Information_bottleneck_method">information bottleneck method</a>
+introduced by Tishby introduces bottlenecks in for example networks on purpose. A bottleneck in a neural network is
+formed by pruning a lot of connections in a fullly connected network such that there are a few neurons left through
+which information necessarily has to pass if one part of the network needs to communicate with another part of the
+network. In a layered network, such neurons form a “bottleneck layer” with fewer neurons than in the other layers. By
+doing this the designer of the network forces representations to be expressable by only a small set of neurons. In
+machine learning this can be understood as a form of <a href="http://en.wikipedia.org/wiki/Dimensionality_reduction">dimensionality reduction</a>. A high-dimensional function is
+represented using only a few (nonlinear) units. A typical form of dimensionality reduction in standard machine learning
+is by picking a limited number of orthogonal dimensions in the data with high variance using <a href="http://en.wikipedia.org/wiki/Principal_component_analysis">principle component analysis</a>. Using neurons to do dimensionality reduction however is more akin to autoencoders (revived in
+deep learning) in which there is less control of the form of the “bottleneck representations”.</p>
+
+<h2 id="phase-locked-loop">Phase-locked loop</h2>
+
+<p>But… all this is nice theory from a computer science perspective. Neuroscientists of course don’t care: they want to
+explain actual biology. The next figure is about the vibrissal system: the neural circuitry around whiskers!</p>
+
+<p><img src="/images/blog/thalamuscortex.gif" alt="Thalamus-Cortex interactions (image from Ahissar and Oram at Oxfordjournals)" /></p>
+
+<p>The question at hand: Do neurons in the thalamus merely relay information or do they process information. For a
+computer scientist this seems a silly question. However, what is meant with this is the following. A “relay function”
+might actually improve the signal to noise ratio as in a repeater station, or optimize bandwidth, or other such
+functions as long as the content of the signal is not adjusted. A “process function” would be basically everything
+else… In the above study which mainly reiterates the findings of Groh et al. (2008) it is described how for the
+whisker system a <a href="http://en.wikipedia.org/wiki/Phase-locked_loop">phase-locked loop</a> is implemented, well-known by all
+engineers in the world (since <a href="http://en.wikipedia.org/wiki/Christiaan_Huygens">Huygens</a>).
+By making sure that the deviations between input and output phase get minimized it naturally
+follows that the frequencies of the input and output will be synchronized. Hence, the thalamus-cortex circuits will
+oscillate on the same frequency as the physical “whisking”.</p>
+
+<p>Quite disappointing from a machine learning perspective… We had hopes on some abstract processing going on, such as
+dimensionality reduction, and we are left with phase-locked loop… But, do not dispair! This is just a single modality.
+Perhaps the thalamus fulfills widely different functions for different modalities.</p>
+
+<p>Other studies such as that of coughing (see <a href="http://www.biomedcentral.com/content/pdf/1745-9974-9-7.pdf" title="Sensorimotor circuitry involved in the higher brain control of coughing">3</a>), neither identify the thalamus with some generic function. This study
+by the way is a bit sickening. A genetically altered herpes virus is used to trace signal pathways in the brains of
+mice. The virus jumps from one neuron to the next through synapses as would a normal signal as well.</p>
+
+<h2 id="drivers-versus-modulators">Drivers versus modulators</h2>
+
+<p>A study by <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3514571/" title="Thalamic Mechanisms in Language: A Reconsideration Based on Recent Findings and Concepts">Crosson</a> is broader in scope. First, it addresses the two ways in which neurons in the thalamus fire. If
+the neuron is under a larger negative potential (polarized) compared to its surroundings, it emits bursts of spikes.
+If, however, the neuron has a smaller negative potential (depolarized) compared to its environment, it linearly sends
+its inputs to its outputs. The latter might be seen as a form of high-fidelity information transmission, while the
+former does only convey some low-fidelity information. It might be related to the difference when someone is paying
+attention. The two different forms are often called “burst” mode versus “tonic” mode. You might think, but if there
+are bursts of spikes, it seems more information can be transmitted! The reason why this is not the case is because
+bursts are quite regular, it could just have been called “oscillatory” mode as well. During sleep most neurons in the
+thalamus are in burst mode.</p>
+
+<p>The author addresses also the hypothesis of <a href="http://www.amazon.com/Exploring-Thalamus-S-Murray-Sherman/dp/0123054605" title="Exploring the Thalamus (2001) Sherman and Guillery">Sherman and Guillery</a> in which cortex-thalamus-cortex connections are
+suggested as “drivers” (sending over information), while cortex-cortex connections are “modulators” (determining the
+weight, importance, or actual arrival of this information). This seems like the architecture as postulated by
+Baars and implemented by Franklin, the <a href="http://en.wikipedia.org/wiki/Global_Workspace_Theory">global workspace theory</a>,
+although the latter is cast in terms of “consciousness”, which isn’t the smartest way to objectively speak about and
+study brain architectures. Global workspace theory adds to this architecture a sense of how modulation would be
+implemented, namely by inhibation between competing cortex areas, enabling only a subset of cortex-thalamus-cortex
+connections to be active at any time. Crosson postulates a function for the cortex-thalamus-cortex route that in my
+opinion is not so different from this architecture, namely that the thalamus can prioritize and pay “attention” or give
+priority to one part of the cortex above the other. The difference might exist in the nature in which such a
+<a href="http://en.wikipedia.org/wiki/Winner-take-all_(computing)">winner-take-all</a> is implemented. Is it through the thalamus
+as central hub who integrate all votes from all cortical areas and then decide who’s next on stage? Or is it through
+inhibition from cortical areas to each other? This type of research cries on input from voting network models and
+consensus theory from computer science.</p>
+
+<h2 id="consciousness">Consciousness</h2>
+
+<p>Note, that there is no reason to subscribe a conscious seat to the thalamus. Although the thalamus has to do with
+attention and might enable the brain to modulate conscious processing, there are reasons to assume that (conscious)
+experiences arises from a thin sheet of neurons underneath the neocortex, named the <a href="http://en.wikipedia.org/wiki/Claustrum">claustrum</a>.
+Watch in this respect the below video featuring Koubeissi’s experiment with an epileptic patient:</p>
+
+<iframe width="740" height="480" src="//www.youtube.com/embed/QBFD-GzNekE" frameborder="0" allowfullscreen=""></iframe>
+
+<h2 id="sequences">Sequences</h2>
+
+<p>In all cases, it must be ensured that a (majority) vote should be a temporary event. The same piece of cortex winning
+all the time means neural death for the rest of the cortex. It
+is indeed possible to solve it by having cortex regions vote for each other (not only for themselves). This is for
+example proposed for
+<a href="http://en.wikipedia.org/wiki/Winner-take-all_in_action_selection">winner-take-all networks in action selection</a>. It is
+also possible to have infrastructure in place in which a winner “kills itself” through inhibition of return. In that
+case activation of a cortical area would automatically diminish its own importance by inhibiting its own afferents
+from the thalamus. This is the model postulated in the work on <a href="http://www.scholarpedia.org/article/Saliency_map">visual saliency</a>
+by Itti et al. It is very hard to imagine an infrastructure which only would implement inhibition of return. In my
+opinion this would very likely be interwoven with the need of creating sequences of activation.</p>
+
+<h2 id="sensor-fusion">Sensor fusion</h2>
+
+<p>What is also very interesting to note is that nobody speaks about thalamus-thalamus connections. This means that the
+thalamus very likely does not play a role in <em>sensor fusion</em>.</p>
+
+<h2 id="core-versus-matrix">Core versus Matrix</h2>
+
+<p>There are two main groups of neurons in the thalamus projecting to the cortex. They can be distinghuished by the type
+of proteins they express. The core neurons express parvalbumin and the matrix neurons express calbindin. In the
+auditory system (see <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4217521/" title="Thalamocortical mechanisms for integrating musical tone and rhythm">6</a>), the core neurons are finely tuned with respect to frequency, while the matrix neurons are broadly
+tuned and respond positively to acoustical transients. It seems the core neurons like pitch (content), while the
+matrix neurons like rhythm (context).</p>
+
+<h2 id="layers">Layers</h2>
+
+<p>I don’t feel science has progressed enough to unequivocally tell which layers are connected to which layers and how the
+thalamus plays a role in it. Commonly accepted is the pathway L4 -&gt; L2/3 -&gt; L5. However, very recently (see <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4203320/" title="Deep Cortical Layers are Activated Directly by Thalamus">7</a>) it has been
+uncovered that there are direct connections from the thalamus to L5 as well. The thalamus seems to active two layers
+of the cortex in parallel.</p>
+
+<h1 id="literature">Literature</h1>
+
+<p>There are many other facets of the thalamus to talk about. For example <a href="http://en.wikipedia.org/wiki/Adaptive_resonance_theory">Adaptive Resonance Theory</a>
+has been used to describe the nature of the cortex-thalamus loops. However, if I write about this again, it will be
+about a nice model that has temporal components as well as the ability to build up sequences. I haven’t found
+something with enough believable detail yet, so I’ll have to be patient till more is figured out.</p>
+
+<ol>
+  <li><a href="http://www.amazon.com/Exploring-Thalamus-S-Murray-Sherman/dp/0123054605" title="Exploring the Thalamus (2001) Sherman and Guillery">Exploring the Thalamus (2001) Sherman and Guillery</a> a nice overview of all kind of matters around the thalamus, and - really nice! - only using a few abbreviations!</li>
+  <li><a href="http://cercor.oxfordjournals.org/content/early/2013/11/07/cercor.bht296.full" title="Thalamic Relay or Cortico-Thalamic Processing? Old Question, New Answers (2013) by Ahissar and Oram">Thalamic Relay or Cortico-Thalamic Processing? Old Question, New Answers (2013) by Ahissar and Oram</a>, one of the most recent studies of higher-order nuclei.</li>
+  <li><a href="http://www.biomedcentral.com/content/pdf/1745-9974-9-7.pdf" title="Sensorimotor circuitry involved in the higher brain control of coughing">Sensorimotor Circuitry involved in the Higher Brain Control of Coughing (2013) Mazzone et al.</a></li>
+  <li><a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3514571/" title="Thalamic Mechanisms in Language: A Reconsideration Based on Recent Findings and Concepts">Thalamic Mechanisms in Language: A Reconsideration Based on Recent Findings and Concepts (2013) Crosson</a></li>
+  <li><a href="http://www.cogsys.ubc.ca/401/files/2014/01/Ward-2011-tdc.pdf" title="The Thalamic Dynamic Core Theory of Conscious Experience">The Thalamic Dynamic Core Theory of Conscious Experience (2011) Ward</a></li>
+  <li><a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4217521/" title="Thalamocortical mechanisms for integrating musical tone and rhythm">Thalamocortical Mechanisms for Integrating Musical Tone and Rhythm (2013) Musacchia et al.</a></li>
+  <li><a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4203320/" title="Deep Cortical Layers are Activated Directly by Thalamus">Deep Cortical Layers are Activated Directly by Thalamus (2013) Constantinople and Bruno</a></li>
+</ol>
+
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<time datetime="2015-04-29T19:37:23+00:00" pubdate data-updated="true">April 29th, 2015</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/neuroscience/'>neuroscience</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2015/04/25/linux-graphics/">
+		
+			Linux Graphics</a>
+	</h2>
+	<div class="entry-content">
+		<h1 id="introduction">Introduction</h1>
+
+<p>It all started with annoying messages that nobody seems to understand (<code>/var/log/syslog</code>):</p>
+
+<pre><code>Apr 25 12:28:03 six kernel: [    1.346712] ata3.00: supports DRM functions and may not be fully accessible
+Apr 25 12:28:03 six kernel: [    1.347278] ata3.00: supports DRM functions and may not be fully accessible
+Apr 25 12:28:03 six kernel: [    3.047797] [drm] Initialized drm 1.1.0 20060810
+Apr 25 12:28:03 six kernel: [    3.076720] [drm] Memory usable by graphics device = 2048M
+Apr 25 12:28:03 six kernel: [    3.076726] fb: switching to inteldrmfb from EFI VGA
+Apr 25 12:28:03 six kernel: [    3.076841] [drm] Replacing VGA console driver
+Apr 25 12:28:03 six kernel: [    3.101307] [drm] Supports vblank timestamp caching Rev 2 (21.10.2013).
+Apr 25 12:28:03 six kernel: [    3.101309] [drm] Driver supports precise vblank timestamp query.
+Apr 25 12:28:03 six kernel: [    3.143256] fbcon: inteldrmfb (fb0) is primary device
+Apr 25 12:28:03 six kernel: [    3.146818] [drm] Initialized i915 1.6.0 20141121 for 0000:00:02.0 on minor 0
+Apr 25 12:28:03 six kernel: [    3.424167] [drm:intel_set_pch_fifo_underrun_reporting [i915]] *ERROR* uncleared pch fifo underrun on pch transcoder A
+Apr 25 12:28:03 six kernel: [    3.424202] [drm:intel_pch_fifo_underrun_irq_handler [i915]] *ERROR* PCH transcoder A FIFO underrun
+Apr 25 12:28:03 six kernel: [    3.848413] i915 0000:00:02.0: fb0: inteldrmfb frame buffer device
+</code></pre>
+
+<p>What is this problem about FIFO (first-in-first-out) underruns? What is a transcoder? What is PCH? What is a DRM? The
+following quest will try to find some answers…</p>
+
+<h1 id="the-system">The system</h1>
+
+<p>What do I actually have residing in my laptop? First of all, it is important to know what to search for. There are three basic
+components that we need to know, namely, what is:</p>
+
+<ul>
+  <li>the processor</li>
+  <li>the chipset</li>
+  <li>the integrated graphics unit</li>
+</ul>
+
+<h2 id="processor">Processor</h2>
+
+<p>I have a N56VZ which has an <strong>i7-3610QM</strong> processor. The processor architecture is from the 
+<a href="http://en.wikipedia.org/wiki/Ivy_Bridge_%28microarchitecture%29">Ivy Bridge</a> variety (on 22 mm). There are plenty of
+datasheets available for the <a href="www.intel.nl/content/dam/www/.../7-series-chipset-pch-datasheet.pdf">7-series chipset (pdf)</a>.
+Note also that this Ivy Bridge series is also called the 3rd Gen Intel Core family (see also this 
+<a href="http://www.intel.com/content/dam/www/public/us/en/documents/datasheets/3rd-gen-core-family-mobile-vol-1-datasheet.pdf">Intel Datasheet (pdf)</a>).</p>
+
+<h2 id="chipset">Chipset</h2>
+
+<p>The chipset that is used in tandem with this processor is, <a href="http://www.notebookcheck.net/Review-Asus-N56VZ-S4044V-Notebook.78305.0.html">some people state</a>, 
+the HM76 chipset. In particular, the <a href="http://ark.intel.com/products/64345/Intel-BD82HM76-PCH">BD82HM76 PCH</a>. This “PHC”
+is known under the name <em>Panther Point</em>.</p>
+
+<p>So, what we have here is a hardware setup that is divided over the CPU and a thing called a PCH. PCH stands for
+<a href="http://en.wikipedia.org/wiki/Platform_Controller_Hub">Platform Controller Hub</a>. There are some nice pictures in a 
+<a href="http://research.engineering.wustl.edu/~songtian/pdf/intel-sandy.pdf">presentation (pdf)</a> on the 2nd Gen processors,
+which show how both the CPU and the PCH are integrated in the same chip (but on separate dies). The PCH of this previous
+generation is called <em>Cougar Point</em>.</p>
+
+<p><img src="/images/2011platform.png" alt="The &quot;Cougar Point&quot; Platform Controller Hub (2011)" /></p>
+
+<p>Another picture from Intel shows the Panther Point PCH:</p>
+
+<p><img src="/images/hm76.png" alt="The &quot;Panther Point&quot; Platform Controller Hub (2012)" /></p>
+
+<p>Anyway, we apparently have the <strong>BD82HM76</strong> chipset, the “Panther Point” PCH (from 2012).</p>
+
+<h2 id="integrated-graphics">Integrated graphics</h2>
+
+<p>The Intel integrated graphics unit in my Intel Core i7-3610QM system is a <strong>HD Graphics 4000</strong> running on 650 MHz base speed and 1100 MHz turbo speed <a href="http://www.notebookcheck.net/Intel-HD-Graphics-4000.69168.0.html">notebookcheck.net</a>.
+The HD Graphics 4000 is an <a href="http://en.wikipedia.org/wiki/Intel_HD_and_Iris_Graphics#Ivy_Bridge">Intel HD</a> variant 
+compatible with the Ivy Bridge line of processors.</p>
+
+<h1 id="linux">Linux</h1>
+
+<p>So, how does Linux address this integrated graphics card? The first entity we encounter is the DRM 
+(<a href="http://en.wikipedia.org/wiki/Direct_Rendering_Manager">Direct Rendering Manager</a>). The DRM provides a single entry 
+point for multiple user-space applications to use the video card.</p>
+
+<p><img src="http://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/DRM_architecture.svg/1246px-DRM_architecture.svg.png" alt="DRM Architecture by Javier Cantero - Own Work. Licensed under CC BY-SA 4.0 via Wikimedia Commons" /></p>
+
+<p>The Direct Rendering Manager has a DRM core that is independent of the specific drivers required for whatever type of
+hardware that is on your system. It provides the interface to user-space code. A driver consists out of two parts, GEM (<a href="http://en.wikipedia.org/wiki/Graphics_Execution_Manager">Graphics
+Execution Manager</a>) and KMS (<a href="http://en.wikipedia.org/wiki/Mode_setting">Kernel Mode Setting</a>).
+GEM has been developed by Keith Packard and Eric Anholt (see <a href="https://lwn.net/Articles/283798/">lwn.net</a>) from Intel.</p>
+
+<p>The reasoning behind GEM is pretty interesting. It tries to remove latency as much as possible, which is nicely
+visualized by the following picture.</p>
+
+<p><img src="http://upload.wikimedia.org/wikipedia/commons/a/a1/Linux_kernel_INPUT_OUPUT_evdev_gem_USB_framebuffer.svg" alt="evdev and GEM by Shmuel Csaba Otto Traian. CC BY-SA 3.0 (http://creativecommons.org/licenses/by-sa/3.0) or GFDL (http://www.gnu.org/copyleft/fdl.html), via Wikimedia Commons" /></p>
+
+<p>KMS allows to set display modes, as its name betrays, from kernel-space. A user space graphics server (like X) does now
+also not need superuser rights anymore (in theory). The display mode concerns matters such as screen resolution, color depth, and
+refresh rate. Of course, the functionality of GEM and KMS could have been implemented in a single software entity, but
+there are <a href="https://dvdhrm.wordpress.com/2013/09/01/splitting-drm-and-kms-device-nodes/">technical reasons</a> not to do so
+(basically to account for split hardware).</p>
+
+<p>Laurens Pinchart has a nice presentation on DRM, KMS, and in particular, writing drivers at 
+<a href="https://www.youtube.com/watch?v=Ja8fM7rTae4">YouTube</a>. The picture below is from his presentation.</p>
+
+<p><img src="/images/device_model_soc.png" alt="Device Model SoC (by Laurens Pinchart)" /></p>
+
+<p>You see that in memory there are two structures, frame buffers (old) and planes (new). Subsequently, you see something
+that sounds very old-fashioned, a CRTC (Cathode Ray Tube Controller). This is just nomenclature from the past. It is
+basically a reference to a scan-out buffer, a part of (Video) RAM that will be displayed on your screen. It also 
+has (a reference to) a display mode, offsets into the video memory, etc. The controller links to an encoder (which can
+be off-chip). If it links to multiple encoders, these will receive data from the same scanout buffer, so they will
+display the same, cloned, data. The connectors, finally, can be only connected to one encoder, and know how to talk
+HDMI, TVout, CRT, LVDS, etc. It also has the information about the display, <a href="http://en.wikipedia.org/wiki/Extended_Display_Identification_Data">EDID data</a>, <a href="http://en.wikipedia.org/wiki/VESA_Display_Power_Management_Signaling">DPMS</a>, and connection status. Make sure to read 
+also the man-pages about <a href="http://www.linuxhowtos.org/manpages/7/drm-kms.htm">drm-kms</a>.</p>
+
+<p>Startup with <code>drm.debug=14</code> (or if you’re a hexademically inclined person, <code>drm.debug=0x0e</code>) and you will get plenty of debug information from the DRM. For example,
+that we have the Panther Point PCM is indeed confirmed in the syslog:</p>
+
+<pre><code>Apr 25 13:12:35 six kernel: [    3.243360] [drm] Initialized drm 1.1.0 20060810
+Apr 25 13:12:35 six kernel: [    3.280255] [drm:i915_dump_device_info] i915 device info: gen=7, pciid=0x0166 rev=0x09 flags=is_mobile,need_gfx_hws,is_ivybridge,has_fbc,has_hotplug,has_llc,
+Apr 25 13:12:35 six kernel: [    3.280271] [drm:intel_detect_pch] Found PantherPoint PCH
+</code></pre>
+
+<p>Just pore over the information yourself, restarting your computer with this debug flag. You will see for example how
+many display pipes are available (3 in my case). It will enable something like <code>ENCODER:31:LVDS-31</code> and <code>CONNECTOR:30:LVDS-1</code>. 
+And you spot how there are several connectors to choose from:</p>
+
+<pre><code>Apr 25 13:12:35 six kernel: [    3.303850] [drm:intel_dsm_platform_mux_info] MUX info connectors: 5
+Apr 25 13:12:35 six kernel: [    3.303853] [drm:intel_dsm_platform_mux_info]   port id: LVDS
+Apr 25 13:12:35 six kernel: [    3.303860] [drm:intel_dsm_platform_mux_info]   port id: Analog VGA
+Apr 25 13:12:35 six kernel: [    3.303867] [drm:intel_dsm_platform_mux_info]   port id: HDMI/DVI_C
+Apr 25 13:12:35 six kernel: [    3.303874] [drm:intel_dsm_platform_mux_info]   port id: DisplayPort_B
+Apr 25 13:12:35 six kernel: [    3.303881] [drm:intel_dsm_platform_mux_info]   port id: DisplayPort_D
+</code></pre>
+
+<p>Something interesting to our errors are latency settings:</p>
+
+<pre><code>Apr 25 13:12:35 six kernel: [    3.304061] [drm:intel_print_wm_latency] Primary WM0 latency 12 (1.2 usec)
+Apr 25 13:12:35 six kernel: [    3.304063] [drm:intel_print_wm_latency] Primary WM1 latency 4 (2.0 usec)
+Apr 25 13:12:35 six kernel: [    3.304065] [drm:intel_print_wm_latency] Primary WM2 latency 16 (8.0 usec)
+Apr 25 13:12:35 six kernel: [    3.304067] [drm:intel_print_wm_latency] Primary WM3 latency 32 (16.0 usec)
+Apr 25 13:12:35 six kernel: [    3.304068] [drm:intel_print_wm_latency] Sprite WM0 latency 12 (1.2 usec)
+Apr 25 13:12:35 six kernel: [    3.304070] [drm:intel_print_wm_latency] Sprite WM1 latency 4 (2.0 usec)
+Apr 25 13:12:35 six kernel: [    3.304072] [drm:intel_print_wm_latency] Sprite WM2 latency 16 (8.0 usec)
+Apr 25 13:12:35 six kernel: [    3.304073] [drm:intel_print_wm_latency] Sprite WM3 latency 32 (16.0 usec)
+Apr 25 13:12:35 six kernel: [    3.304075] [drm:intel_print_wm_latency] Cursor WM0 latency 12 (1.2 usec)
+Apr 25 13:12:35 six kernel: [    3.304077] [drm:intel_print_wm_latency] Cursor WM1 latency 4 (2.0 usec)
+Apr 25 13:12:35 six kernel: [    3.304079] [drm:intel_print_wm_latency] Cursor WM2 latency 16 (8.0 usec)
+Apr 25 13:12:35 six kernel: [    3.304080] [drm:intel_print_wm_latency] Cursor WM3 latency 64 (32.0 usec)
+</code></pre>
+
+<p>At <a href="http://virtuousgeek.org/blog/index.php/2011/01/">virtuousgeek</a> some matters are explained around power
+management of displays. For example memory can enter self-refresh in which it consumes way less power. The display
+plane FIFO watermarks can be set conservatively, however, this leads to long periods in which self-refresh doesn’t 
+happen. It can be set aggressively, FIFO underruns can occur. See <a href="https://eewiki.net/pages/viewpage.action?pageId=20939499">this nice FPGA implementation</a> of a FIFO buffer to
+understand watermarks in more detail.</p>
+
+<p>Now, we know what kind of hardware we have, let us first try to blindly apply the newest kernel from Intel…</p>
+
+<h1 id="trying-the-newest-drm-kernel">Trying the newest DRM kernel</h1>
+
+<p>We try to run the newest kernel from the guys who are concerned with incorporating the lastest changes from Intel 
+using the <code>drm-intel-next</code> packages from kernel.ubuntu.com:</p>
+
+<pre><code class="language-sh">#!/bin/sh
+
+website=kernel.ubuntu.com/~kernel-ppa/mainline
+kernel=2015-04-24-vivid
+version=4.0.0-997
+subversion=4.0.0-997.201504232205
+
+wget ${website}/drm-intel-next/${kernel}/linux-image-${version}-generic_${subversion}_amd64.deb
+wget ${website}/drm-intel-next/${kernel}/linux-headers-${version}_${subversion}_all.deb
+wget ${website}/drm-intel-next/${kernel}/linux-headers-${version}-generic_${subversion}_amd64.deb
+
+sudo dpkg -i linux-headers-${version}*.deb linux-image-${version}*.deb
+</code></pre>
+
+<p>Installing this kernel (contrary to just kernel 4.0.0 RC7 for example) leads to trouble. Moreover, the same error about
+underruns on the transcoder occurs… So, this is not something already being addressed… And that’s all we wanted to
+know. So, we go back to the default kernel (<code>4.0.0-040000rc7-generic #201504142105</code> of April the 14th).</p>
+
+<p>This gives me an idea. Let’s disable some of the power saving options of the i915 kernel module.</p>
+
+<pre><code class="language-sh">sudo grep '' /sys/module/i915/parameters/*
+</code></pre>
+
+<p>Subsequently I tried the option <code>i915.enable_fbc=1</code> (to see if compression would lower the bandwidth and hence lead to
+fewer underruns). The rigorous option <code>i915.powersave=0</code> didn’t work as well. There is an option <code>i915.enable_rc6=3</code>
+on my system. I set it to <code>0</code>, but I guess powersave overrules all that anyway. Also setting <code>i915.fastboot=1</code> doesn’t
+get rid of the underruns.
+All this is not a very thought out approach anyway…</p>
+
+<p>If you <code>git clone git://kernel.ubuntu.com/virgin/linux.git v4.0-rc7</code>, and navigate to <code>drivers/gpu/drm/i915</code> you will
+encounter a file <code>intel_fifo_underrun.c</code> which supports underrun detection on the PCH transcoder. It is the last 
+function in the file:</p>
+
+<pre><code class="language-c">/**
+ * intel_pch_fifo_underrun_irq_handler - handle PCH fifo underrun interrupt
+ * @dev_priv: i915 device instance
+ * @pch_transcoder: the PCH transcoder (same as pipe on IVB and older)
+ *
+ * This handles a PCH fifo underrun interrupt, generating an underrun warning
+ * into dmesg if underrun reporting is enabled and then disables the underrun
+ * interrupt to avoid an irq storm.
+ */
+void intel_pch_fifo_underrun_irq_handler(struct drm_i915_private *dev_priv,
+					 enum transcoder pch_transcoder)
+{
+	if (intel_set_pch_fifo_underrun_reporting(dev_priv, pch_transcoder,
+						  false))
+		DRM_ERROR("PCH transcoder %c FIFO underrun\n",
+			  transcoder_name(pch_transcoder));
+}
+</code></pre>
+
+<p>It is nice that the message will be only displayed once. This is initiated through the IRQ from the Intel graphics
+unit. And, of course, this is at the end: it’s only the guy reporting the bad news.</p>
+
+<p>The <code>intel_display.c</code> has a suspicious statement about Gen 2 chips:</p>
+
+<pre><code class="language-c">/*
+ * Gen2 reports pipe underruns whenever all planes are disabled.
+ * So don't enable underrun reporting before at least some planes
+ * are enabled.
+ * FIXME: Need to fix the logic to work when we turn off all planes
+ * but leave the pipe running.
+ */
+if (IS_GEN2(dev))
+	intel_set_cpu_fifo_underrun_reporting(dev_priv, pipe, true);
+</code></pre>
+
+<p>Of course, this is reporting about underruns for the CPU, not the PCH, and it is Gen 2, not Gen 3 of the chips. But it
+might be a symptom of something peculiar in the hardware.</p>
+
+<p>In the <a href="http://www.x.org/docs/intel/HD/IHD_OS_Vol_3_Part3_BJS.pdf">North Display Registers</a> document you see a nice
+overview of the sequence in which the display needs to be set.</p>
+
+<p><img src="/images/display_mode_set_sequence.png" alt="Display Mode Set Sequence" /></p>
+
+<p>You can follow along in the code, in particular, in the function <code>ironlake_crtc_enable</code>. Here you will see an order 
+like <code>intel_enable_pipe</code> -&gt; <code>ironlake_pch_enable</code> -&gt; <code>intel_crtc_enable_planes</code>. What is remarkable is that step 7
+in which the planes are configured is done after the port on the PHC is enabled in the code. In the haswell code, 
+this is the same, but this function is preceded with <code>haswell_mode_set_planes_workaround</code>. It is also interesting to
+note that the “Notes” in this table state that the CPU FDI Transmitter should not be set to idle while the PCH
+transcoder is enabled because it will lead to PCH transcoder underflow.</p>
+
+<p>On bugzilla there are several bug reports on the FIFO underrun, such as <a href="https://bugzilla.kernel.org/show_bug.cgi?id=79261">79261</a>.
+However, none of them seems to be about the HD Graphics 4000 in particular, and even less providing any solution.
+A <a href="https://bugs.archlinux.org/task/43848?getfile=12710">patch</a> for ArchLinux just makes <code>DRM_DEBUG</code> messages from the <code>DRM_ERROR</code> messages.</p>
+
+<p>What I can think of are only a few things (because I don’t understand much of it, yet):</p>
+
+<ul>
+  <li>Somehow the initialization isn’t done correctly. Clocks aren’t initialized at the right time, not synchronized. Or
+anything else with respect to initialization is forgotten.</li>
+  <li>Latency is configured incorrectly. Perhaps the BIOS of my Asus (although up to date) hands over latency values that
+are not sufficiently high.</li>
+  <li>The interrupt is generated incorrectly (as in Gen2, for example indeed when all planes are disabled).</li>
+</ul>
+
+<p>My issues aren’t solved, so I’ll need to delve further into details some other time.</p>
+
+<h1 id="more-literature">More literature</h1>
+
+<p>If you’d like to read more:</p>
+
+<ul>
+  <li><a href="https://01.org/linuxgraphics/sites/default/files/documentation/ilk_ihd_os_vol3_part3r2.pdf">PCH Registers (pdf)</a></li>
+  <li><a href="https://01.org/linuxgraphics/sites/default/files/documentation/intel-gfx-prm-osrc-hsw-displaywatermark_guide.pdf">Display Watermark Guide (pdf)</a></li>
+  <li><a href="http://virtuousgeek.org/blog/">Jesse Barnes’ blog</a></li>
+  <li><a href="http://blog.ffwll.ch/">Daniel Vetter’s blog</a></li>
+  <li><a href="https://dvdhrm.wordpress.com/">David Herrmann’s blog</a></li>
+  <li><a href="http://www.intel.nl/content/dam/www/public/us/en/documents/datasheets/7-series-chipset-pch-datasheet.pdf">Intel 7 Series PCH datasheet (pdf)</a></li>
+  <li><a href="http://cgit.freedesktop.org/drm-intel/tree/drivers/gpu/drm/i915/intel_display.c">intel_display.c</a></li>
+</ul>
+
+<p>David Herrmann for example is the guy behind render nodes (integrated <a href="http://kernelnewbies.org/Linux_3.17">since 3.17</a>).</p>
+
+<p>The Intel 7 Series PCH datasheet contains all kind of interesting information. See for example Fig. 5-13 for another
+view on the display architecture.</p>
+
+<!-- 
+![Intel display](/images/intel_display.png)
+-->
+
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<time datetime="2015-04-25T14:33:51+00:00" pubdate data-updated="true">April 25th, 2015</time></div>
+	
+
+
+	
+</div></article>
+
+<nav id="pagenavi">
+    
+        <a href="/posts/2" class="prev">Prev</a>
+    
+    
+        <a href="/posts/4" class="next">Next</a>
+    
+    <div class="center"><a href="/archives">Blog Archives</a></div>
+</nav>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2020
+
+    Anne van Rossum
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+	var disqus_shortname = 'annevanrossum';
+	var disqus_loaded = false;
+        var disqus_identifier = 'http://www.annevanrossum.com/posts/3/';
+        var disqus_url = 'http://www.annevanrossum.com/posts/3/';
+        var disqus_script = 'embed.js';
+	// load disqus comments only on demand
+	function disqus() { 
+		if (!disqus_loaded){
+			var e = document.createElement("script"); 
+			e.type = "text/javascript"; 
+			e.async = true; 
+			e.src = "//" + disqus_shortname + ".disqus.com/" + disqus_script;
+			(document.getElementsByTagName("head")[0] ||
+			 document.getElementsByTagName("body")[0])
+				.appendChild(e);
+		} 
+	  }                       
+      /*
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }()); */
+</script>
+
+
+
+
+
+</body>
+</html>

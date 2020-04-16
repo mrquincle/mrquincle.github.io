@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: maximization-expectation | Robots, machine learning, global issues]]></title>
+  <link href="http://www.annevanrossum.com/blog/categories/maximization-expectation/atom.xml" rel="self"/>
+  <link href="http://www.annevanrossum.com/"/>
+  <updated>2020-04-16T13:19:09+00:00</updated>
+  <id>http://www.annevanrossum.com/</id>
+  <author>
+    <name><![CDATA[Anne van Rossum]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Bayesian approximation]]></title>
+    <link href="http://www.annevanrossum.com/blog/2014/12/21/bayesian-approximation/"/>
+    <updated>2014-12-21T13:35:18+00:00</updated>
+    <id>http://www.annevanrossum.com/blog/2014/12/21/bayesian-approximation</id>
+    <content type="html"><![CDATA[<p>In the world of Bayesian’s, a model is a triplet $p(x,z,\theta)$. The observations are random variables $x$. And then there is a seemingly artificial distinction between the random variables that are called <strong>hidden</strong> ($z$) and other random variables that are called <strong>parameters</strong> ($\theta$), and are hidden as well! So, how come that parameters got their distinguished name? In the case of for example a clustering task, we can assign each observation a corresponding hidden variable: an index of the cluster it belongs to. Hence, there are as many hidden variables as there are observations. Now, in contrary, we might define parameters in two different ways:</p>
+
+<ul>
+  <li>The number of parameters is fixed. The parameters are defined as that part of the model that is not adjusted with respect to the number of observations. In $k$-means there are $k$ means that need to be estimated. There are not more means to be estimated if the number of observations grows.</li>
+  <li>Parameters are more variable then the hidden variables. There are not just as many parameters as observations, no their number needs to be derived from the data. In nonparameteric Bayesian methods there will be more clusters (means) when the number of observations grows.</li>
+</ul>
+
+<p>Consider a dataset $D$, we would like to get our hands on $p(D,z,\theta)$. If this all concerns discrete variables, this is a 3D ‘matrix’ (a tensor of rank 3) with the observations along one dimension, the hidden variables along another dimension, and the parameters along the third dimension. The joint distribution $p(D,z,\theta)$ would tell us everything. Some examples where either marginalize out a variable, or use the definition of a conditional probability:</p>
+
+<script type="math/tex; mode=display">p(D,z) = \int d\theta \ p(D,z,\theta) \\
+p(z) = \int \int d\theta dz \ p(D,z,\theta) \\
+p(z|D) = p(z,D)/p(D)</script>
+
+<p>To get to the matrix $p(D,z)$ we sum over all entries in the rank 3 matrix in the direction of the dimension $\theta$. In other words, we are not interested anymore to what kind of fine granular information $\theta$ brings to bear. We are only interested in how often $D$ occurs with $z$.</p>
+
+<p>The problem is, we often do not have $p(D,z,\theta)$. 
+Now, we suppose we have instead all of the following conditional distributions, $p(D|z,\theta)$, $p(z|\theta,D)$, and $p(\theta|D,z)$, would we have enough information?</p>
+
+<p>The answer is a resounding yes. If you have all conditional distributions amongst a set of random variables you can reconstruct the joint distribution. It always helps to experiment with small discrete conditional and joint probability tables. In <a href="https://stats.stackexchange.com/questions/129956/how-to-derive-gibbs-sampling">this question</a> on <a href="https://stats.stackexchange.com">https://stats.stackexchange.com</a> you see how I construct a joint probability table from the corresponding conditional probability tables. Note the word <strong>corresponding</strong>: as Lucas points out in his answer there are problems with <strong>compatibility</strong>. If the conditional probabilities correspond to a joint probability, the latter can be found. However, if you come up with random conditional probability tables it is very likely that the joint probability table does not exist.</p>
+
+<p>The paper that I found very clarifying with respect to the different ways to do approximations to the full Bayesian method is <a href="https://www.siam.org/meetings/sdm06/proceedings/044wellingm.pdf">Bayesian K-Means as a “Maximization-Expectation” Algorithm (pdf)</a> by Welling and Kurihara.</p>
+
+<p>So, let us assume we are given a dataset $D$ (hence $p(D)$) and we want to find $p(z,\theta|D)$.</p>
+
+<p><strong>1. Gibbs sampling</strong></p>
+
+<p>We can approximate $p(z,\theta|D)$ by sampling. <a href="http://www.wikiwand.com/en/Gibbs_sampling">Gibbs sampling</a> gives $p(z,\theta|D)$ by alternating:</p>
+
+<script type="math/tex; mode=display">\theta \sim p(\theta|z,D) \\
+z \sim p(z|\theta,D)</script>
+
+<p><strong>2. Variational Bayes</strong></p>
+
+<p>Instead, we can try to establish a distribution $q(\theta)$ and $q(z)$ and minimize the difference with the distribution we are after $p(\theta,z|D)$. The difference between distributions has a convenient fancy name, the <a href="http://www.wikiwand.com/en/Kullback%E2%80%93Leibler_divergence">Kullback-Leibler divergence</a>. To minimize $KL[q(\theta)q(z)||p(\theta,z|D)]$ we update:</p>
+
+<script type="math/tex; mode=display">q(\theta) \propto \exp (E [\log p(\theta,z,D) ]_{q(z)} ) \\
+q(z) \propto \exp (E [\log p(\theta,z,D) ]_{q(\theta)} )</script>
+
+<p>This type of <a href="http://www.wikiwand.com/en/Variational_Bayesian_methods">variational Bayes</a> that uses the Kullback-Leibler divergence is also known under mean-field variational Bayes.</p>
+
+<p><strong>3. Expectation-Maximization</strong></p>
+
+<p>To come up with full-fledged probability distributions for both $z$ and $\theta$ might be considered extreme. Why don’t we instead consider a point estimate for one of these and keep the other nice and nuanced. In <a href="http://www.wikiwand.com/en/Expectation%E2%80%93maximization_algorithm">Expectation Maximization</a> the parameter $\theta$ is established as the one being unworthy of a full distribution, and set to its MAP (<a href="http://www.wikiwand.com/en/Maximum_a_posteriori_estimation">Maximum A Posteriori</a>) value, $\theta^*$.</p>
+
+<script type="math/tex; mode=display">\theta^* = \underset{\theta}{\operatorname{argmax}} E [\log p(\theta,z,D) ]_{q(z)} \\
+q(z) = p(z|\theta^*,D)</script>
+
+<p>Here $\theta^* \in \operatorname{argmax}$ would actually be a better notation: the argmax operator can return multiple values. But let’s not nitpick. Compared to variational Bayes you see that correcting for the $\log$ by $\exp$ doesn’t change the result, so that is not necessary anymore.</p>
+
+<p><strong>4. Maximization-Expectation</strong></p>
+
+<p>There is no reason to treat $z$ as a spoiled child. We can just as well use point estimates $z^*$ for our hidden variables and give the parameters $\theta$ the luxury of a full distribution.</p>
+
+<script type="math/tex; mode=display">z^* = \underset{z}{\operatorname{argmax}} E [\log p(\theta,z,D) ]_{q(\theta)} \\
+q(\theta) = p(\theta|z^*,D)</script>
+
+<p>If our hidden variables $z$ are indicator variables, we suddenly have a computationally cheap method to perform inference on the number of clusters. This is in other words: model selection (or automatic relevance detection or imagine another fancy name).</p>
+
+<p><strong>5. Iterated conditional modes</strong></p>
+
+<p>Of course, the poster child of approximate inference is to use point estimates  for both the parameters $\theta$ as well as the observations $z$.</p>
+
+<script type="math/tex; mode=display">\theta^* = \underset{\theta}{\operatorname{argmax}} p(\theta,z^*,D) \\
+z^* = \underset{z}{\operatorname{argmax}} p(\theta^*,z,D) \\</script>
+
+<p>To see how Maximization-Expectation plays out I highly recommend <a href="https://www.siam.org/meetings/sdm06/proceedings/044wellingm.pdf">the article</a>. In my opinion, the strength of this article is however not the application to a $k$-means alternative, but this lucid and concise exposition of approximation.</p>
+
+]]></content>
+  </entry>
+  
+</feed>

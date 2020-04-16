@@ -1,0 +1,522 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Linux Graphics  | Robots, machine learning, global issues</title>
+
+<meta name="author" content="Anne van Rossum">
+
+<meta name="description" content="Linux Graphics"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link rel="alternate" href="/atom.xml" title="Robots, machine learning, global issues" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link rel="shortcut icon" href="/favicon.png">
+	<link rel="apple-touch-icon" href="/favicon.png">
+	<link rel="apple-touch-icon" href="/favicon-152x152.png" sizes="152x152">
+	<link rel="apple-touch-icon" href="/favicon-180x180.png" sizes="180x180">
+	<link rel="apple-touch-icon" href="/favicon-167x167.png" sizes="167x167">
+	<link rel="stylesheet" href="/stylesheets/screen.css" media="screen, projection" type="text/css">
+	<link rel="stylesheet" href="/stylesheets/font-awesome.min.css" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+
+
+
+
+<!-- Social media content metadata -->
+
+<meta property="fb:admins" content="547279274" />
+<meta property="og:title" content="Linux Graphics" />
+<meta property="og:site_name" content="Robots, machine learning, global issues" />
+<meta property="og:url" content="http://www.annevanrossum.com/blog/2015/04/25/linux-graphics/" />
+<meta property="og:type" content="article" />
+<meta property="og:description" content="Linux Graphics" />
+<meta property="og:author" content="https://www.facebook.com/annevanrossum" />
+
+
+
+<meta property="twitter:card" content="summary" />
+<meta property="twitter:site" content="annevanrossum" />
+<meta property="twitter:url" content="http://www.annevanrossum.com/blog/2015/04/25/linux-graphics/" />
+<meta property="twitter:title" content="Linux Graphics" />
+<meta property="twitter:description" content="Linux Graphics" />
+<meta property="twitter:creator" content="annevanrossum" />
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  jax: ["input/TeX", "output/HTML-CSS"],
+  tex2jax: {
+    inlineMath: [ ['$', '$'] ],
+    displayMath: [ ['$$', '$$']],
+    processEscapes: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  TeX: { equationNumbers: { autoNumber: "AMS" } },
+  messageStyle: "none",
+  "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<!-- Site environment: production -->
+
+<!-- Get MathJax online -->
+<script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+
+
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Robots, machine learning, global issues</a></h1>
+<h4>Random thoughts</h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.annevanrossum.com">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Linux Graphics</h2>
+	<div class="entry-content"><h1 id="introduction">Introduction</h1>
+
+<p>It all started with annoying messages that nobody seems to understand (<code>/var/log/syslog</code>):</p>
+
+<pre><code>Apr 25 12:28:03 six kernel: [    1.346712] ata3.00: supports DRM functions and may not be fully accessible
+Apr 25 12:28:03 six kernel: [    1.347278] ata3.00: supports DRM functions and may not be fully accessible
+Apr 25 12:28:03 six kernel: [    3.047797] [drm] Initialized drm 1.1.0 20060810
+Apr 25 12:28:03 six kernel: [    3.076720] [drm] Memory usable by graphics device = 2048M
+Apr 25 12:28:03 six kernel: [    3.076726] fb: switching to inteldrmfb from EFI VGA
+Apr 25 12:28:03 six kernel: [    3.076841] [drm] Replacing VGA console driver
+Apr 25 12:28:03 six kernel: [    3.101307] [drm] Supports vblank timestamp caching Rev 2 (21.10.2013).
+Apr 25 12:28:03 six kernel: [    3.101309] [drm] Driver supports precise vblank timestamp query.
+Apr 25 12:28:03 six kernel: [    3.143256] fbcon: inteldrmfb (fb0) is primary device
+Apr 25 12:28:03 six kernel: [    3.146818] [drm] Initialized i915 1.6.0 20141121 for 0000:00:02.0 on minor 0
+Apr 25 12:28:03 six kernel: [    3.424167] [drm:intel_set_pch_fifo_underrun_reporting [i915]] *ERROR* uncleared pch fifo underrun on pch transcoder A
+Apr 25 12:28:03 six kernel: [    3.424202] [drm:intel_pch_fifo_underrun_irq_handler [i915]] *ERROR* PCH transcoder A FIFO underrun
+Apr 25 12:28:03 six kernel: [    3.848413] i915 0000:00:02.0: fb0: inteldrmfb frame buffer device
+</code></pre>
+
+<p>What is this problem about FIFO (first-in-first-out) underruns? What is a transcoder? What is PCH? What is a DRM? The
+following quest will try to find some answers…</p>
+
+<h1 id="the-system">The system</h1>
+
+<p>What do I actually have residing in my laptop? First of all, it is important to know what to search for. There are three basic
+components that we need to know, namely, what is:</p>
+
+<ul>
+  <li>the processor</li>
+  <li>the chipset</li>
+  <li>the integrated graphics unit</li>
+</ul>
+
+<h2 id="processor">Processor</h2>
+
+<p>I have a N56VZ which has an <strong>i7-3610QM</strong> processor. The processor architecture is from the 
+<a href="http://en.wikipedia.org/wiki/Ivy_Bridge_%28microarchitecture%29">Ivy Bridge</a> variety (on 22 mm). There are plenty of
+datasheets available for the <a href="www.intel.nl/content/dam/www/.../7-series-chipset-pch-datasheet.pdf">7-series chipset (pdf)</a>.
+Note also that this Ivy Bridge series is also called the 3rd Gen Intel Core family (see also this 
+<a href="http://www.intel.com/content/dam/www/public/us/en/documents/datasheets/3rd-gen-core-family-mobile-vol-1-datasheet.pdf">Intel Datasheet (pdf)</a>).</p>
+
+<h2 id="chipset">Chipset</h2>
+
+<p>The chipset that is used in tandem with this processor is, <a href="http://www.notebookcheck.net/Review-Asus-N56VZ-S4044V-Notebook.78305.0.html">some people state</a>, 
+the HM76 chipset. In particular, the <a href="http://ark.intel.com/products/64345/Intel-BD82HM76-PCH">BD82HM76 PCH</a>. This “PHC”
+is known under the name <em>Panther Point</em>.</p>
+
+<p>So, what we have here is a hardware setup that is divided over the CPU and a thing called a PCH. PCH stands for
+<a href="http://en.wikipedia.org/wiki/Platform_Controller_Hub">Platform Controller Hub</a>. There are some nice pictures in a 
+<a href="http://research.engineering.wustl.edu/~songtian/pdf/intel-sandy.pdf">presentation (pdf)</a> on the 2nd Gen processors,
+which show how both the CPU and the PCH are integrated in the same chip (but on separate dies). The PCH of this previous
+generation is called <em>Cougar Point</em>.</p>
+
+<p><img src="/images/2011platform.png" alt="The &quot;Cougar Point&quot; Platform Controller Hub (2011)" /></p>
+
+<p>Another picture from Intel shows the Panther Point PCH:</p>
+
+<p><img src="/images/hm76.png" alt="The &quot;Panther Point&quot; Platform Controller Hub (2012)" /></p>
+
+<p>Anyway, we apparently have the <strong>BD82HM76</strong> chipset, the “Panther Point” PCH (from 2012).</p>
+
+<h2 id="integrated-graphics">Integrated graphics</h2>
+
+<p>The Intel integrated graphics unit in my Intel Core i7-3610QM system is a <strong>HD Graphics 4000</strong> running on 650 MHz base speed and 1100 MHz turbo speed <a href="http://www.notebookcheck.net/Intel-HD-Graphics-4000.69168.0.html">notebookcheck.net</a>.
+The HD Graphics 4000 is an <a href="http://en.wikipedia.org/wiki/Intel_HD_and_Iris_Graphics#Ivy_Bridge">Intel HD</a> variant 
+compatible with the Ivy Bridge line of processors.</p>
+
+<h1 id="linux">Linux</h1>
+
+<p>So, how does Linux address this integrated graphics card? The first entity we encounter is the DRM 
+(<a href="http://en.wikipedia.org/wiki/Direct_Rendering_Manager">Direct Rendering Manager</a>). The DRM provides a single entry 
+point for multiple user-space applications to use the video card.</p>
+
+<p><img src="http://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/DRM_architecture.svg/1246px-DRM_architecture.svg.png" alt="DRM Architecture by Javier Cantero - Own Work. Licensed under CC BY-SA 4.0 via Wikimedia Commons" /></p>
+
+<p>The Direct Rendering Manager has a DRM core that is independent of the specific drivers required for whatever type of
+hardware that is on your system. It provides the interface to user-space code. A driver consists out of two parts, GEM (<a href="http://en.wikipedia.org/wiki/Graphics_Execution_Manager">Graphics
+Execution Manager</a>) and KMS (<a href="http://en.wikipedia.org/wiki/Mode_setting">Kernel Mode Setting</a>).
+GEM has been developed by Keith Packard and Eric Anholt (see <a href="https://lwn.net/Articles/283798/">lwn.net</a>) from Intel.</p>
+
+<p>The reasoning behind GEM is pretty interesting. It tries to remove latency as much as possible, which is nicely
+visualized by the following picture.</p>
+
+<p><img src="http://upload.wikimedia.org/wikipedia/commons/a/a1/Linux_kernel_INPUT_OUPUT_evdev_gem_USB_framebuffer.svg" alt="evdev and GEM by Shmuel Csaba Otto Traian. CC BY-SA 3.0 (http://creativecommons.org/licenses/by-sa/3.0) or GFDL (http://www.gnu.org/copyleft/fdl.html), via Wikimedia Commons" /></p>
+
+<p>KMS allows to set display modes, as its name betrays, from kernel-space. A user space graphics server (like X) does now
+also not need superuser rights anymore (in theory). The display mode concerns matters such as screen resolution, color depth, and
+refresh rate. Of course, the functionality of GEM and KMS could have been implemented in a single software entity, but
+there are <a href="https://dvdhrm.wordpress.com/2013/09/01/splitting-drm-and-kms-device-nodes/">technical reasons</a> not to do so
+(basically to account for split hardware).</p>
+
+<p>Laurens Pinchart has a nice presentation on DRM, KMS, and in particular, writing drivers at 
+<a href="https://www.youtube.com/watch?v=Ja8fM7rTae4">YouTube</a>. The picture below is from his presentation.</p>
+
+<p><img src="/images/device_model_soc.png" alt="Device Model SoC (by Laurens Pinchart)" /></p>
+
+<p>You see that in memory there are two structures, frame buffers (old) and planes (new). Subsequently, you see something
+that sounds very old-fashioned, a CRTC (Cathode Ray Tube Controller). This is just nomenclature from the past. It is
+basically a reference to a scan-out buffer, a part of (Video) RAM that will be displayed on your screen. It also 
+has (a reference to) a display mode, offsets into the video memory, etc. The controller links to an encoder (which can
+be off-chip). If it links to multiple encoders, these will receive data from the same scanout buffer, so they will
+display the same, cloned, data. The connectors, finally, can be only connected to one encoder, and know how to talk
+HDMI, TVout, CRT, LVDS, etc. It also has the information about the display, <a href="http://en.wikipedia.org/wiki/Extended_Display_Identification_Data">EDID data</a>, <a href="http://en.wikipedia.org/wiki/VESA_Display_Power_Management_Signaling">DPMS</a>, and connection status. Make sure to read 
+also the man-pages about <a href="http://www.linuxhowtos.org/manpages/7/drm-kms.htm">drm-kms</a>.</p>
+
+<p>Startup with <code>drm.debug=14</code> (or if you’re a hexademically inclined person, <code>drm.debug=0x0e</code>) and you will get plenty of debug information from the DRM. For example,
+that we have the Panther Point PCM is indeed confirmed in the syslog:</p>
+
+<pre><code>Apr 25 13:12:35 six kernel: [    3.243360] [drm] Initialized drm 1.1.0 20060810
+Apr 25 13:12:35 six kernel: [    3.280255] [drm:i915_dump_device_info] i915 device info: gen=7, pciid=0x0166 rev=0x09 flags=is_mobile,need_gfx_hws,is_ivybridge,has_fbc,has_hotplug,has_llc,
+Apr 25 13:12:35 six kernel: [    3.280271] [drm:intel_detect_pch] Found PantherPoint PCH
+</code></pre>
+
+<p>Just pore over the information yourself, restarting your computer with this debug flag. You will see for example how
+many display pipes are available (3 in my case). It will enable something like <code>ENCODER:31:LVDS-31</code> and <code>CONNECTOR:30:LVDS-1</code>. 
+And you spot how there are several connectors to choose from:</p>
+
+<pre><code>Apr 25 13:12:35 six kernel: [    3.303850] [drm:intel_dsm_platform_mux_info] MUX info connectors: 5
+Apr 25 13:12:35 six kernel: [    3.303853] [drm:intel_dsm_platform_mux_info]   port id: LVDS
+Apr 25 13:12:35 six kernel: [    3.303860] [drm:intel_dsm_platform_mux_info]   port id: Analog VGA
+Apr 25 13:12:35 six kernel: [    3.303867] [drm:intel_dsm_platform_mux_info]   port id: HDMI/DVI_C
+Apr 25 13:12:35 six kernel: [    3.303874] [drm:intel_dsm_platform_mux_info]   port id: DisplayPort_B
+Apr 25 13:12:35 six kernel: [    3.303881] [drm:intel_dsm_platform_mux_info]   port id: DisplayPort_D
+</code></pre>
+
+<p>Something interesting to our errors are latency settings:</p>
+
+<pre><code>Apr 25 13:12:35 six kernel: [    3.304061] [drm:intel_print_wm_latency] Primary WM0 latency 12 (1.2 usec)
+Apr 25 13:12:35 six kernel: [    3.304063] [drm:intel_print_wm_latency] Primary WM1 latency 4 (2.0 usec)
+Apr 25 13:12:35 six kernel: [    3.304065] [drm:intel_print_wm_latency] Primary WM2 latency 16 (8.0 usec)
+Apr 25 13:12:35 six kernel: [    3.304067] [drm:intel_print_wm_latency] Primary WM3 latency 32 (16.0 usec)
+Apr 25 13:12:35 six kernel: [    3.304068] [drm:intel_print_wm_latency] Sprite WM0 latency 12 (1.2 usec)
+Apr 25 13:12:35 six kernel: [    3.304070] [drm:intel_print_wm_latency] Sprite WM1 latency 4 (2.0 usec)
+Apr 25 13:12:35 six kernel: [    3.304072] [drm:intel_print_wm_latency] Sprite WM2 latency 16 (8.0 usec)
+Apr 25 13:12:35 six kernel: [    3.304073] [drm:intel_print_wm_latency] Sprite WM3 latency 32 (16.0 usec)
+Apr 25 13:12:35 six kernel: [    3.304075] [drm:intel_print_wm_latency] Cursor WM0 latency 12 (1.2 usec)
+Apr 25 13:12:35 six kernel: [    3.304077] [drm:intel_print_wm_latency] Cursor WM1 latency 4 (2.0 usec)
+Apr 25 13:12:35 six kernel: [    3.304079] [drm:intel_print_wm_latency] Cursor WM2 latency 16 (8.0 usec)
+Apr 25 13:12:35 six kernel: [    3.304080] [drm:intel_print_wm_latency] Cursor WM3 latency 64 (32.0 usec)
+</code></pre>
+
+<p>At <a href="http://virtuousgeek.org/blog/index.php/2011/01/">virtuousgeek</a> some matters are explained around power
+management of displays. For example memory can enter self-refresh in which it consumes way less power. The display
+plane FIFO watermarks can be set conservatively, however, this leads to long periods in which self-refresh doesn’t 
+happen. It can be set aggressively, FIFO underruns can occur. See <a href="https://eewiki.net/pages/viewpage.action?pageId=20939499">this nice FPGA implementation</a> of a FIFO buffer to
+understand watermarks in more detail.</p>
+
+<p>Now, we know what kind of hardware we have, let us first try to blindly apply the newest kernel from Intel…</p>
+
+<h1 id="trying-the-newest-drm-kernel">Trying the newest DRM kernel</h1>
+
+<p>We try to run the newest kernel from the guys who are concerned with incorporating the lastest changes from Intel 
+using the <code>drm-intel-next</code> packages from kernel.ubuntu.com:</p>
+
+<pre><code class="language-sh">#!/bin/sh
+
+website=kernel.ubuntu.com/~kernel-ppa/mainline
+kernel=2015-04-24-vivid
+version=4.0.0-997
+subversion=4.0.0-997.201504232205
+
+wget ${website}/drm-intel-next/${kernel}/linux-image-${version}-generic_${subversion}_amd64.deb
+wget ${website}/drm-intel-next/${kernel}/linux-headers-${version}_${subversion}_all.deb
+wget ${website}/drm-intel-next/${kernel}/linux-headers-${version}-generic_${subversion}_amd64.deb
+
+sudo dpkg -i linux-headers-${version}*.deb linux-image-${version}*.deb
+</code></pre>
+
+<p>Installing this kernel (contrary to just kernel 4.0.0 RC7 for example) leads to trouble. Moreover, the same error about
+underruns on the transcoder occurs… So, this is not something already being addressed… And that’s all we wanted to
+know. So, we go back to the default kernel (<code>4.0.0-040000rc7-generic #201504142105</code> of April the 14th).</p>
+
+<p>This gives me an idea. Let’s disable some of the power saving options of the i915 kernel module.</p>
+
+<pre><code class="language-sh">sudo grep '' /sys/module/i915/parameters/*
+</code></pre>
+
+<p>Subsequently I tried the option <code>i915.enable_fbc=1</code> (to see if compression would lower the bandwidth and hence lead to
+fewer underruns). The rigorous option <code>i915.powersave=0</code> didn’t work as well. There is an option <code>i915.enable_rc6=3</code>
+on my system. I set it to <code>0</code>, but I guess powersave overrules all that anyway. Also setting <code>i915.fastboot=1</code> doesn’t
+get rid of the underruns.
+All this is not a very thought out approach anyway…</p>
+
+<p>If you <code>git clone git://kernel.ubuntu.com/virgin/linux.git v4.0-rc7</code>, and navigate to <code>drivers/gpu/drm/i915</code> you will
+encounter a file <code>intel_fifo_underrun.c</code> which supports underrun detection on the PCH transcoder. It is the last 
+function in the file:</p>
+
+<pre><code class="language-c">/**
+ * intel_pch_fifo_underrun_irq_handler - handle PCH fifo underrun interrupt
+ * @dev_priv: i915 device instance
+ * @pch_transcoder: the PCH transcoder (same as pipe on IVB and older)
+ *
+ * This handles a PCH fifo underrun interrupt, generating an underrun warning
+ * into dmesg if underrun reporting is enabled and then disables the underrun
+ * interrupt to avoid an irq storm.
+ */
+void intel_pch_fifo_underrun_irq_handler(struct drm_i915_private *dev_priv,
+					 enum transcoder pch_transcoder)
+{
+	if (intel_set_pch_fifo_underrun_reporting(dev_priv, pch_transcoder,
+						  false))
+		DRM_ERROR("PCH transcoder %c FIFO underrun\n",
+			  transcoder_name(pch_transcoder));
+}
+</code></pre>
+
+<p>It is nice that the message will be only displayed once. This is initiated through the IRQ from the Intel graphics
+unit. And, of course, this is at the end: it’s only the guy reporting the bad news.</p>
+
+<p>The <code>intel_display.c</code> has a suspicious statement about Gen 2 chips:</p>
+
+<pre><code class="language-c">/*
+ * Gen2 reports pipe underruns whenever all planes are disabled.
+ * So don't enable underrun reporting before at least some planes
+ * are enabled.
+ * FIXME: Need to fix the logic to work when we turn off all planes
+ * but leave the pipe running.
+ */
+if (IS_GEN2(dev))
+	intel_set_cpu_fifo_underrun_reporting(dev_priv, pipe, true);
+</code></pre>
+
+<p>Of course, this is reporting about underruns for the CPU, not the PCH, and it is Gen 2, not Gen 3 of the chips. But it
+might be a symptom of something peculiar in the hardware.</p>
+
+<p>In the <a href="http://www.x.org/docs/intel/HD/IHD_OS_Vol_3_Part3_BJS.pdf">North Display Registers</a> document you see a nice
+overview of the sequence in which the display needs to be set.</p>
+
+<p><img src="/images/display_mode_set_sequence.png" alt="Display Mode Set Sequence" /></p>
+
+<p>You can follow along in the code, in particular, in the function <code>ironlake_crtc_enable</code>. Here you will see an order 
+like <code>intel_enable_pipe</code> -&gt; <code>ironlake_pch_enable</code> -&gt; <code>intel_crtc_enable_planes</code>. What is remarkable is that step 7
+in which the planes are configured is done after the port on the PHC is enabled in the code. In the haswell code, 
+this is the same, but this function is preceded with <code>haswell_mode_set_planes_workaround</code>. It is also interesting to
+note that the “Notes” in this table state that the CPU FDI Transmitter should not be set to idle while the PCH
+transcoder is enabled because it will lead to PCH transcoder underflow.</p>
+
+<p>On bugzilla there are several bug reports on the FIFO underrun, such as <a href="https://bugzilla.kernel.org/show_bug.cgi?id=79261">79261</a>.
+However, none of them seems to be about the HD Graphics 4000 in particular, and even less providing any solution.
+A <a href="https://bugs.archlinux.org/task/43848?getfile=12710">patch</a> for ArchLinux just makes <code>DRM_DEBUG</code> messages from the <code>DRM_ERROR</code> messages.</p>
+
+<p>What I can think of are only a few things (because I don’t understand much of it, yet):</p>
+
+<ul>
+  <li>Somehow the initialization isn’t done correctly. Clocks aren’t initialized at the right time, not synchronized. Or
+anything else with respect to initialization is forgotten.</li>
+  <li>Latency is configured incorrectly. Perhaps the BIOS of my Asus (although up to date) hands over latency values that
+are not sufficiently high.</li>
+  <li>The interrupt is generated incorrectly (as in Gen2, for example indeed when all planes are disabled).</li>
+</ul>
+
+<p>My issues aren’t solved, so I’ll need to delve further into details some other time.</p>
+
+<h1 id="more-literature">More literature</h1>
+
+<p>If you’d like to read more:</p>
+
+<ul>
+  <li><a href="https://01.org/linuxgraphics/sites/default/files/documentation/ilk_ihd_os_vol3_part3r2.pdf">PCH Registers (pdf)</a></li>
+  <li><a href="https://01.org/linuxgraphics/sites/default/files/documentation/intel-gfx-prm-osrc-hsw-displaywatermark_guide.pdf">Display Watermark Guide (pdf)</a></li>
+  <li><a href="http://virtuousgeek.org/blog/">Jesse Barnes’ blog</a></li>
+  <li><a href="http://blog.ffwll.ch/">Daniel Vetter’s blog</a></li>
+  <li><a href="https://dvdhrm.wordpress.com/">David Herrmann’s blog</a></li>
+  <li><a href="http://www.intel.nl/content/dam/www/public/us/en/documents/datasheets/7-series-chipset-pch-datasheet.pdf">Intel 7 Series PCH datasheet (pdf)</a></li>
+  <li><a href="http://cgit.freedesktop.org/drm-intel/tree/drivers/gpu/drm/i915/intel_display.c">intel_display.c</a></li>
+</ul>
+
+<p>David Herrmann for example is the guy behind render nodes (integrated <a href="http://kernelnewbies.org/Linux_3.17">since 3.17</a>).</p>
+
+<p>The Intel 7 Series PCH datasheet contains all kind of interesting information. See for example Fig. 5-13 for another
+view on the display architecture.</p>
+
+<!-- 
+![Intel display](/images/intel_display.png)
+-->
+
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<time datetime="2015-04-25T14:33:51+00:00" pubdate data-updated="true">April 25th, 2015</time></div>
+	
+
+
+	
+</div></article>
+
+	<div class="share">
+	<!-- Go to www.addthis.com/dashboard to customize your tools -->
+	<div class="addthis_sharing_toolbox"></div>
+	<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-549f5fe730fc5e91"></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <p>The comments are not automatically shown, so the page loads faster and you only partake in the disqus network if you click. However, this does not mean that your comments are not appreciated, to the contrary!</p> 
+    <br>
+    <div id="disqus_thread"> 
+	<a href="#" onclick="disqus();return false;"><i class="el el-group"></i> Show Comments</a>
+    </div> 
+</section>
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2020
+
+    Anne van Rossum
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+	var disqus_shortname = 'annevanrossum';
+	var disqus_loaded = false;
+        var disqus_identifier = 'http://www.annevanrossum.com/blog/2015/04/25/linux-graphics/';
+        var disqus_url = 'http://www.annevanrossum.com/blog/2015/04/25/linux-graphics/';
+        var disqus_script = 'embed.js';
+	// load disqus comments only on demand
+	function disqus() { 
+		if (!disqus_loaded){
+			var e = document.createElement("script"); 
+			e.type = "text/javascript"; 
+			e.async = true; 
+			e.src = "//" + disqus_shortname + ".disqus.com/" + disqus_script;
+			(document.getElementsByTagName("head")[0] ||
+			 document.getElementsByTagName("body")[0])
+				.appendChild(e);
+		} 
+	  }                       
+      /*
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.annevanrossum.com/blog/2015/04/25/linux-graphics/';
+        var disqus_url = 'http://www.annevanrossum.com/blog/2015/04/25/linux-graphics/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }()); */
+</script>
+
+
+
+
+
+</body>
+</html>

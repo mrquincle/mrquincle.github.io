@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: welcome | Robots, machine learning, global issues]]></title>
+  <link href="http://www.annevanrossum.com/blog/categories/welcome/atom.xml" rel="self"/>
+  <link href="http://www.annevanrossum.com/"/>
+  <updated>2020-04-16T13:19:09+00:00</updated>
+  <id>http://www.annevanrossum.com/</id>
+  <author>
+    <name><![CDATA[Anne van Rossum]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Welcome]]></title>
+    <link href="http://www.annevanrossum.com/blog/2013/01/15/welcome/"/>
+    <updated>2013-01-15T00:00:00+00:00</updated>
+    <id>http://www.annevanrossum.com/blog/2013/01/15/welcome</id>
+    <content type="html"><![CDATA[<p>This website contains a few links of moderate importance to what I do. For my work see the company we started at <a href="http://almende.com">Almende</a>, namely <a href="https://dobots.nl">Distributed Organisms</a> (which we informally call DoBots). DoBots is a very exciting company which sells internet services for large groups of robots. In Replicator we did research with respect to self-reconfigurable robots, but its applicability is still far away. However, in FireSwarm we can actually use a group of aerial robots to find a dune fire as quick as possible. At times I might post some things about robot cognition, because the thing that I like (professionally) more than robots is artificial intelligence.</p>
+
+<p>I like travelling and initiatives that make the world a better place! :-)</p>
+
+<div style="float: left; margin: 0px 20px 0px 0px">
+	<a href="http://couchsurfing.com">
+		<img src="http://www.annevanrossum.com/images/blog/couchsurfing.jpg" alt="Couchsurfing" width="100" height="100" title="Couchsurfing" />
+	</a>
+</div>
+
+<p>Couchsurfing is a worldwide initiative that gives foreigners and countrymen the opportunity to sleep on your couch, so you can show them all the cool places in your city. And the other way around of course!</p>
+
+<div style="float: right; margin: 0px 0px 0px 20px">
+	<a href="http://bookcrossing.com">
+		<img src="http://www.annevanrossum.com/images/blog/bookcrossing.jpg" alt="Bookcrossing" width="100" height="100" title="Bookcrossing" />
+	</a>
+</div>
+
+<p>Bookcrossing is basically a tracking mechanism. You can put books that you don’t wanna read or want others to read in a plastic bag with a tag. The world as one big free library.</p>
+
+<div style="float: left; margin: 0px 20px 0px 0px">
+	<a href="http://improbable.com/ig/">
+		<img src="http://www.annevanrossum.com/images/blog/ignobel.gif" alt="Ignobel Prize" width="100" height="100" title="Ignobel Prize" />
+	</a>
+</div>
+
+<p>The ignobel prices are for funny experiments having often to do with dirty stuff, sex, drugs, weirdness, and just on first sight very irrelevant stuff. Check them out!</p>
+]]></content>
+  </entry>
+  
+</feed>

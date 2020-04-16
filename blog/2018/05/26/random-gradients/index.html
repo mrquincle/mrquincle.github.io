@@ -1,0 +1,414 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Random gradients  | Robots, machine learning, global issues</title>
+
+<meta name="author" content="Anne van Rossum">
+
+<meta name="description" content="Random gradients"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link rel="alternate" href="/atom.xml" title="Robots, machine learning, global issues" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link rel="shortcut icon" href="/favicon.png">
+	<link rel="apple-touch-icon" href="/favicon.png">
+	<link rel="apple-touch-icon" href="/favicon-152x152.png" sizes="152x152">
+	<link rel="apple-touch-icon" href="/favicon-180x180.png" sizes="180x180">
+	<link rel="apple-touch-icon" href="/favicon-167x167.png" sizes="167x167">
+	<link rel="stylesheet" href="/stylesheets/screen.css" media="screen, projection" type="text/css">
+	<link rel="stylesheet" href="/stylesheets/font-awesome.min.css" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+
+
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/vis/4.7.0/vis.js"></script>
+
+
+<link href="//cdnjs.cloudflare.com/ajax/libs/vis/4.7.0/vis.css" rel="stylesheet" type="text/css" />
+
+
+<!-- Social media content metadata -->
+
+<meta property="fb:admins" content="547279274" />
+<meta property="og:title" content="Random gradients" />
+<meta property="og:site_name" content="Robots, machine learning, global issues" />
+<meta property="og:url" content="http://www.annevanrossum.com/blog/2018/05/26/random-gradients/" />
+<meta property="og:type" content="article" />
+<meta property="og:description" content="Random gradients" />
+<meta property="og:author" content="https://www.facebook.com/annevanrossum" />
+
+
+
+<meta property="twitter:card" content="summary" />
+<meta property="twitter:site" content="annevanrossum" />
+<meta property="twitter:url" content="http://www.annevanrossum.com/blog/2018/05/26/random-gradients/" />
+<meta property="twitter:title" content="Random gradients" />
+<meta property="twitter:description" content="Random gradients" />
+<meta property="twitter:creator" content="annevanrossum" />
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  jax: ["input/TeX", "output/HTML-CSS"],
+  tex2jax: {
+    inlineMath: [ ['$', '$'] ],
+    displayMath: [ ['$$', '$$']],
+    processEscapes: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  TeX: { equationNumbers: { autoNumber: "AMS" } },
+  messageStyle: "none",
+  "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<!-- Site environment: production -->
+
+<!-- Get MathJax online -->
+<script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+
+
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Robots, machine learning, global issues</a></h1>
+<h4>Random thoughts</h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.annevanrossum.com">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Random Gradients</h2>
+	<div class="entry-content"><h1 id="random-gradients">Random Gradients</h1>
+
+<p>Variational inference approximates the posterior distribution in probabilistic models. 
+Given observed variables <script type="math/tex">x</script> we would like to know the underlying phenomenon <script type="math/tex">z</script>, 
+defined probabilistically as <script type="math/tex">p(z | x)</script>. 
+Variational inference approximates <script type="math/tex">p(z|x)</script> through a simpler distribution <script type="math/tex">q(z,v)</script>. 
+The approximation is defined through a distance/divergence, often the <a href="/blog/2017/05/03/what-is-contrastive-divergence/">Kullback-Leibler divergence</a>:</p>
+
+<script type="math/tex; mode=display">v = \arg\min_v D_{KL}(q(z,v) || p(z|x))</script>
+
+<p>It is interesting to see that this <strong>deterministic</strong> strategy does not require Monte Carlo updates. It can be seen as a deterministic optimization problem. However, it is definitely possible to solve this deterministic problem <strong>stochastically</strong> as well! We can formulate it as a stochastic optimization problem!</p>
+
+<p>There are two main strategies:</p>
+
+<ul>
+  <li>the reparametrization trick</li>
+  <li>the log-derivate trick</li>
+</ul>
+
+<!--more-->
+
+<p>The log-derivate trick is quite general but still suffers from high variance. Henceforth, so-called control variates
+have been introduced that reduce variance. We will spend quite a bit of time to clarify what a control variate is.
+The last section describes modern approaches that combine features from both strategies.</p>
+
+<h1 id="the-reparametrization-trick">The reparametrization trick</h1>
+
+<p>The reparametrization trick introduces auxiliary random variables that are stochastic such that the parameters to be
+optimized over are only occuring in deterministic functions. This is convenient because it can reduce variance and
+sometimes the derivatives of the probability density functions do not exist in closed-form (which means no autodifferentation).
+See the <a href="/blog/2018/01/30/inference-in-deep-learning/">Inference in deep learning</a> post.</p>
+
+<h1 id="the-log-derivative-trick">The log-derivative trick</h1>
+
+<p>The log-derivative trick is also called the score function method, REINFORCE, or black-box variational inference. 
+The term black-box variational inference reveals that this trick is completely general. 
+It can be applied to any model. For instance, models that have both continuous and discrete latent variables. 
+The joint distribution does not need to be differentiable either.</p>
+
+<p>It uses the following identity:</p>
+
+<script type="math/tex; mode=display">\nabla_\phi \log p_\phi(x) =  \frac{ \nabla_\phi p_\phi(x) } { p_\phi(x)}</script>
+
+<p>This identity is just obtained by differentiating using <script type="math/tex">\nabla \log x = \frac{1}{x}</script> and applying the chain rule <script type="math/tex">\nabla \log f(x) = \frac{1}{f(x)} \nabla f(x)</script>. 
+Let’s subsequently rewrite this identity as a product:</p>
+
+<script type="math/tex; mode=display">\nabla_\phi p_\phi(x) = p_\phi(x) \nabla_\phi \log p_\phi(x)</script>
+
+<p>The expected costs we want to minimize:</p>
+
+<script type="math/tex; mode=display">\nabla_\phi L(\theta,\phi) = \nabla_\phi E_{x \sim p_\phi(x)} [f_\theta(x) ] =  \nabla_\phi \int_x f_\theta(x) p_\phi(x) dx</script>
+
+<p>We can use <a href="https://en.wikipedia.org/wiki/Leibniz_integral_rule">Leibniz’s integral rule</a> (differentiation under the integral sign) to shift the differential operator into the integral. To recall the rule:</p>
+
+<script type="math/tex; mode=display">\nabla_x \int f(x,t) dt = \int \nabla_x f(x,t) dt</script>
+
+<p>In our case:</p>
+
+<script type="math/tex; mode=display">\nabla_\phi L(\theta,\phi) = \int_x f_\theta(x) \nabla_\phi p_\phi(x) dx</script>
+
+<p>Using the log identity:</p>
+
+<script type="math/tex; mode=display">\nabla_\phi L(\theta,\phi) = \int_x f_\theta(x) p_\phi(x) \nabla_\phi \log p_\phi(x) dx</script>
+
+<script type="math/tex; mode=display">\nabla_\phi L(\theta,\phi) = E_{x \sim p_\phi(x)} [ f_\theta(x) \nabla_\phi \log p_\phi(x) ]</script>
+
+<p>Now we can use Monte Carlo to estimate:</p>
+
+<script type="math/tex; mode=display">\nabla_\phi L(\theta,\phi) \approx \frac{1}{S} \sum_{s=1}^S [ f_\theta(x^s) \nabla_\phi \log p_\phi(x^s) ]</script>
+
+<p>Here $x_s \sim p_\phi(x)$ i.i.d. This is general estimator: $f_\theta(x)$ does not need to be differentiable or
+continuous with respect to $x$. 
+Note that $\log p_\phi(x)$ needs to be differentiable with respect to $\phi$.</p>
+
+<p>We should show that the variance is actually reduced… However, let us first explain something that you will find
+time after time. Namely the notion of control variates…</p>
+
+<h1 id="control-variates">Control variates</h1>
+
+<p>Let us estimate the expectation over a function <script type="math/tex">E_x[f(x)]</script> given a function <script type="math/tex">f(x)</script>. 
+The Monte Carlo estimator is of the form <script type="math/tex">E_x[f(x)] \approx \frac{1}{k} \sum_i f(x^i)</script> with <script type="math/tex">x^i \sim p(x)</script>.
+We can introduce a control variate to reduce the variance:</p>
+
+<script type="math/tex; mode=display">E[f(x)] \approx \left( \frac{1}{k} \sum_i f(x^i) - \eta g(x^i) \right) + \eta E[g(x)]</script>
+
+<p>The parameter <script type="math/tex">\eta</script> can be chosen to minimize the variance, which turns out to be optimally:</p>
+
+<script type="math/tex; mode=display">\eta = \frac{Cov(f,g)}{Var(g)}</script>
+
+<p>More information can be found at <a href="https://en.wikipedia.org/wiki/Control_variates">Wikipedia</a>. The final variance will be something along the lines:</p>
+
+<script type="math/tex; mode=display">Var(f) - \frac{ Cov(f,g)^2}{ Var(g)}</script>
+
+<p>Here <script type="math/tex">Var(f) = E[f^2] - E[f]^2</script> and <script type="math/tex">Cov(f,g) = E[(f-E[f])(g-E[g])]</script>. 
+So, how we can explain this best?</p>
+
+<p>Assume we have to sum over <font color="blue">the function</font> <script type="math/tex">f(x) = 1/(1+x)</script> with <script type="math/tex">% <![CDATA[
+0 < x < 1 %]]></script>, then if we sample uniformly random values between <script type="math/tex">0</script> and <script type="math/tex">1</script> we will have results between <script type="math/tex">1/(1+0)=1</script> and <script type="math/tex">1/(1+1)=1/2</script>.
+We would like to transform this function in such way that these results are closer to each other. 
+The values at <script type="math/tex">x=0</script> should be going to the mean, and the values at <script type="math/tex">x=1</script> as well. 
+At wikipedia they give the example of the <font color="orange">covariate</font> <script type="math/tex">g(x) = 1 + x</script> (this could have just been <script type="math/tex">g(x) = x</script>). By adding <script type="math/tex">x</script> and subtracting the average (in this case <script type="math/tex">\int_0^1 (1+x) dx = 3/2</script>) we make the function <strong>flatter</strong> with picking <script type="math/tex">\eta=0.4773</script>, in other words we reduced the variance. We sample 100 values uniformly and demonstate in the following graph that the function using the covariate is indeed flatter.</p>
+
+<div id="visualization-controlvariates"></div>
+
+<p>Another <font color="purple">covariate</font> could be <script type="math/tex">g(x) = \log(x + 1)</script>. We then have to subtract the expectation of that function, namely <script type="math/tex">\int_0^1 \log(x+1) dx = \log(4)-1</script>. This function is even flatter and has an even smaller variance. You can see that in the graph above. We have picked a value for <script type="math/tex">\eta=0.72</script>.
+The covariate which would make the compound function completely flat would be <script type="math/tex">g(x) = 1/(2-x)</script>, which is <script type="math/tex">f(x)</script> mirrored over the range from <script type="math/tex">x=[0,1]</script>. However, this would of course render the Monte Carlo sampling redundant, because we would need the expectation over <script type="math/tex">g(x)</script> which is in this case just as hard as that over <script type="math/tex">f(x)</script>.</p>
+
+<!--
+Why is a biased estimator at times not a problem. Suppose the expectation is consistently above or consistently below the real expectation. Assume the expectation is used within a (variational) minimization or maximization problem. Then it does not matter if we minimize including a particular offset.
+-->
+
+<!-- ## Local expectation gradients -->
+
+<h1 id="recent-approaches-and-combinations">Recent approaches (and combinations)</h1>
+
+<p>The log-derivative trick (or the score function estimator) still suffers from high variance. Common techniques to 
+reduce variance is by introducing baselines. Examples of unbiased single sample gradient estimators, are 
+NVIL (Mnih and Gregor, 2014) and MuProp (Gu et al., 2015). 
+An example of an unbiased multisample case is VIMCO (Mnih and Rezende, 2016).</p>
+
+<p>Examples of biased single sample gradient estimators, are Gumbel-Softmax (Jang et al., 2016) and Concrete relaxiations 
+(Maddison et al., 2017), independent researchers coming to the same strategy.
+The family of concrete distributions (Maddison et al, 2017) has closed-form densities and a simple reparametrization. The 
+concrete distributions can replace discrete distributions on training so all gradients can properly be calculated. During
+training the concrete distributions can be replaced by discrete distributions.</p>
+
+<p>REBAR (Tucker et al., 2017) is a new approach that uses a novel control variate to make the Concrete relaxation
+approach unbiased again.</p>
+
+<!--
+Toy problem:
+
+$$E_{p(b)} [ f(b,\theta) ]$$
+
+The random variables $$b \sim Bernoulli(\theta)$$ are independent variables parameterized by $$\theta$$. 
+The function $$f(b,\theta)$$ is differentiable. 
+
+This can be estimated through gradient ascent:
+
+$$\nabla_\theta E_{p(b)} [ f(b,\theta) ] = E_{p(b)} [ \nabla_\theta f(b,\theta) + f(b,\theta) \nabla_\theta \log p(b) ] $$
+-->
+
+<h1 id="references">References</h1>
+
+<ul>
+  <li><a href="https://gabrielhuang.gitbooks.io/machine-learning/content/reparametrization-trick.html">Reparametrization Trick (Huang, 2018, blog post)</a></li>
+  <li><a href="http://papers.nips.cc/paper/6328-the-generalized-reparameterization-gradient.pdf">The Generalized Reparameterization Gradient (Ruiz et al., 2016)</a></li>
+  <li><a href="https://arxiv.org/pdf/1503.01494.pdf">Local Expectation Gradients for Doubly Stochastic Variational Inference (Titsias, 2015)</a></li>
+  <li><a href="https://arxiv.org/pdf/1402.0030.pdf">Neural Variational Inference and Learning in Belief Networks (Mnih, Gregor, 2014)</a></li>
+  <li><a href="https://arxiv.org/pdf/1511.05176.pdf">MuProp: Unbiased Backpropagation for Stochastic Neural Networks, (Gu et al, 2016)</a></li>
+  <li><a href="https://arxiv.org/pdf/1602.06725.pdf">Variational Inference for Monte Carlo Objectives (Mnih, Rezende, 2016)</a></li>
+  <li><a href="https://arxiv.org/pdf/1611.01144.pdf">Categorical Reparameterization with Gumbel-Softmax (Jang et al., 2016)</a></li>
+  <li><a href="https://arxiv.org/pdf/1611.00712.pdf">The Concrete Distribution: A Continuous Relaxation of Discrete Random Variables (Maddison et al., 2017)</a></li>
+  <li><a href="https://openreview.net/pdf?id=ryBDyehOl">REBAR: Low-Variance, Unbiased Gradient Estimates for Discrete Latent Variable Models (Tucker et al., 2017)</a></li>
+</ul>
+
+<script type="text/javascript" src="/javascripts/controlvariates.js">
+</script>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<time datetime="2018-05-26T13:30:44+00:00" pubdate data-updated="true">May 26th, 2018</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/gradients/'>gradients</a>, <a class='category' href='/blog/categories/log-derivative-trick/'>log-derivative trick</a>, <a class='category' href='/blog/categories/reparametrization-trick/'>reparametrization trick</a>
+
+</div>
+
+
+	
+</div></article>
+
+	<div class="share">
+	<!-- Go to www.addthis.com/dashboard to customize your tools -->
+	<div class="addthis_sharing_toolbox"></div>
+	<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-549f5fe730fc5e91"></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <p>The comments are not automatically shown, so the page loads faster and you only partake in the disqus network if you click. However, this does not mean that your comments are not appreciated, to the contrary!</p> 
+    <br>
+    <div id="disqus_thread"> 
+	<a href="#" onclick="disqus();return false;"><i class="el el-group"></i> Show Comments</a>
+    </div> 
+</section>
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2020
+
+    Anne van Rossum
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+	var disqus_shortname = 'annevanrossum';
+	var disqus_loaded = false;
+        var disqus_identifier = 'http://www.annevanrossum.com/blog/2018/05/26/random-gradients/';
+        var disqus_url = 'http://www.annevanrossum.com/blog/2018/05/26/random-gradients/';
+        var disqus_script = 'embed.js';
+	// load disqus comments only on demand
+	function disqus() { 
+		if (!disqus_loaded){
+			var e = document.createElement("script"); 
+			e.type = "text/javascript"; 
+			e.async = true; 
+			e.src = "//" + disqus_shortname + ".disqus.com/" + disqus_script;
+			(document.getElementsByTagName("head")[0] ||
+			 document.getElementsByTagName("body")[0])
+				.appendChild(e);
+		} 
+	  }                       
+      /*
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.annevanrossum.com/blog/2018/05/26/random-gradients/';
+        var disqus_url = 'http://www.annevanrossum.com/blog/2018/05/26/random-gradients/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }()); */
+</script>
+
+
+
+
+
+</body>
+</html>

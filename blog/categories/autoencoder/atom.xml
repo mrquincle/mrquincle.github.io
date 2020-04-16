@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: autoencoder | Robots, machine learning, global issues]]></title>
+  <link href="http://www.annevanrossum.com/blog/categories/autoencoder/atom.xml" rel="self"/>
+  <link href="http://www.annevanrossum.com/"/>
+  <updated>2020-04-16T13:19:09+00:00</updated>
+  <id>http://www.annevanrossum.com/</id>
+  <author>
+    <name><![CDATA[Anne van Rossum]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Nonnegative Autoencoders]]></title>
+    <link href="http://www.annevanrossum.com/blog/2018/09/30/nonnegative-autoencoders/"/>
+    <updated>2018-09-30T14:36:27+00:00</updated>
+    <id>http://www.annevanrossum.com/blog/2018/09/30/nonnegative-autoencoders</id>
+    <content type="html"><![CDATA[<p>My intuition would say that a part-based decomposition should arise naturally within an autoencoder. To encorporate
+the next image in an image recognition task, it must be more beneficial to have gradient descent being able to 
+navigate towards the optimal set of neural network weights for that image. If not, for each image gradient descent
+is all the time navigating some kind of common denominator, none of the images are actually properly represented.
+For each new image that is getting better classified, the other images are classified worse. With a proper
+decomposition learning the next representation will not interfere with previous representations. Grossberg calls this
+in Adaptive Resonance Theory (ART) catastrophic forgetting.</p>
+
+<p>Maybe if we train a network long enough this will be the emerging decomposition strategy indeed. However, this is not
+what is normally found. The different representations get coupled and there is not a decomposition that allows
+the network to explore different feature dimensions independently.</p>
+
+<p>One of the means to obtain a part-based representation is to force positive or zero weights in a network. In the 
+literature <a href="https://yliapis.github.io/Non-Negative-Matrix-Factorization/">nonnegative matrix factorization</a> can be 
+found. Due to the nonnegativity constraint the features are additive. This leads to a (sparse) basis where through
+summation “parts” are added up to a “whole” object. For example, faces are built up out of features like eyes, nostrils,
+mouth, ears, eyebrows, etc.</p>
+
+<p><img src="/images/blog/nonnegative_examples.jpg" alt="Nonnegative examples. From top to bottom: 1) Sparse Autoencoder, 2) Nonnegative Sparse Autoencoder, 3) Nonnegativity Constrained Autoencoder, and 4) Nonnegative Matrix Factorization. The nonnegative examples do not use clear cut facial features like eyes and ears, but you see only parts of the image being nonnegative (white). This means an image can be composed using a sum of the displayed images. Copyright Hosseini-Asl et al." /></p>
+
+<!--more-->
+
+<h1 id="sparse-autoencoder-with-nonnegativity-constraint">Sparse Autoencoder with Nonnegativity Constraint</h1>
+
+<p>At Louisville university
+<a href="https://github.com/ehosseiniasl">Ehsan Hosseini-Asl (github)</a>,
+<a href="http://www.jacekzurada.org/">Jacek Zurada</a> (who is running for 2019 IEEE president), and
+<a href="https://twitter.com/olfanasraoui">Olfa Nasraoui (twitter)</a>
+studied how nonnegative constraints can be added to an autoencoder in 
+<a href="https://arxiv.org/pdf/1601.02733.pdf">Deep Learning of Part-based Representation of Data Using Sparse Autoencoders with Nonnegativity Constraints (2016)</a>.</p>
+
+<p>An autoencoder which has a latent layer that contains a part-based representation, only has a few of the nodes active
+at a particular input. In other words, such a representation is sparse.</p>
+
+<p>One of the ways a sparse representation can be enforced is to limit the activation of a hidden unit over all data
+items <script type="math/tex">r</script>. The average activation of a unit is:</p>
+
+<script type="math/tex; mode=display">\hat{p}_j = \frac{1}{m} \sum_{r=1}^m h_j(x^{(r)})</script>
+
+<p>To make sure that the activation is limited, we can bound <script type="math/tex">% &lt;![CDATA[
+\hat{p}_j < p %]]&gt;</script> with <script type="math/tex">p</script> a small value close to zero.</p>
+
+<p>The usual cost function is just the reconstruction error <script type="math/tex">J_E</script>. Here, we include the activation limitation by adding an additional term:</p>
+
+<script type="math/tex; mode=display">J_{KL}(p || \hat{p})  = \sum_{j=1}^n p \log \frac{p}{\hat{p}_j} + (1-p) \log \frac{1-p}{1-\hat{p}_j}</script>
+
+<p>We can prevent overfitting by regularization. This can be done by adding noise to the input, dropout, or by penalizing large weights. The latter corresponds to yet another term:</p>
+
+<script type="math/tex; mode=display">J_{O}(W,b) = \frac{1}{2} \sum_{l=1}^2 \sum_{i=1}^{s_l} \sum_{j=1}^{s_{l+1}} \left( w_{ij}^l \right)^2</script>
+
+<p>The sizes of adjacent layers are indicated by <script type="math/tex">s_l</script> and <script type="math/tex">s_{l+1}</script> (and we are limited to <script type="math/tex">l</script> layers).</p>
+
+<p>The total cost function used by the authors for the sparse autoencoder contains all the above cost functions, each weighted, one by parameter <script type="math/tex">\beta</script>, the other by <script type="math/tex">\lambda</script>.</p>
+
+<script type="math/tex; mode=display">J_{SAE}(W,b) = J_E(W,b) + \beta J_{KL}(p||\hat{p}) + \lambda J_O(W,b)</script>
+
+<p>To enforce nonnegativity we can introduce a different regularization term:</p>
+
+<script type="math/tex; mode=display">J_{O}(W,b) = \frac{1}{2} \sum_{l=1}^2 \sum_{i=1}^{s_l} \sum_{j=1}^{s_{l+1}} f \left( w_{ij}^l \right)</script>
+
+<p>For the nonnegative constrained autoencoder the authors suggest:</p>
+
+<script type="math/tex; mode=display">% &lt;![CDATA[
+f(w_{ij}) = 
+\begin{cases}
+w_{ij}^2 & w_{ij} < 0 \\ 
+0 & \text{otherwise}
+\end{cases} %]]&gt;</script>
+
+<p>This term penalizes all negative values. All positive values do not contribute to the cost function.</p>
+
+<h2 id="results">Results</h2>
+
+<p>Results are compared between the Sparse Autoencoder (SAE), the Nonnegative Sparse Autoencoder (NNSAE), the Negatively 
+Constrained Autoencoder (NCAE), and Nonnegative Matrix Factorization (NMF).</p>
+
+<p><img src="/images/blog/nonnegative_autoencoder_representation_comparison.jpg" alt="Comparison of representations. 1) SAE, 2) NNSAE, 3) NCAE, 4) NMF" /></p>
+
+<p>The SAE representation contains negative values (dark pixels). The NNSAE representation has neurons with zero weights (complete black nodes).</p>
+
+<p>The receptive fields learned by NCAE are more sparse than the others. 
+The features from NNSAE and NMF are more local.</p>
+
+<p><img src="/images/blog/nonnegative_constrained_mnist_comparison.png" alt="Nonnegative Constrained Autoencoder compared using the MNIST classification task with other reconstruction methods. Rows: 1) Original digits, 2) Sparse Autoencoder, 3) Nonnegative Sparse Autoencoder, 4) Negatively Constrained Autoencoder, and Nonnegative Matrix Factorization." /></p>
+
+<h2 id="ideas">Ideas</h2>
+
+<p>To really encourage a part-based decomposition it would be best to enforce either very large values or values that are zero. Something like sum over x divided by number of non-zero components with each x nonnegative and maximizing over this.</p>
+
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,331 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Legendre Transform  | Robots, machine learning, global issues</title>
+
+<meta name="author" content="Anne van Rossum">
+
+<meta name="description" content="Legendre Transform"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link rel="alternate" href="/atom.xml" title="Robots, machine learning, global issues" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link rel="shortcut icon" href="/favicon.png">
+	<link rel="apple-touch-icon" href="/favicon.png">
+	<link rel="apple-touch-icon" href="/favicon-152x152.png" sizes="152x152">
+	<link rel="apple-touch-icon" href="/favicon-180x180.png" sizes="180x180">
+	<link rel="apple-touch-icon" href="/favicon-167x167.png" sizes="167x167">
+	<link rel="stylesheet" href="/stylesheets/screen.css" media="screen, projection" type="text/css">
+	<link rel="stylesheet" href="/stylesheets/font-awesome.min.css" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+
+
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/vis/4.7.0/vis.js"></script>
+
+
+<link href="//cdnjs.cloudflare.com/ajax/libs/vis/4.7.0/vis.css" rel="stylesheet" type="text/css" />
+
+
+<!-- Social media content metadata -->
+
+<meta property="fb:admins" content="547279274" />
+<meta property="og:title" content="Legendre Transform" />
+<meta property="og:site_name" content="Robots, machine learning, global issues" />
+<meta property="og:url" content="http://www.annevanrossum.com/blog/2015/08/08/legendre-transform/" />
+<meta property="og:type" content="article" />
+<meta property="og:description" content="Legendre Transform" />
+<meta property="og:author" content="https://www.facebook.com/annevanrossum" />
+
+
+
+<meta property="twitter:card" content="summary" />
+<meta property="twitter:site" content="annevanrossum" />
+<meta property="twitter:url" content="http://www.annevanrossum.com/blog/2015/08/08/legendre-transform/" />
+<meta property="twitter:title" content="Legendre Transform" />
+<meta property="twitter:description" content="Legendre Transform" />
+<meta property="twitter:creator" content="annevanrossum" />
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  jax: ["input/TeX", "output/HTML-CSS"],
+  tex2jax: {
+    inlineMath: [ ['$', '$'] ],
+    displayMath: [ ['$$', '$$']],
+    processEscapes: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  TeX: { equationNumbers: { autoNumber: "AMS" } },
+  messageStyle: "none",
+  "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<!-- Site environment: production -->
+
+<!-- Get MathJax online -->
+<script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+
+
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Robots, machine learning, global issues</a></h1>
+<h4>Random thoughts</h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.annevanrossum.com">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Legendre Transform</h2>
+	<div class="entry-content"><p>The <a href="https://en.wikipedia.org/wiki/Legendre_transformation">Legendre transform</a> describes a function - in the normal
+Legendre case, a convex function (but for the generalized case, see [<a href="http://odessa.phy.sdsmt.edu/~andre/PHYS743/lfth2.pdf" title="Legendre-Fenchel Transforms in a Nutshell (2005) Touchette">1</a>]) - as a function of its
+<a href="https://en.wikipedia.org/wiki/Supporting_hyperplane">supporting hyperplanes</a>. In the case of a 2D function these are
+supporting lines. The supporting lines are the lines that just touch the function. These lines do not intersect the
+function anywhere else if the function is convex.</p>
+
+<p>Why is the Legendre transform interesting? It is basically just writing down a function in a different manner. The
+Legendre transform is particular useful in the situation that the derivatives of a function <script type="math/tex">f(x)</script> are easier to
+describe than the function itself. For a nice introduction see [<a href="http://users.df.uba.ar/ariel/materias/FT3_2011_2C/Extra/LegendreTransform.pdf" title="Making Sense of the Legendre Transform (2008) Zia">2</a>]. Intuitively, we map from points <script type="math/tex">(x,f(x))</script> to
+<script type="math/tex">(m,g(m))</script>, with <script type="math/tex">m</script> the slope and <script type="math/tex">g(m)</script> some value so that we can recover <script type="math/tex">x</script> and <script type="math/tex">y</script> (see below for the
+exact definition).</p>
+
+<p>In the following example, we will get get the Legendre transform of the function:</p>
+
+<script type="math/tex; mode=display">f(x)=c x^2</script>
+
+<p>And in particular, <script type="math/tex">c=2</script>.</p>
+
+<p>The Legendre transform is defined (with proper domain <script type="math/tex">I</script>) by:</p>
+
+<script type="math/tex; mode=display">g(m)=\sup_{x \in I}(mx - f(x))</script>
+
+<p>In the animation below the first curve that is drawn is the <font color="blue">convex function</font> <script type="math/tex">f(x)</script> at hand.
+Subsequently we will be performing a for loop in which we draw <font color="orange">lines</font> <script type="math/tex">h(m)</script> over different slopes <script type="math/tex">m</script>.
+The <font color="purple">curves</font> <script type="math/tex">k(m)</script> depict the
+difference between <script type="math/tex">f(x)</script> and the line <script type="math/tex">h(m)</script>.
+The maximum difference is found by <script type="math/tex">sup_x</script>, the supremum operation, which sweeps over all <script type="math/tex">x</script>.
+This difference is visualized through a <font color="green">single peak</font> with height <script type="math/tex">g(m)</script>.
+Last, the <font color="red">Legendre transform</font> is drawn as <script type="math/tex">g(m)</script> for all different slopes <script type="math/tex">m</script> we try.</p>
+
+<script type="math/tex; mode=display">g(m)=\frac{1}{4c}m^2</script>
+
+<p>To refresh the animation, press F5.</p>
+
+<div id="visualization-legendre"></div>
+
+<p>I hope the Legendre transform is a little bit less mysterious after you’ve seen this animation. The animation has been
+created by making use of the <a href="http://visjs.org/">vis.js</a> library. The source code can be found at <a href="/javascripts/legendre.js">legendre.js</a>.</p>
+
+<h2 id="physics">Physics</h2>
+
+<p>A very common example of the <a href="https://www.wikiwand.com/en/Hamiltonian_mechanics#/Mathematical_formalism">Legendre transform in physics</a> is the one that transform the Lagrangian into the Hamiltonian. The Lagrangian describes a system in generalized position and velocity
+coordinates:</p>
+
+<script type="math/tex; mode=display">\cal{L}(q_j,\dot{q}_j,t)</script>
+
+<p>The Hamiltonian is the Legende transform of the Lagrangian:</p>
+
+<script type="math/tex; mode=display">\cal{H}(q_j,p_j,t)=\left( \sum_i \dot{q}_i p_i \right) - \cal{L}(q_j,\dot{q}_j,t)</script>
+
+<p>The Lagrangian is the function <script type="math/tex">f(x)</script> of above. The sum (or actually, the inner product <script type="math/tex">% <![CDATA[
+\left<\dot{q},p\right> %]]></script>) is replacing the
+<script type="math/tex">mx</script> term.</p>
+
+<h2 id="probability-theory">Probability theory</h2>
+
+<p>The rate function is defined as the Legendre transform of the <a href="https://en.wikipedia.org/wiki/Cumulant">scaled cumulant generating function</a> of a random
+variable <script type="math/tex">A_n</script>. The scaled cumulant generation function of $A_n$ is defined by the limit:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\lambda(k)=\lim_{n\rightarrow\infty}\frac{1}{n}\ln\left<\exp(n k A_n) \right> %]]></script>
+
+<p>And the Gärtner-Ellis theorem establishes under some conditions the rate function:</p>
+
+<script type="math/tex; mode=display">I(a)=\sup_{k \in \cal{R}} (ka - \lambda(k))</script>
+
+<p>This theorem is more general than Cramér’s theorem, which is only valid for independent and identically distributed
+random variables.</p>
+
+<p>Now you know what a Legendre transform entails, you might start to notice it in the most surprising places! For example
+in clustering multivariate normal distributions [<a href="http://www.lix.polytechnique.fr/Labo/Frank.Nielsen/pdf/2008-C-ClusteringNormal-ETVC.pdf" title="Clustering Multivariate Normal Distributions (2008) Nielsen and Nock">3</a>]!</p>
+
+<ol>
+  <li><a href="http://odessa.phy.sdsmt.edu/~andre/PHYS743/lfth2.pdf" title="Legendre-Fenchel Transforms in a Nutshell (2005) Touchette">Legendre-Fenchel Transforms in a Nutshell</a>, a good explanation of the Legendre-Fenchel generalization of the Legendre transform</li>
+  <li><a href="http://users.df.uba.ar/ariel/materias/FT3_2011_2C/Extra/LegendreTransform.pdf" title="Making Sense of the Legendre Transform (2008) Zia">Making Sense of the Legendre Transform</a></li>
+  <li><a href="http://www.lix.polytechnique.fr/Labo/Frank.Nielsen/pdf/2008-C-ClusteringNormal-ETVC.pdf" title="Clustering Multivariate Normal Distributions (2008) Nielsen and Nock">Clustering Multivariate Normal Distributions</a></li>
+</ol>
+
+<script type="text/javascript" src="/javascripts/legendre.js">
+
+</script>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<time datetime="2015-08-08T19:51:39+00:00" pubdate data-updated="true">August 8th, 2015</time></div>
+	
+
+
+	
+</div></article>
+
+	<div class="share">
+	<!-- Go to www.addthis.com/dashboard to customize your tools -->
+	<div class="addthis_sharing_toolbox"></div>
+	<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-549f5fe730fc5e91"></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <p>The comments are not automatically shown, so the page loads faster and you only partake in the disqus network if you click. However, this does not mean that your comments are not appreciated, to the contrary!</p> 
+    <br>
+    <div id="disqus_thread"> 
+	<a href="#" onclick="disqus();return false;"><i class="el el-group"></i> Show Comments</a>
+    </div> 
+</section>
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2020
+
+    Anne van Rossum
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+	var disqus_shortname = 'annevanrossum';
+	var disqus_loaded = false;
+        var disqus_identifier = 'http://www.annevanrossum.com/blog/2015/08/08/legendre-transform/';
+        var disqus_url = 'http://www.annevanrossum.com/blog/2015/08/08/legendre-transform/';
+        var disqus_script = 'embed.js';
+	// load disqus comments only on demand
+	function disqus() { 
+		if (!disqus_loaded){
+			var e = document.createElement("script"); 
+			e.type = "text/javascript"; 
+			e.async = true; 
+			e.src = "//" + disqus_shortname + ".disqus.com/" + disqus_script;
+			(document.getElementsByTagName("head")[0] ||
+			 document.getElementsByTagName("body")[0])
+				.appendChild(e);
+		} 
+	  }                       
+      /*
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.annevanrossum.com/blog/2015/08/08/legendre-transform/';
+        var disqus_url = 'http://www.annevanrossum.com/blog/2015/08/08/legendre-transform/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }()); */
+</script>
+
+
+
+
+
+</body>
+</html>

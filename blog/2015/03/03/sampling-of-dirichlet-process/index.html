@@ -1,0 +1,538 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Sampling of Dirichlet Process  | Robots, machine learning, global issues</title>
+
+<meta name="author" content="Anne van Rossum">
+
+<meta name="description" content="Sampling of Dirichlet Process"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link rel="alternate" href="/atom.xml" title="Robots, machine learning, global issues" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link rel="shortcut icon" href="/favicon.png">
+	<link rel="apple-touch-icon" href="/favicon.png">
+	<link rel="apple-touch-icon" href="/favicon-152x152.png" sizes="152x152">
+	<link rel="apple-touch-icon" href="/favicon-180x180.png" sizes="180x180">
+	<link rel="apple-touch-icon" href="/favicon-167x167.png" sizes="167x167">
+	<link rel="stylesheet" href="/stylesheets/screen.css" media="screen, projection" type="text/css">
+	<link rel="stylesheet" href="/stylesheets/font-awesome.min.css" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+
+
+
+
+<!-- Social media content metadata -->
+
+<meta property="fb:admins" content="547279274" />
+<meta property="og:title" content="Sampling of Dirichlet Process" />
+<meta property="og:site_name" content="Robots, machine learning, global issues" />
+<meta property="og:url" content="http://www.annevanrossum.com/blog/2015/03/03/sampling-of-dirichlet-process/" />
+<meta property="og:type" content="article" />
+<meta property="og:description" content="Sampling of Dirichlet Process" />
+<meta property="og:author" content="https://www.facebook.com/annevanrossum" />
+
+
+
+<meta property="twitter:card" content="summary" />
+<meta property="twitter:site" content="annevanrossum" />
+<meta property="twitter:url" content="http://www.annevanrossum.com/blog/2015/03/03/sampling-of-dirichlet-process/" />
+<meta property="twitter:title" content="Sampling of Dirichlet Process" />
+<meta property="twitter:description" content="Sampling of Dirichlet Process" />
+<meta property="twitter:creator" content="annevanrossum" />
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  jax: ["input/TeX", "output/HTML-CSS"],
+  tex2jax: {
+    inlineMath: [ ['$', '$'] ],
+    displayMath: [ ['$$', '$$']],
+    processEscapes: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  TeX: { equationNumbers: { autoNumber: "AMS" } },
+  messageStyle: "none",
+  "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<!-- Site environment: production -->
+
+<!-- Get MathJax online -->
+<script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+
+
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Robots, machine learning, global issues</a></h1>
+<h4>Random thoughts</h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.annevanrossum.com">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Sampling of Dirichlet Process</h2>
+	<div class="entry-content"><p>Thousands of articles describe the use of the Dirichlet Process, but very few describe how to sample from it. Most often one is referred to <a href="http://www.tandfonline.com/doi/pdf/10.1080/10618600.2000.10474879">Markov chain sampling methods for Dirichlet process mixture models (pdf)</a> by <a href="http://www.cs.toronto.edu/~radford/">Radford Neal</a> (at University of Toronto), which is a nice piece of work, but still a bit dense as an introduction. I contacted him by email about certain things that were difficult to understand at first and he was kind enough to respond, thanks a lot! Definitely also check out <a href="https://radfordneal.wordpress.com/">his blog</a> in which he regularly showcases his fast version of R.</p>
+
+<p>Let us introduce the Dirichlet Process with two lines:</p>
+
+<script type="math/tex; mode=display">G \sim DP(H,\alpha) \\
+\theta_i  \mid  G \sim G</script>
+
+<p>First of all, if you haven’t been reading an article about this material in the last decennia, the notation <script type="math/tex">\sim</script> stands for “is distributed as” (see <a href="http://stats.stackexchange.com/questions/41306/why-are-probability-distributions-denoted-with-a-tilde">stackexchange</a>).</p>
+
+<p>On the first line we have defined that <script type="math/tex">G</script> being distributed as a Dirichlet Process (DP) with parameters <script type="math/tex">H</script> and <script type="math/tex">\alpha</script>. The parameter <script type="math/tex">H</script> has kind of the role of a mean, the parameter <script type="math/tex">\alpha</script> has kind of the role of precision (inverse variance). The parameter <script type="math/tex">H</script> is called the base distribution, the parameter <script type="math/tex">\alpha</script> is called the dispersion factor.</p>
+
+<p>On the second line we generate a bunch of parameters <script type="math/tex">\theta_i</script> conditioned on the generated distribution <script type="math/tex">G</script>. A peculiar property of this distribution is that exactly the same <script type="math/tex">\theta_i</script> can be sampled multiple times. Hence, the Dirichlet Process can generate discrete objects out of a continuous base distribution <script type="math/tex">H</script>.</p>
+
+<p>If we have parameters we can subsequently generate observations as well:</p>
+
+<script type="math/tex; mode=display">y_i  \mid  \theta_i \sim F(\theta_i)</script>
+
+<p>Here <script type="math/tex">F</script> describes the mapping of parameters to observations.</p>
+
+<p>We can integrate over <script type="math/tex">G</script> to obtain a presentation such as:</p>
+
+<script type="math/tex; mode=display">\theta_{n+1}  \mid  \theta_1 \ldots \theta_{n-1} \sim \frac{1}{\alpha+n} (\alpha H + \sum_{i=1}^n \delta_{\theta_i})</script>
+
+<p>And just to write this down in a totally equivalent notation for your convenience:</p>
+
+<script type="math/tex; mode=display">p(\theta_m \mid \theta_{-m},\alpha,H) = \frac{a}{M-1+\alpha} H + \frac{1}{M-1+\alpha} \sum_{j=1,j\neq m}^M \delta_{\theta_j}</script>
+
+<p>Here we have picked an index <script type="math/tex">m</script> mid-way, and not a new item <script type="math/tex">n+1</script> which complicates the notation considerably. The notation <script type="math/tex">\theta_{-m}</script> with the minus sign means in this case the set of parameters <script type="math/tex">(\theta_1,\ldots,\theta_M)</script> with <script type="math/tex">\theta_m</script> excluded.</p>
+
+<p>This trick in which we can act as if a parameter mid-way is the same as a new one, is possible because of an underlying assumed property: <strong>exchangeability</strong> of observations.</p>
+
+<p>In both notations we have <script type="math/tex">\delta_{\theta}</script>, the distribution at the point <script type="math/tex">\theta</script>. Here <script type="math/tex">\delta</script> has the beautiful role of a functor which maps a function to a value. Something we will see back when we will take Hilbert spaces seriously, but that’s something for later.</p>
+
+<p>If we incorporate the likelihood <script type="math/tex">F(y_i,\theta_i)</script>, we will arrive at the following formula:</p>
+
+<script type="math/tex; mode=display">\theta_i  \mid  \theta_{-i}, y_i \sim C ( \sum_{i \neq j} F(y_i,\theta_j) \delta_{\theta_j} + \alpha H_i \int F(y_i,\theta) dH(\theta) )</script>
+
+<p>Here <script type="math/tex">C</script> is a normalization factor to make it a proper probability summing to one. The entity <script type="math/tex">H_i</script> is the posterior distribution of <script type="math/tex">\theta</script> given <script type="math/tex">H</script> as prior and given observation <script type="math/tex">y_i</script>. The integral on the right side has the imposing form of a (Lebesgue-)Stieltjes integral. The Lebesgue integral is a nice topic on its own as well, but skimming through <a href="http://en.wikipedia.org/wiki/Lebesgue_integration">wikipedia</a> should be sufficient. A one-line summary: For a two-dimensional function you can see it as “horizontal” integration rather than “vertical” integration. The Stieltjes part of it generalizes integration by (linear) parts <script type="math/tex">dx = x_i - x_{i-1}</script> to that of integration by <script type="math/tex">dg(x)</script>. If <script type="math/tex">g(x)</script> is differentiable everywhere and the derivative is continuous, it has the more familiar presentation:</p>
+
+<script type="math/tex; mode=display">\int F(y_i,\theta) H'(\theta) d\theta = \int F(y_i,\theta) \frac{dH(\theta)}{d\theta} d\theta = \int F(y_i,\theta) dH(\theta)</script>
+
+<p>There is a solid reason why this familiar notation is insufficient here. In probability theory we often have a nice cumulative distribution function <script type="math/tex">g(x)</script>. However, things become nasty for the probability density function as such. The Lebesgue measure for <script type="math/tex">g'(x)</script> (the “horizontal” integration) if the distribution of <script type="math/tex">x</script> is discrete becomes nonsense.</p>
+
+<p>Studying this multiplicative (or convolutive) form it is clear that a conjugate pair of <script type="math/tex">F</script> and <script type="math/tex">H</script> is extremely convenient.</p>
+
+<p>The definition of <script type="math/tex">p(\theta_i\ \mid \theta_{-i},y_i)</script> leads to Gibbs sampling by just drawing from it for all indices <script type="math/tex">(i=1,\ldots,n)</script>.</p>
+
+<p>To remind you about the basics of Gibbs sampling; if we sample the conditionals <script type="math/tex">p(a_0\ \mid a_1,b)</script> and <script type="math/tex">p(a_1\ \mid a_0,b)</script> iteratively, we will get the distribution <script type="math/tex">p(a_0,a_1\ \mid b)</script> which is joint in <script type="math/tex">a_0</script> and <script type="math/tex">a_1</script>. So, our sampling results in <script type="math/tex">p(\theta\ \mid y)</script> with <script type="math/tex">y</script> all observations. Note that Gibbs sampling allows you to forget a value <script type="math/tex">\theta_i</script> when it is time to sample it again.</p>
+
+<h2 id="using-cluster-indices">Using cluster indices</h2>
+
+<p>It is possible to calculate stuff using the parameters <script type="math/tex">\theta</script> directly, but considering that we are here interested
+in clustering, it makes sense to introduce <em>one level of indirection</em>. In this case: <strong>cluster indices</strong>. Each parameter
+<script type="math/tex">\theta_i</script> is paired with a cluster index <script type="math/tex">c_i</script>. The values of the cluster indices do not matter, as long as all the
+parameters that belong to the same cluster are having the same value <script type="math/tex">c_i</script>. For computational convenience a series of
+integers is appropriate, but it could just have as well be names from a dictionary about tropical trees.</p>
+
+<p>In <a href="http://www.tandfonline.com/doi/pdf/10.1080/10618600.2000.10474879">Neal’s paper</a> the derivation of the following is quite brief, so let me expand here a bit. The system under
+consideration here is not a Dirichlet Process, but a mixture of <script type="math/tex">K</script> Dirichlet distributions:</p>
+
+<script type="math/tex; mode=display">c_i  \mid  p \sim Discrete(p_1,\ldots,p_K) \\
+\phi_c \sim H \\
+p_1,\ldots,p_K \sim Dirichlet(\alpha/K,\ldots,\alpha/K)</script>
+
+<p>Now we have to integrate out the mixing proportions <script type="math/tex">p_i</script> to get a formula that operates on cluster indices. Again, the
+number of cluster indices is exactly equal to the number of parameters and exactly equal to the number of observations.</p>
+
+<p>Let us now consider the Dirichlet-Multinomial as it is often called (terrible name!). As you see from above it should
+be called the Dirichlet-Categorical (see for a derivation <a href="http://math.stackexchange.com/questions/709959/how-to-derive-the-dirichlet-multinomial">stackexchange</a> again).</p>
+
+<script type="math/tex; mode=display">\int p(c \mid p) p(p \mid \alpha) dp = \frac{\Gamma(\alpha)}{\Gamma(\alpha + n)} \prod_k \frac{\Gamma(\alpha_k + n(c_l=k))}{\Gamma(\alpha_k)}</script>
+
+<p>Here <script type="math/tex">\alpha=\sum_k \alpha_k</script>, <script type="math/tex">n=\sum_n n(c_l=k)</script> and <script type="math/tex">l</script> runs from <script type="math/tex">1</script> to <script type="math/tex">n</script> (over all observations). We will use the
+shorter notation <script type="math/tex">n_k=n(c_l=k)</script> as the number of cluster indices that point to the same cluster <script type="math/tex">k</script>. Do not forget however
+that this number is a function of <script type="math/tex">c_l</script>, or else you might think: where have all the <script type="math/tex">c</script>’s gone!?
+And of course the guy who uses a variable <script type="math/tex">p</script> in probabilistic
+texts should be a <script type="math/tex">p</script>-victim in Jackass. :-) I think you deserve a break on the moment:</p>
+
+<iframe width="740" height="480" src="//www.youtube.com/embed/VhnZ3wzrwik" frameborder="0" allowfullscreen=""></iframe>
+
+<p>In our case <script type="math/tex">\alpha_k</script> is taken to be the same for all clusters, so <script type="math/tex">\alpha/K</script>:</p>
+
+<script type="math/tex; mode=display">\int p(c \mid p) p(p \mid \alpha) dp = \frac{\Gamma(\alpha)}{\Gamma(\alpha + n)} \prod_k \frac{\Gamma(\alpha/K + n_k)}{\Gamma(\alpha/K)}</script>
+
+<p>What we are after is:</p>
+
+<script type="math/tex; mode=display">p(c_1,\ldots,c_{i-1};\alpha) = \int p(c_1,\ldots,c_{i-1} \mid p) p(p \mid \alpha) dp</script>
+
+<p>And:</p>
+
+<script type="math/tex; mode=display">p(c_1,\ldots,c_{i-1},c_i=c;\alpha) = \int p(c_1,\ldots,c_{i-1},c_i=c \mid p) p(p \mid \alpha) dp</script>
+
+<p>Basically the <script type="math/tex">;\alpha</script> means that we identified it as a variable. However, we haven’t decided yet if it is going to
+be a random variable or just a parameter. We can just leave it out in the next equations, just remember that the entire
+thing depends on <script type="math/tex">\alpha</script> in the end.
+Anyway, the above two functions are required to calculate the entity we are after.
+Using the definition of a conditional probability, we calculate the probability of a value for a specific cluster index
+given all other cluster indices:</p>
+
+<script type="math/tex; mode=display">p(c_i=c \mid c_1,\ldots,c_{i-1}) = \frac{p(c_1,\ldots,c_{i-1},c_i=c)}{p(c_1,\ldots,c_{i-1})}</script>
+
+<p>I try to follow here the notation in Neal’s paper as close as possible. Do not fry me because I use <script type="math/tex">c</script> here as an
+instance of <script type="math/tex">c_i</script>. It ain’t pretty, I know!</p>
+
+<p>The nominator:</p>
+
+<script type="math/tex; mode=display">\int p(c_1,\ldots,c_{i-1},c_i=c \mid p) p(p \mid \alpha) dp =
+ \frac{\Gamma(\alpha)}{\Gamma(\alpha + n)} \prod_k \frac{\Gamma(\alpha/K + n_k)}{\Gamma(\alpha/K)}</script>
+
+<p>And the denominator where we have one less component index to calculate with (so <script type="math/tex">n-1</script> to sum over):</p>
+
+<script type="math/tex; mode=display">\int p(c_1,\ldots,c_{i-1} \mid p) p(p \mid \alpha) dp =
+ \frac{\Gamma(\alpha)}{\Gamma(\alpha + n - 1)} \prod_k \frac{\Gamma(\alpha/K + n_{k,-i})}{\Gamma(\alpha/K)}</script>
+
+<p>The notation <script type="math/tex">n_{k,-i}</script> counts the cluster indices as for <script type="math/tex">n_k</script> but does not take into account <script type="math/tex">i</script>. This notation is a bit awkward
+admittedly, because the left-hand side does not seem to contain <script type="math/tex">c_i</script>. But it does because <script type="math/tex">n_k = n(c_l = k)</script> if you remember. The notation just becomes a bit less cluttered by writing it down like this,
+trust me. The division becomes:</p>
+
+<script type="math/tex; mode=display">p(c_i=c \mid c_1,\ldots,c_{i-1}) = \frac{
+ \frac{\Gamma(\alpha)}{\Gamma(\alpha + n)} \prod_k \frac{\Gamma(\alpha/K + n_k)}{\Gamma(\alpha/K)} }
+ {\frac{\Gamma(\alpha)}{\Gamma(\alpha + n - 1)} \prod_k \frac{\Gamma(\alpha/K + n_{k,-i})}{\Gamma(\alpha/K)} }</script>
+
+<p>And we are happy to see we can cross-out a lot of the terms in this fraction:</p>
+
+<script type="math/tex; mode=display">p(c_i=c \mid c_1,\ldots,c_{i-1}) = \frac{\Gamma(\alpha + n - 1)}{ \Gamma(\alpha+n)}
+\prod_k \frac{ \Gamma(\alpha/K + n_k)}
+{\Gamma(\alpha/K + n_{k,-i})}</script>
+
+<p>As you probably know <script type="math/tex">\Gamma(x)=(x-1)!</script>, so it is not hard to see that <script type="math/tex">\Gamma(x+1)=x\Gamma(x)</script> just as with a
+factorial: <script type="math/tex">x! = x(x-1)!</script>.
+Also, <script type="math/tex">\Gamma(x-1)=\Gamma(x)/(x-1)</script>, which leads to a simplification of the first fraction:</p>
+
+<script type="math/tex; mode=display">p(c_i=c \mid c_1,\ldots,c_{i-1}) =
+\frac{\Gamma(\alpha + n)}{(\alpha+n-1) \Gamma(\alpha+n)}
+\prod_k \frac{ \Gamma(\alpha/K + n_k)}
+{\Gamma(\alpha/K + n_{k,-i})} \\
+=\frac{1}{\alpha+n-1}
+\prod_k \frac{ \Gamma(\alpha/K + n_k)}
+{\Gamma(\alpha/K + n_{k,-i})}</script>
+
+<p>The second fraction requires splitting of the product for <script type="math/tex">c_i=k</script> or, equivalently, <script type="math/tex">k=c</script>. So, we bring the index that
+(amongst others) is pointed at by observation <script type="math/tex">c_i=k</script> to the front:</p>
+
+<script type="math/tex; mode=display">\prod_k \Gamma(\alpha/K + n_k) =
+\Gamma(\alpha/K + n_c) \prod_{k \neq c}  \Gamma(\alpha/K + n_k)</script>
+
+<p>If we think this through, we now know that <script type="math/tex">n_c</script> does contain the cluster corresponding with the observation with index <script type="math/tex">i</script> and henceforth that <script type="math/tex">n_k</script>
+does <strong>not</strong> contain that cluster. Thus the following is absolutely equivalent to the above:</p>
+
+<script type="math/tex; mode=display">\prod_k \Gamma(\alpha/K + n_k) =
+\Gamma(\alpha/K + n_c) \prod_{k \neq c}  \Gamma(\alpha/K + n_{k,-i})</script>
+
+<p>Thinking this through, we also realize that <script type="math/tex">n_c</script> does indeed contain this cluster corresponding with observation <script type="math/tex">i</script>,
+and therefore must be exactly one larger than if it would not be counting <script type="math/tex">c_i</script>!</p>
+
+<script type="math/tex; mode=display">\prod_k \Gamma(\alpha/K + n_k) =
+\Gamma(\alpha/K + n_{c,-i} + 1) \prod_{k \neq c}  \Gamma(\alpha/K + n_{k,-i})</script>
+
+<p>We can again make use of the <script type="math/tex">\Gamma(x+1)=x\Gamma(x)</script> fact:</p>
+
+<script type="math/tex; mode=display">\prod_k \Gamma(\alpha/K + n_k) =
+(\alpha/K + n_{c,-i}) \Gamma(\alpha/K + n_{c,-i}) \prod_{k \neq c}  \Gamma(\alpha/K + n_{k,-i})</script>
+
+<p>And we can move the Gamma term with <script type="math/tex">n_{c,-i}</script> within the product again:</p>
+
+<script type="math/tex; mode=display">\prod_k \Gamma(\alpha/K + n_k) =
+(\alpha/K + n_{c,-i}) \prod_k \Gamma(\alpha/K + n_{k,-i})</script>
+
+<p>Let me reiterate the equation from above (because it has now scrolled off your screen except if you keep your laptop
+vertically - on its side - when reading this, or if you use a ridiculous high resolution):</p>
+
+<script type="math/tex; mode=display">p(c_i=c \mid c_1,\ldots,c_{i-1}) = \frac{1}{\alpha+n-1}
+\prod_k \frac{ \Gamma(\alpha/K + n_k)}
+{\Gamma(\alpha/K + n_{k,-i})}</script>
+
+<p>Fill in our neat endevour with shifting in and out of the product, just to go through a Gamma function, and we arrive at:</p>
+
+<script type="math/tex; mode=display">p(c_i=c \mid c_1,\ldots,c_{i-1}) = \frac{ \alpha/K + n_{c,-i}  }{\alpha+n-1}</script>
+
+<p>The first time I encountered the sentence “just integrate out the mixing proportions <script type="math/tex">p_i</script>” I did not have a clue that a dozen steps
+like these were required. But, perhaps, I need them spelled out in more detail than a person with a normal brain…</p>
+
+<p>The step subsequently fo <script type="math/tex">K \rightarrow \infty</script> contains probably also many steps, but only for a mathematical rigorous
+mind, not my sloppy one. If we only consider cluster <script type="math/tex">c_i=c</script>, we can use the equation above and assume <script type="math/tex">\alpha/K</script> goes to zero.
+The only other assumption we need in this case, is that there is some other observation with cluster index <script type="math/tex">c_i</script>, so
+<script type="math/tex">n_{c,-i} \neq 0</script>.</p>
+
+<script type="math/tex; mode=display">p(c_i=c \textit{ and } n_{c,-i} \neq 0  \mid c_1,\ldots,c_{i-1}) = \frac{ n_{c,-i}  }{\alpha+n-1}</script>
+
+<p>Or, equivalently:</p>
+
+<script type="math/tex; mode=display">p(c_i=c \textit{ and } c_i = c_j \textit{ and } i \neq j  \mid c_1,\ldots,c_{i-1}) = \frac{ n_{c,-i}  }{\alpha+n-1}</script>
+
+<!--
+If we count all conditional probabilities for $$c_i \neq c$$ it has to sum to one minus the term above. This is just
+sampling over the entire sample space $$\Omega(\mathbf{c})$$. To recapitulate the essence of it:
+
+$$\sum_{\omega \in \Omega(\mathbf{c})} p(c_i=\omega \mid c_1,\ldots,c_{i-1}) = 1$$
+
+Apply this:
+
+$$ p(c_i\neq c \mid c_1,\ldots,c_{i-1}) = 1 - \frac{\alpha/K + n_{c,-i}  }{\alpha+n-1}
+= \frac{ \alpha + n - 1 - n_{c,-i} - \alpha/K  }{\alpha+n-1} $$
+
+If we let $$K \rightarrow \infty$$, it seems we arrive at:
+
+$$ p(c_i\neq c \mid c_1,\ldots,c_{i-1}) =
+\frac{ \alpha + n - 1 - n_{c,-i}  }{\alpha+n-1} $$
+
+Unless $$n_{c,-i} = n - 1$$ (which is of course not the case) we will not arrive at the same result as in the paper.
+So, we are calculating the wrong entity here. The equation is correct, but we are after a different entity, namely
+the following.
+
+Apparently, what we are after is not the collection of other options for $$c_i$$, which
+is indeed kind of trivial, but the probability that none of the other observations $$c_j$$ is part of the same cluster.
+
+-->
+<p>If we consider <script type="math/tex">c_i=c</script> again and now with <script type="math/tex">n_{c,-i}=0</script>:</p>
+
+<script type="math/tex; mode=display">p(c_i=c \textit{ and } c_i\neq c_j \textit{ and } i \neq j \mid c_1,\ldots,c_{i-1}) = \frac{ \alpha/K }{\alpha+n-1}</script>
+
+<p>I won’t say often “of course”, but here it is of course that <script type="math/tex">i \neq j</script>.
+Then if we allow <script type="math/tex">c_i</script> to take all possible <script type="math/tex">K</script> values, in this case the sum is not one because of the “and” operation:</p>
+
+<script type="math/tex; mode=display">\sum_{\omega \in \Omega(\mathbf{c})} p(c_i=\omega \textit{ and } c_i \neq c_j \textit{ and } i \neq j  \mid c_1 ,\ldots,c_{i-1}) = K \frac{ \alpha/K }{\alpha+n-1}</script>
+
+<p>So, this is straightforward the number of clusters, <script type="math/tex">K</script>, times the previously calculated probability for a single cluster.
+We arrive sweetly - without taking limits in this case - at:</p>
+
+<script type="math/tex; mode=display">p(c_i \in \Omega(\mathbf{c}) \textit{ and } c_i\neq c_j \textit{ and } i \neq j  \mid c_1,\ldots,c_{i-1}) =
+\frac{ \alpha }{\alpha+n-1}</script>
+
+<p>We kept here explicit that we consider all possible cluster indices for <script type="math/tex">c_i</script> by drawing it from the set <script type="math/tex">\Omega(\mathbf{c})</script>.
+Sorry, this is not standard notation, feel free to suggest improvements using the discussion section! The reason why
+I explicitly add it is because <script type="math/tex">p(c_i\neq c_j \textit{ and } i \neq j)</script> might be read as the sum of the probabilities
+of any two cluster indices being unequal (where we do not fix <script type="math/tex">i</script> to a specific cluster index). Note also that in
+Neal’s exposition <script type="math/tex">i</script> is the last observation. The notation here does not assume that <script type="math/tex">i</script> is the last observation,
+and hence uses <script type="math/tex">i \neq j</script> rather than <script type="math/tex">% <![CDATA[
+j < i %]]></script>, but this is absolutely equivalent.</p>
+
+<h2 id="nonconjugate-priors">Nonconjugate priors</h2>
+
+<p><a href="http://www.tandfonline.com/doi/pdf/10.1080/10618600.2000.10474879">Neal’s article</a> is again a source of insight. Make sure however to also take a look at the first people working on these problems. Antoniak for example extended Ferguson’s Dirichlet Process to the mixture model case and reading <a href="http://projecteuclid.org/download/pdf_1/euclid.aos/1176342871">this old text</a> might be enlightening as well. Let us recapitulate quickly what we have. We have an equation for
+the conditional probabilities of cluster indices given the other cluster indices for an infinite number of clusters.
+The equation has two parts. One in which we have a cluster index that has been encountered before:</p>
+
+<script type="math/tex; mode=display">p(c_i=c \textit{ and } c_i=c_j \textit{ and } i \neq j  \mid  c_1,\ldots,c_{i-1}) = \frac{ n_{c,-i}  }{\alpha+n-1}</script>
+
+<p>And one part in which we have a cluster index that has not been encountered before:</p>
+
+<script type="math/tex; mode=display">p(c_i \in \Omega(\mathbf{c}) \textit{ and } c_i\neq c_j \textit{ and }i \neq j \mid c_1,\ldots,c_{i-1}) = \frac{ \alpha }{\alpha+n-1}</script>
+
+<p>The term <script type="math/tex">c_i=c_j \textit{ and } i \neq j</script> is true for any <script type="math/tex">i \neq j</script>, while <script type="math/tex">c_i \neq c_j \textit{ and } i \neq j</script> is true only when all of <script type="math/tex">c_j</script> are unequal to <script type="math/tex">c_i</script>.</p>
+
+<p>We now have to take a shortcut and bluntly introduce the <a href="http://en.wikipedia.org/wiki/Metropolis%E2%80%93Hastings_algorithm">Metropolis-Hastings algorithm</a>. Why it works I would love to
+show another time. It is a typical Monte Carlo method driven by detailed balance. Ehrenfest, the inventer of the
+<a href="http://en.wikipedia.org/wiki/Ehrenfest_model">dog-flea model</a> would have been proud.</p>
+
+<p>To sample a density <script type="math/tex">\pi(c_i)</script> a proposal density, <script type="math/tex">g(c_i^*\mid c_i)</script>, is used in calculating an acceptance probability <script type="math/tex">a(c_i^*,c_i)</script>:</p>
+
+<script type="math/tex; mode=display">a(c_i^*,c_i) = \min \left[ 1, \frac{g(c_i \mid c_i^*)}{g(c_i^* \mid c_i)} \frac{ \pi(c_i^*)}{\pi(c_i)} \right]</script>
+
+<p>With probability <script type="math/tex">a</script> the new state <script type="math/tex">c_i^*</script> is accepted. With probability <script type="math/tex">1-a</script> the old state <script type="math/tex">c_i</script> is maintained.</p>
+
+<script type="math/tex; mode=display">a(c_i^*,c_i) = \min \left[ 1, \frac{g(c_i \mid c_i^*)}{g(c_i^* \mid c_i)} \frac{p(c_i^*; k^* \mid c_{-i}^*)}{p(c_i; k \mid c_{-i})} \frac{ F(y_i,\phi_{c_i^*})}{F(y_i,\phi_{c_i})} \right]</script>
+
+<p>Here we made explicit that <script type="math/tex">k^*</script> and <script type="math/tex">k</script> might be different. Moreover, the notation <script type="math/tex">c_{-i}</script> stands for <script type="math/tex">c_1,\ldots,c_n</script> with <script type="math/tex">c_i</script> excluded.</p>
+
+<p>First, I went on a tangent here. I thought Neal was picking the following as a transition probability:</p>
+
+<script type="math/tex; mode=display">g(c_i^*\mid c_i) = \frac{p(c_i^*; k^* \mid c_{-i}^*)}{p(c_i; k \mid c_{-i})}</script>
+
+<p>And subsequently I started calculating this ratio, where I made mistakes as well not realizing at first that $k$ and $k^*$ do not need to be the same. However, after “breaking my head”, I finally understood that Neal proposes something much simpler:</p>
+
+<script type="math/tex; mode=display">g(c_i^* \mid c_i) = p(c_i^*; k^* \mid c_{-i}^*)</script>
+
+<p>In such a case the acceptance rule becomes indeed quite simple:</p>
+
+<script type="math/tex; mode=display">a(c_i^*,c_i) = \min \left[ 1, \frac{ F(y_i,\phi_{c_i^*})}{F(y_i,\phi_{c_i})} \right]</script>
+
+<p>Only the likelihood is used to calculate the Metropolis-Hastings ratio.</p>
+
+<h2 id="auxiliary-parameters">Auxiliary parameters</h2>
+
+<p>I have to study this part later.</p>
+
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<time datetime="2015-03-03T15:06:06+00:00" pubdate data-updated="true">March 3rd, 2015</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/dirichlet-process/'>Dirichlet process</a>, <a class='category' href='/blog/categories/bayesian/'>bayesian</a>, <a class='category' href='/blog/categories/inference/'>inference</a>, <a class='category' href='/blog/categories/sampling/'>sampling</a>
+
+</div>
+
+
+	
+</div></article>
+
+	<div class="share">
+	<!-- Go to www.addthis.com/dashboard to customize your tools -->
+	<div class="addthis_sharing_toolbox"></div>
+	<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-549f5fe730fc5e91"></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <p>The comments are not automatically shown, so the page loads faster and you only partake in the disqus network if you click. However, this does not mean that your comments are not appreciated, to the contrary!</p> 
+    <br>
+    <div id="disqus_thread"> 
+	<a href="#" onclick="disqus();return false;"><i class="el el-group"></i> Show Comments</a>
+    </div> 
+</section>
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2020
+
+    Anne van Rossum
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+	var disqus_shortname = 'annevanrossum';
+	var disqus_loaded = false;
+        var disqus_identifier = 'http://www.annevanrossum.com/blog/2015/03/03/sampling-of-dirichlet-process/';
+        var disqus_url = 'http://www.annevanrossum.com/blog/2015/03/03/sampling-of-dirichlet-process/';
+        var disqus_script = 'embed.js';
+	// load disqus comments only on demand
+	function disqus() { 
+		if (!disqus_loaded){
+			var e = document.createElement("script"); 
+			e.type = "text/javascript"; 
+			e.async = true; 
+			e.src = "//" + disqus_shortname + ".disqus.com/" + disqus_script;
+			(document.getElementsByTagName("head")[0] ||
+			 document.getElementsByTagName("body")[0])
+				.appendChild(e);
+		} 
+	  }                       
+      /*
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.annevanrossum.com/blog/2015/03/03/sampling-of-dirichlet-process/';
+        var disqus_url = 'http://www.annevanrossum.com/blog/2015/03/03/sampling-of-dirichlet-process/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }()); */
+</script>
+
+
+
+
+
+</body>
+</html>

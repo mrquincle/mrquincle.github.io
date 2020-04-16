@@ -1,0 +1,831 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: inference | Robots, machine learning, global issues]]></title>
+  <link href="http://www.annevanrossum.com/blog/categories/inference/atom.xml" rel="self"/>
+  <link href="http://www.annevanrossum.com/"/>
+  <updated>2020-04-16T13:19:09+00:00</updated>
+  <id>http://www.annevanrossum.com/</id>
+  <author>
+    <name><![CDATA[Anne van Rossum]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Inference in deep learning]]></title>
+    <link href="http://www.annevanrossum.com/blog/2018/01/30/inference-in-deep-learning/"/>
+    <updated>2018-01-30T00:00:00+00:00</updated>
+    <id>http://www.annevanrossum.com/blog/2018/01/30/inference-in-deep-learning</id>
+    <content type="html"><![CDATA[<!-- Inception in Tensorflow -->
+
+<p>There are many, many new generative methods developed in the recent years.</p>
+
+<ul>
+  <li>denoising autoencoders</li>
+  <li>generative stochastic networks</li>
+  <li>variational autoencoders</li>
+  <li>importance weighted autoencoders</li>
+  <li>generative adversarial networks</li>
+  <li>infusion training</li>
+  <li>variational walkback</li>
+  <li>stacked generative adversarial networks</li>
+  <li>generative latent optimization</li>
+  <li>deep learning through the use of non-equilibrium thermodynamics</li>
+</ul>
+
+<h1 id="deep-models">Deep Models</h1>
+
+<p>We can’t delve into the details of those old workhorse models, but let us summarize a few of them nevertheless.</p>
+
+<p>A Boltzmann machine can be seen as a stochastic generalization of a Hopfield network. In their unrestricted form Hebbian learning is often used to learn representations.</p>
+
+<!--more-->
+
+<p>A restricted Boltzmann machine, or Harmonium, restricts a Boltzmann machine in the sense that the neurons have to form a bipartite graph. Neurons in one “group” are allowed connections to another group, and the other way around, but they are not allowed to be connected to neurons in the same group. This restriction naturally, but not necessarily leads to structures that resemble layers.</p>
+
+<p>A deep belief network hand deep Boltzmann machines have multiple (hidden) layers that are each connected to each other in the restricted sense of above. These models are basically stacks of restricted Boltzmann machines. This is by the way only true in a handwaving manner. A deep belief network is not a true Boltzmann machine because its lower layers form a <em>directed</em> generative model. <a href="http://proceedings.mlr.press/v5/salakhutdinov09a/salakhutdinov09a.pdf">Salakhutdinov and Hinton (pdf)</a> spell out the differences in detail.</p>
+
+<h1 id="markov-chain-monte-carlo-mcmc">Markov Chain Monte Carlo (MCMC)</h1>
+
+<p>Restricted Boltzmann Machines, Deep Belief Networks, and Deep Boltzmann Machines were trained by MCMC methods. MCMC computes the gradient of the log-likelihood (see post on <a href="/blog/2017/05/03/what-is-contrastive-divergence/">contrastive divergence</a>). MCMC has particular difficulty in mixing between modes.</p>
+
+<h1 id="autoencoder">Autoencoder</h1>
+
+<p>An autoencoder has an input layer, one or more hidden layers, and an output layer. If the hidden layer has fewer nodes than the input layer it is a dimension reduction technique. Given a particular input, the hidden layer represents only particular abstractions that are subsequently enriched so that the output corresponds to the original input. An other dimension reduction technique is for example principle component analysis which has some additional constraints such as linearity of the nodes. Given the shape an autoencoder can also be called a bottleneck or sandglass network.</p>
+
+<p>If we represent the encoder <script type="math/tex">F: X \rightarrow H</script> and the decoder <script type="math/tex">G: H \rightarrow X</script>. We apply the individual <script type="math/tex">x</script> to the product as <script type="math/tex">x' = (G \circ F)x</script>, then we can define the autoencoder as:</p>
+
+<script type="math/tex; mode=display">\{F, G \} = \arg \min_{F,G} \| X - X'\|^2</script>
+
+<p>Here we choose for an L2 norm for the reconstruction: <script type="math/tex">L(x,x') = \| x-x' \|^2</script>.</p>
+
+<p><img src="/images/blog/autoencoder.png" alt="The autoencoder exists of an encoder F and a decoder G. The encoder maps the input to a hidden set of variables, the decoder maps it back as good as possible to the original input. The difference between original and generated output is used to guide the process to converge to optimal F and G." title="Autoencoder" /></p>
+
+<p>An autoencoder is typically trained using a variant of backpropagation (conjugate gradient method, steepest descent). It is possible to use so-called pre-training. Train each two subsequent layers as a restricted Boltzmann machine and use backpropagation for fine-tuning.</p>
+
+<p>A nice blog post at <a href="https://blog.keras.io/building-autoencoders-in-keras.html">Keras</a> explains also some of the disadvantages of autoencoders, a very clarifying read!</p>
+
+<h1 id="denoising-autoencoders">Denoising Autoencoders</h1>
+
+<p>A denoising autoencoder (DAE) is a regular autoencoder with the input signal corrupted by noice (on purpose: <script type="math/tex">\tilde{x} = B(x)</script>). This forces the autoencoder to be resilient against missing or corrupted values in the input.</p>
+
+<p>The reconstruction error is again measured by <script type="math/tex">L(x,x') = \| x - x'\|^2</script>, but now <script type="math/tex">x'</script> is formed by a distortion of the original <script type="math/tex">x</script>, denoted by <script type="math/tex">\tilde{x}</script>, hence <script type="math/tex">x' = (G \circ F) \tilde{x}</script>.</p>
+
+<p><img src="/images/blog/denoising-autoencoder.png" alt="The denoising autoencoder is like the autoencoder but has first a step in which the input is distorted before it is fed into the encoder F and a decoder G." title="Denoising autoencoder" /></p>
+
+<p>Note that a denoising autoencoder can be seen as a stochastic transition operator from <strong>input space</strong> to <strong>input space</strong>. In other words, if some input is given, it will generate something “nearby” in some abstract sense. An autoencoder is typically started from or very close to the training data. The goal is to get an equilibrium distribution that contains all the modes. It is henceforth important that the autoencoder mixes properly between the different modes, also modes that are “far” away.</p>
+
+<!--
+# Generative Stochastic Networks
+
+Generative Stochastic Networks ([Alain et al., 2015](https://www.researchgate.net/profile/Saizheng_Zhang/publication/273788029_GSNs_Generative_Stochastic_Networks/links/55140dbf0cf2eda0df303dad/GSNs-Generative-Stochastic-Networks.pdf)) generalize denoising autoencoders. It learns the transition operator of a Markov chain such that its stationary distribution approaches the data distribution.
+
+![Denoising Autoencoder vs a Generative Stochastic Network (copyright Alain et al.). Top: the denoising autoencoder corrupts X and subsequently tries to reconstruct X. Bottom: a generative stochastic network introduces arbitrary random variables H, rather than just a distorted version of X and reconstructs X given H.](/images/blog/generative_stochastic_networks.png)
+-->
+
+<h1 id="variational-autoencoders">Variational Autoencoders</h1>
+
+<p>The post by <a href="http://blog.fastforwardlabs.com/2016/08/22/under-the-hood-of-the-variational-autoencoder-in.html">Miriam Shiffman</a> is a nice introduction to variational autoencoders. They have been designed by <a href="https://arxiv.org/pdf/1312.6114.pdf">(Kingma and Welling, 2014)</a> and <a href="https://arxiv.org/pdf/1401.4082.pdf">(Rezende et al., 2014)</a>. The main difference is that <script type="math/tex">h</script> is now a full-fledged random variable, often Gaussian.</p>
+
+<p><img src="/images/blog/variational_autoencoder.png" alt="Variational Autoencoder. The hidden (latent) variables in a variational autoencoder are random variables. A variational autoencoder is a probabilistic autoencoder rather than a conventional deterministic one. This means that it becomes possible that there are closed form descriptions for p and q and that standard Bayesian inference can be applied." title="Variational Autoencoder" /></p>
+
+<p>A variational autoencoder can be seen as a (bottom-up) recognition model and a (top-down) generative model. The recognition model maps observations to latent variables. The generative model maps latent variables to observations. In an autoencoder setup the generated observations should be similar to the real observations that go into the recognition model. Both models are trained simultanously. The latent variables are constrained in such a way that a representation is found that is approximately factorial.</p>
+
+<h1 id="helmholtz-machine">Helmholtz Machine</h1>
+
+<p>A Helmholtz machine is a probabilistic model similar to the variational autoencoder. It is trained by the so-called sleep-wake algorithm (similar to expectation-maximization).</p>
+
+<!-- See http://artem.sobolev.name/posts/2016-07-11-neural-variational-inference-variational-autoencoders-and-Helmholtz-machines.html -->
+
+<h1 id="importance-weighted-autoencoders">Importance weighted Autoencoders</h1>
+
+<p>The importance weighted autoencoder (<a href="https://arxiv.org/pdf/1509.00519.pdf">Burda et al., 2015</a>) is similar to the variational autoencoder, but it uses a tighter loglikelihood lower bound through applying importance weighting. The main difference is that the recognition model uses <strong>multiple samples</strong> (to approximate the posterior distribution over latent variables given the observations). In order words, the recognition model is run a few times and the suggested latent variables are combined to get a better estimate. The model gives more weight to the recognition model than the generative model.</p>
+
+<script type="math/tex; mode=display">\mathcal{L}(x) = \mathbb{E}_{z \sim q(z|x) } \left[ \log \frac{1}{k} \sum_k \frac{p(x,z)}{q(z|x)}  \right]</script>
+
+<h1 id="generative-adversarial-networks">Generative Adversarial Networks</h1>
+
+<p>Generative Adversarial Networks (<a href="http://papers.nips.cc/paper/5423-generative-adversarial-nets.pdf">Goodfellow et al., 2014</a>) use two networks. A generative model <script type="math/tex">G</script> and a discriminative model <script type="math/tex">D</script>. The generative model maps latent variables <script type="math/tex">z</script> to data points <script type="math/tex">x'</script>. The discriminator has to make a choice between true data <script type="math/tex">x</script> and fake data <script type="math/tex">x'</script>. Hereby should <script type="math/tex">D(x)</script> have a large value and <script type="math/tex">D(x')</script> have a small value. The discriminator maximizes (we fix the generator):</p>
+
+<script type="math/tex; mode=display">V(D) = \mathbb{E}_{x\sim p_{data}(x)} \left[ \log( D(x) \right] + \mathbb{E}_{x' \leftarrow G(z)} \left[ \log( 1 - D(x') \right]</script>
+
+<p>The generator in contrast maximizes:</p>
+
+<script type="math/tex; mode=display">V(D,G) = \mathbb{E}_{x\sim p_{data}(x)} \left[ \log( D(x) \right] + \mathbb{E}_{z \sim G(z)} \left[ \log( 1 - D(G(z)) \right]</script>
+
+<p>It is clearly visualized by Mark Chang’s <a href="https://www.slideshare.net/ckmarkohchang/generative-adversarial-networks">slide</a>.</p>
+
+<p><img src="/images/blog/gan.png" alt="Generative Adversarial Net. The discriminator is trying to score as high as possible by assigning ones to real data and zeros to fake data. The generator is trying to make this job as difficult as possible by having the fake data look similar to the real data. The log function punishes false positives and false negatives extraordinarly hard." title="Generative Adversarial Net" /></p>
+
+<p>The distribution <script type="math/tex">p_z(z)</script> is a arbitrary noise distribution. In other words, the generator morphs totally random stuff into meaningful <script type="math/tex">x</script>. It is like throwing darts randomly into a dart board and the generator folding the board into a hat. Similarly from pure random values we can draw point clouds that have elaborate structure.</p>
+
+<p>The latent variables <script type="math/tex">z</script> are totally random, however there is something else important here. If <script type="math/tex">z</script> is a multidimensional random variable information across all dimensions can be used to construct <script type="math/tex">x' \leftarrow G(z)</script>. There is no information about <script type="math/tex">z</script> if we would like to reason back from <script type="math/tex">x'</script>. This means that from a representation learning perspective the unconstrained use of <script type="math/tex">z</script> leads to entangled use of it in <script type="math/tex">G</script>. InfoGAN introduces an additional mutual information term between a latent code <script type="math/tex">C</script> and generated data <script type="math/tex">X</script>.</p>
+
+<h1 id="adversarial-autoencoders">Adversarial Autoencoders</h1>
+
+<p>Adversarial Autoencoders (<a href="https://arxiv.org/pdf/1511.05644.pdf">Makhzani et al., 2016</a>) is an autoencoder that uses generative adversarial networks. The latent variables (the code) are matched with a prior distribution. This prior distribution can be anything. The autoencoder subsequently maps this to the data distribution.</p>
+
+<p><img src="/images/blog/adversarial_autoencoder.png" alt="Adversarial Autoencoder. The latent variables (code) are denoted by h. Samples are drawn from e.g. a Normal distribution p(h). The discriminator (bottom-right) has the task to distinguish positive samples h' from negative samples h. Preferably p(h) will look like p(h') in the end. In the meantime the top row is reconstructing the image x from h as well." title="Adversarial Autoencoder" /></p>
+
+<p>Note that the use of the adversarial network is on the level of the hidden variables. The discriminator attempts to distinguish “true” from “fake” hidden variables.</p>
+
+<p>This immediately rises the following question: Can we also generate fake data as well? If one discriminator has the goal to distinguish true from fake hidden variables, the other can have as goal to distinguish true from fake data. We should take provisions to not have the former discriminator punished by a bad performing second discriminator.</p>
+
+<h1 id="deep-learning-through-the-use-of-non-equilibrium-thermodynamics">Deep Learning Through The Use Of Non-Equilibrium Thermodynamics</h1>
+
+<p>Non-equilibrium Thermodynamics (<a href="https://arxiv.org/pdf/1503.03585.pdf">Sohl-Dickstein et al., 2015</a>) slowly destroys structure in a data distribution through a diffusion process. Then a reverse diffusion process is learned that restores the structure in the ata.</p>
+
+<p>Both processes are factorial Gaussians, the forward process, <script type="math/tex">p(x^{t}\mid p(x^{t-1})</script> and the inverse process, 
+<script type="math/tex">p(x^{t-1}\mid p(x^t)</script>.</p>
+
+<p>To have an exact inverse diffusion the chain requires thousands of small steps.</p>
+
+<!-- We can also have "heat up" the diffusion operator. -->
+
+<h1 id="infusion-training">Infusion Training</h1>
+
+<p>Infusion training (<a href="https://arxiv.org/pdf/1703.06975.pdf">Bordes et al., 2017</a>) learns a generative model as the transition operator of a Markov chain. When applied multiple times on unstructured random noise, infusion training will denoise it into a sample that matches the target distribution.</p>
+
+<p><img src="/images/blog/infusion-training.png" alt="Infusion training (copyright Bordes et al.) infuses in this case target x=3 into the chain. First row: random initialization of network weights. Second row: after 1 training epoch. Third row: after 2 training epochs, etc. Bottom row: the network learned how to denoise as fast as possible to x=3." title="Infusion training" /></p>
+
+<!-- compatitive results compared to GAN -->
+
+<h1 id="variational-walkback">Variational Walkback</h1>
+
+<p>Variational Walkback (<a href="http://papers.nips.cc/paper/7026-variational-walkback-learning-a-transition-operator-as-a-stochastic-recurrent-net.pdf">Goyal et al., 2017</a>) learns a transition operator as a stochastic recurrent network. It learns those operators which can represent a nonequilibrium stationary distribution (also violating detailed balance) directly. The training objective is a variational one. The chain is allowed to “walk back” and revisit states that were quite “interesting” in the past.</p>
+
+<p>Compared to MCMC we do not have detailed balance, nor an energy function. A detailed balance condition would by the way mean a network with symmetric weights.</p>
+
+<!--
+# Stacked Generative Adversarial Networks
+
+Stacked Generative Adversarial Networks ([Huang et al., 2017](https://arxiv.org/pdf/1612.04357.pdf)) 
+
+![Stacked Generative Adversarial Networks (copyright Huang et al.) ](/images/blog/stacked_gans.jpg "Stacked Generative Adversarial Networks")
+
+-->
+
+<h1 id="nonparametric-autoencoders">Nonparametric autoencoders</h1>
+
+<p>The latent variables in the standard variational autoencoder are Gaussian and have a fixed quantity. The ideal hidden representation however might require a dynamic number of such latent variables. For example if the neural network has only 8 latent variables in the MNIST task it has to somehow represent 10 digits with these 8 variables.</p>
+
+<p>To extend the hidden layer from a fixed to a variable number of nodes it is possible to use methods developed in the nonparametric Bayesian literature.</p>
+
+<p>There have been already several developments:</p>
+
+<ul>
+  <li>A stick-breaking variational autoencoder (<a href="https://arxiv.org/pdf/1605.06197.pdf">Nalisnick and Smyth, 2017</a>) where the latent variables are represented by a stick-breaking process (SB-VAE). The inference is done using stochastic gradient descent, which requires a representation where the parameters of a distribution are separated from an independent stochastic noise factor, called a <strong>differentiable, non-centered parametrization</strong> (DNCP). With a Gaussian distribution this is done through the <strong>reparameterization trick</strong> (see below). For a stick-breaking process Beta random variables need to be sampled. This can be done by drawing <script type="math/tex">x \sim Gamma(\alpha,1)</script> and <script type="math/tex">y \sim Gamma(\beta,1)</script> and have <script type="math/tex">v = x/(x+y)</script>, corresponding to <script type="math/tex">v \sim Beta(\alpha,\beta)</script>. This does not work as a DNCP though, because Gamma does not have one w.r.t. the shape parameter. When close to zero an inverse CDF might be used. However, the authors opt for a so-called Kumaraswamy distribution;</li>
+  <li>A nested Chinese Restaurant Process as a prior on the latent variables (<a href="https://arxiv.org/pdf/1703.07027.pdf">Goyal et al., 2017</a>);</li>
+  <li>An (ordinary) Gaussian mixture as a prior distribution on the latent variables (<a href="https://arxiv.org/pdf/1611.02648.pdf">Dilokthanakul et al., 2017</a>), but see <a href="http://ruishu.io/2016/12/25/gmvae/">this interesting blog post</a> for a critical review (GMVAE);</li>
+  <li>A deep latent Gaussian mixture model (<a href="http://www.ics.uci.edu/~enalisni/BDL_paper20.pdf">Nalisnick et al, 2016</a>) where a Gaussian mixture is used as the approximate posterior (DLGMM);
+<!-- $$z ~ DP(\alpha)$$ and $$x ~ p_\theta(x|z_i)$$ with $$p_\theta$$ the generating network (DLGMM); --></li>
+  <li>Variational deep embedding uses (again) a mixture of Gaussians as a prior (<a href="https://arxiv.org/pdf/1611.05148.pdf">Jiang et al., 2017</a>) (VaDE);</li>
+  <li>Variational autoencoded deep Gaussian Processes (<a href="https://arxiv.org/pdf/1511.06455.pdf">Dai et al., 2016</a>) uses a “chain” of Gaussian Processes to represent multiple layers of latent variables (VAE-DGP).</li>
+</ul>
+
+<p>The problem with autoencoders is that they actually do not define how the latent variables are to be used.</p>
+
+<p>Inherently, without additional constraints the representation problem is ill-posed. Suppose for example that the generator is just a dictionary of images and that training will make the latent variables point to a particular index in this dictionary. In this way no deep structure has been uncovered by the network at all. It’s pretty much just pointing at what it has been seen during training. Generalization can be expected to be pretty bad.</p>
+
+<p>Especially when variational autoencoders are used in sequence modeling it becomes apparent that the latent code is generally not used. The variational lossy autoencoder introduces control over the latent code to successfully combine them with recurrent networks (<a href="https://arxiv.org/pdf/1611.02731.pdf">Chen et al., 2017</a>).</p>
+
+<p>From an information-theoretic perspective the differences can be formulated in an extreme manner: <strong>maximization or minimization</strong> of mutual information. With InfoGAN (not explained in this blog post) mutual information between input and latent variables is maximized to make sure that the variables are all used. This is useful to avoid the “uninformative latent code problem”, where latent features are actually not used in the training. However, with for example the information bottleneck approach the mutual information between input and latent variables is minimized (under the constraint that the features still predict some labels). This makes sense from the perspective of compression. This behavior can all be seen as a so-called information-autoencoding family (<a href="http://bayesiandeeplearning.org/2017/papers/60.pdf">Zhao et al., 2017</a>).</p>
+
+<p>It is interesting to study how nonparametric Bayesian methods fare with respect to this family and what role they fulfill in such a constrained optimization problem. Existing models namely use fixed values for the Lagrangian multipliers (the tradeoffs they make).</p>
+
+<h1 id="mode-collapse">Mode Collapse</h1>
+
+<p>There are several research directions where mode collapse is the main topic. Mode collapse is especially prevalent in generative adversarial networks. In distributional adversarial networks (<a href="https://arxiv.org/pdf/1706.09549.pdf">Li et al., 2017</a>) two adversaries are defined that are slightly different from the normal one, both based on a so-called <strong>deep mean encoder</strong>. The deep mean encoder has the form:</p>
+
+<script type="math/tex; mode=display">\eta(P) = \mathop{\mathbb{E}}_{x \sim P} [ \phi(x) ]</script>
+
+<p>The GAN objective function is:</p>
+
+<script type="math/tex; mode=display">\min_G \max_D { \mathop{\mathbb{E}}_{x \sim P_x} [ \log D(x) ] + \mathop{\mathbb{E}}_{z \sim P_z} [ \log (1 - D(G(z)) ]  }</script>
+
+<p>The authors extend it with an additional term:</p>
+
+<script type="math/tex; mode=display">\min_G \max_{D,M} { \lambda_1 \mathop{\mathbb{E}}_{x \sim P_x} [ \log D(x) ] + \mathop{\mathbb{E}}_{z \sim P_z} [ \log (1 - D(G(z)) ] + \lambda_2 M(P_x,P_G) }</script>
+
+<p>The sample classifier <script type="math/tex">\psi</script> uses the above intermediate summary statistics <script type="math/tex">\eta(P)</script> to define a costs (it outputs 1 if sample is drawn from <script type="math/tex">P_x</script> and 0 otherwise).</p>
+
+<script type="math/tex; mode=display">M(P_x,P_G) = {  \log \psi (\eta (P_G)) ] +  \log (1 - \psi (\eta(P_x)) ]  }</script>
+
+<h1 id="generalization">Generalization</h1>
+
+<p>The GAN objective:</p>
+
+<script type="math/tex; mode=display">\min_{u \in U} \max_{v \in V} { \mathop{\mathbb{E}}_{x \sim D_{real}} [ \phi ( D_v(x) ) ] + \mathop{\mathbb{E}}_{x \sim D_{G_u}} [ \phi (1 - D_v(x)) ]  }</script>
+
+<p>This objective assumes we have an infinite number of samples from <script type="math/tex">D_{real}</script> to estimate 
+<script type="math/tex">\mathop{\mathbb{E}}_{x \sim D_{real}} [ \phi ( D_v(x) ) ]</script>. If we have only a finite number of training examples <script type="math/tex">x_1, \ldots, x_m \sim D_{real}</script>, we use the following to estimate this expectation: <script type="math/tex">\frac{1}{m} \sum_{i=1}^m [ \phi(D_v(x))]</script>.</p>
+
+<!--
+# Nonparametric view of the GAN 
+
+Theorem (oracle inequality for GAN). Let $$F$$ be any critic function class. Denote $$\mu_n$$ as the solution with respect to the empirical estimate $$\nu_n$$ to GAN with generator $$\mu_G$$ and discriminator $$F_D$$:
+
+$$\mu_n = \arg\min_{\mu \sim \mu_G} \max_{f \in F_D} E_{Y \sim \mu} f(Y) - E_{X \sim \nu_n} f(X)$$
+
+The the following decompositions hold for any distribution $$\nu$$,
+
+$$d_{F_D}(\mu_n,\nu) \leq \min_{\mu \in \mu_G} d_{F_D}(\mu,\nu) + d_{F_D}(\nu,\nu_n) + d_{F_D}(\nu_n,\nu)$$
+
+$$d_{F}(\mu_n,\nu) \leq \min_{\mu \in \mu_G} d_{F_D}(\mu,\nu) + (1 + {||\nu_n||}_1 ) \max_{f \in F} \min_{f' \in F_D} {|| f - f'||}_\infty + d_{F_D}(\nu,\nu_n) + d_{F}(\nu_n,\nu)$$
+
+In the first decomposition $$d_{F_D}$$ is the objective evaluation metric. The first term is a minimization term, the best approximation error within the generator class when having population access to the true measure $$\nu$$. The second term is the statistical error, also called the generalization error, due to the fact that there are only $$n$$ samples available.
+
+In the second decomposition a different $$d_F$$ is the objective metric. The first term is the approximation error induced by the generator. The second term defines how well the discriminator serves as a surrogate for the objective metric, and the third term is the statistical error.
+-->
+
+<h1 id="regularization">Regularization</h1>
+
+<p>Training deep networks has undergone several advances. One of the first innovations has been the layer by layer training. 
+Other concepts you will find are:</p>
+
+<ul>
+  <li>dropout</li>
+  <li>stochastic gradient descent</li>
+  <li>batch normalization</li>
+  <li>residual training</li>
+  <li>reparameterization trick</li>
+</ul>
+
+<p>We will briefly describe them, but they each easily deserve a dedicated explanation as well. So little time!</p>
+
+<h2 id="dropout">Dropout</h2>
+
+<p>Another key idea has been to randomly drop units including connections during training. This prevents overfitting. During training in this way a collection of differently thinned networks is used. At testing an unthinned network is used. This is called dropout (<a href="http://www.jmlr.org/papers/volume15/srivastava14a/srivastava14a.pdf">Srivastava et al., 2014</a>).</p>
+
+<h2 id="stochastic-gradient-descent">Stochastic gradient descent</h2>
+
+<p>Gradient descent or steepest descent is an iterative method where we take steps that depend on the slope (or more general, that depend on the gradient) with as purpose to end up at a minimum. To get (negative) gradients we need to have differential functions.</p>
+
+<p>Stochastic gradient descent is a stochastic approximation to gradient descent. What is approximated is the true gradient. Adjusting the parameters <script type="math/tex">\theta</script> it minimizes the following loss function:</p>
+
+<script type="math/tex; mode=display">\theta = \arg \min_\theta \frac{1}{N} \sum_{i=1}^N L(x_i;\theta)</script>
+
+<p>Here <script type="math/tex">x_1, \ldots x_N</script> is the training set. Stochastic gradient descent now incrementally navigates to the values for $\theta$ where the sum over the function $L(x_i, \theta)$ is minimized. The parameter $\theta$ is continuously adjusted by looping over all observations $x_i$:</p>
+
+<script type="math/tex; mode=display">\theta' = \theta - \eta \frac{\partial }{\partial \theta} L(x_i;\theta)</script>
+
+<p>After looping over all observations, stochastic gradient descent performs this loop again and again till some kind of convergence criterion is met or until the researcher likes to have a beer, read a book, or spend time on social media.</p>
+
+<!--
+Stochastic gradient descent typically uses a mini-batch $$x_1, \ldots, x_m$$ of size $$m$$. The gradient is then approximated by:
+
+$$\frac{1}{m} {\partial l(x_i, \theta)}{\partial \theta}$$
+-->
+
+<h2 id="batch-normalization">Batch normalization</h2>
+
+<p>The distribution of network activities change during training due to the fact that the network parameters change. This phenomenon is called <strong>internal covariate shift</strong>. It is possible to fix the distribution of the layer inputs <script type="math/tex">x</script> as the training progresses. It is for example well-known that whitening the inputs (linear transforming them to zero means, unit variances and decorrelating them) makes a network converge faster. Batch normalization does not simply whiten each layer’s input, but makes two simplifications: (1) normalize each scalar feature independently, and (2) introduce scale and shift parameters to preserve nonlinearities. Batch normalization improved significantly on the ImageNet classification task (<a href="https://arxiv.org/pdf/1502.03167.pdf">Ioffe and Szegedy, 2015</a>).</p>
+
+<h2 id="residual-learning">Residual learning</h2>
+
+<p>Making networks deeper and deeper counterintuitively increases the training error and thus the test error. Consider for example an identity mapping (as with autoencoders): a network needs to learn to duplicate the input to generate the output. Empirical evidence shows that learning the difference (in this case zero between input and output) is easier for a network. This is called residual learning (<a href="https://arxiv.org/pdf/1512.03385.pdf">He et al., 2015</a>. At ImageNet such residual nets achieve 3.57% error on the test set. It is hence no surprise that the fourth edition of the Inception networks use residual learning (<a href="http://www.aaai.org/ocs/index.php/AAAI/AAAI17/paper/download/14806/14311">Szegedy et al., 2017</a>).</p>
+
+<h2 id="reparameterization-trick">Reparameterization Trick</h2>
+
+<p>The reparameterization trick replaces a (blackbox) stochastic node in a computational graph with a node that is non-stochastic (of which a gradient can be calculated) with the noise added separately. It’s just as if the salt is added after you have made the soup. It substitutes a random variable by a deterministic transformation of a simpler random variable. There are three popular methods (<a href="http://blog.shakirm.com/2015/10/machine-learning-trick-of-the-day-4-reparameterisation-tricks/">Shakir Mohammed blog</a>):</p>
+
+<ol>
+  <li>Inverse sampling. The inverse cumulative distribution function can be used as the transformation.</li>
+  <li>Polar methods. Generating pairs (e.g. the basis of the Box-Muller transform).</li>
+  <li>Coordinate transformation methods (shifting and scaling).</li>
+</ol>
+
+<p>The last example uses the fact that the transformation ($x = g(\epsilon;\theta)$) is valid for particular well chosen one-liners:</p>
+
+<script type="math/tex; mode=display">\frac{\partial}{\partial \theta} \sum_{i=1}^N p(x_i; \theta) f(x_i) =
+\frac{\partial}{\partial \theta} \sum_{i=1}^N p(\epsilon_i) f(g(\epsilon_i;\theta))</script>
+
+<p>For example the (zero-centered) Normal distribution is defined as:</p>
+
+<script type="math/tex; mode=display">p(x;\theta) = N(0,\theta)</script>
+
+<p>We can write this as a standard Normal distribution with a deterministic transformation:</p>
+
+<script type="math/tex; mode=display">p(\epsilon) = N(0,1)</script>
+
+<script type="math/tex; mode=display">g(\epsilon; \theta) = \theta \epsilon</script>
+
+<!--
+For example the standard Cauchy distribution (position at zero, $x_0 = 0$, and scale at one, $\gamma=1$) is defined as:
+
+$$p(x;\theta) = \frac{1}{\pi (1 + x^2)}$$
+
+The quantile function (inverse cumulative function) is:
+
+$$Q(\epsilon) = \tan (\pi (\epsilon - 1/2) )$$
+
+Thus is can also be written as a uniform base distribution with a subsequent deterministic transformation:
+
+$$p(\epsilon) = U[0,1]$$
+
+$$g(\epsilon; \theta) = \tan(\pi \epsilon)$$
+
+-->
+
+<!--
+Suppose we want to optimize over $\sigma$:
+
+$$
+x = U(-1, 1) \\
+y = N(0, \sigma) \\
+\arg \min_{\sigma} \frac{1}{N} \sum_{i=1}^N L(x_i,y_i)
+$$
+
+Here $L$ is the loss function. It is often the mean squared error between $x$ and $y$, let us assume this here as well. 
+
+$$L(x,y) = (x - y)^2$$
+
+In a probabilistic model the output is **different** each time we run, even if the input is the same. To do gradient descent we define a closed-form formula about how to change our parameter $\sigma$ to get a lower value for $L$. The gradient defines how much the output changes when we alter the input. 
+
+$$\frac{\partial}{\partial \sigma} L(x,y) = \frac{\partial}{\partial \sigma} {(x - c \sigma)}^2 $$
+
+Here we have $c ~\sim N(0,1)$ simulated from a normal distribution without parameters.
+
+$$
+x = U(-1, 1) \\
+y = c \sigma \\
+\arg \min_{\sigma} \frac{1}{N} \sum_{i=1}^N L(x_i,y_i)
+$$
+
+We can solve:
+
+$$\frac{\partial}{\partial \sigma} L(x,y) = \frac{\partial}{\partial \sigma} {(x - c \sigma)}^2 = 
+\frac{\partial}{\partial \sigma} x^2 - 2 c \sigma x + {(c \sigma)}^2 = - 2 x c + 2 c^2 \sigma $$
+
+If we now perform gradient descent it will be an iterative execution of:
+
+$$\sigma' = \sigma - \eta ( - 2 x c + 2 c^2 \sigma ) = \sigma + 2 \eta c ( x - c \sigma) $$
+
+Now we can reparametrize in such way that $x$ and $\sigma$ are not parameters of a probability distribution. They are just parameters of a deterministic function (that is transformed through a stochastic function that has **no parameters** to optimize over).
+-->
+
+<p>The result is that through this reparameterization the variance can be substantially reduced (potentially!). 
+The reparameterization trick is well explained by Goker Ergodan in this <a href="http://nbviewer.jupyter.org/github/gokererdogan/Notebooks/blob/master/Reparameterization%20Trick.ipynb">Jupyter notebook</a>.</p>
+
+<!-- The way gradient descent is done in this type of setting is stochastic as well. Single $x,y$ pairs are used to find out in which way $\sigma$ has to be adjusted. The difference with the setting above is that -->
+
+<!-- if the primal is infeasible (insufficient model capacity) the choice of Lagrange multipliers prioritizes different constraints -->
+
+<!--
+
+# Generative Latent Optimization 
+
+
+
+# Other typical concepts
+
+## Energy function representation of probability
+
+A probability distribution can be represented through an energy function
+
+$$p(x) = \frac { \exp^{-E(x)} }{ \sum_{x \in X} \exp^{-E(x)} } = \frac{1}{Z} \exp^{-E(x)}$$
+
+It relates the probability of $$x$$ with that of all possible other states. A so-called canonical assemble represents the states of a system by such an exponential. The above is actually using the so-called canonical [partition function](https://en.wikipedia.org/wiki/Partition_function_(mathematics)). Note, that in both cases the original definitions contains a thermodynamic beta $$\beta$$. This (inverse) temperature can be used to compare systems: they will be in equilibrium if their temperature is the same.
+
+The generalization of the canonical assemble to an infinite number of states is called the [Gibbs measure](https://en.wikipedia.org/wiki/Gibbs_measure):
+
+$$P(X=x) = \frac{1}{Z(\beta)} \exp^{-\beta E(x)}$$
+
+What is all narrows down to is that not every state is counted equally. The Boltzmann factor is a weight. A low energy state is easier to access and weighs much more than a high energy state. If the temperature increases this difference diminishes.
+-->
+
+<!--
+Kullback-Leibler
+Thus, we have for example:
+
+$$\log p(x) = -E(x) - \log Z$$
+-->
+
+<!--
+
+## Monte Carlo simulation
+
+If a probability density function $$p(x)$$ is known, its statistical properties such as mean, variance, etcetera can be found through integration:
+
+$$E[h(X)] = \int h(x) p(x) dx$$
+
+This integral can be approximated by Monte Carlo simulation by drawing many $$X_i$$ from $$p(x)$$:
+
+$$\mu_h = \int h(x) p(x) dx \approx \frac{1}{n} \sum_{i=1}^n h(X_i)$$
+
+That the latter converges to the expectation $$\mu_h$$ of $$h(x)$$ is known as the law of large numbers.
+
+
+## Jensen's inequality
+
+To really appreciate Jensen's inequality I'd recommend the Convex Optimization course by Stephen Boyd at the Stanford University, Electrical Engineering department ([youtube lecture series](https://www.youtube.com/watch?v=McLq1hEq3UY).
+
+
+## Reparameterization Trick
+
+The reparameterization trick is well explained by Goker Ergodan in this [Jupyter notebook](http://nbviewer.jupyter.org/github/gokererdogan/Notebooks/blob/master/Reparameterization%20Trick.ipynb).
+
+Suppose we have a simple distribution $$q_{\theta}(x) = N(\theta, 1)$$ and we want to solve the following toy problem:
+
+$$\min_\theta E_q \left[ x^2 \right]$$
+
+The gradient over $$\theta$$ we can calculate (see the Jupyter notebook):
+
+$$\nabla_\theta E_q \left[ x^2 \right] = E_q \left[ x^2 (x - \theta) \right]$$
+
+The gradient is zero at $$x = \theta$$ and increases quadratically with $$x^2$$ all with $$x$$ sampled from $$N(\theta,1)$$.
+
+However, if we separate $$x = \theta + \epsilon$$ with $$\epsilon \sim N(0,1)$$, we can write:
+
+$$\nabla_\theta E_q \left[ x^2 \right] = E_p \left[ 2 (\theta + \epsilon) \right]$$
+
+Here $$p$$ is the distribution over $$\epsilon$$, namely $$N(0,1)$$, not the distribution over $$N(\theta,1)$$. This is the whole trick, the distribution $$p$$ does not depend on $$\theta$$. The result is that through this reparameterization the variance can be substantially reduced. In a handwaving manner this is logical. Do not try to differentiate over stochastic elements, that only amplifies deltas.
+
+## Backpropagation
+
+The backprop paper came out in 1986. 
+
+
+
+## Likelihood
+
+Likelihood, call it an error function if you hate Bayesian terms. :-)
+
+
+-->
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Sampling of Dirichlet Process]]></title>
+    <link href="http://www.annevanrossum.com/blog/2015/03/03/sampling-of-dirichlet-process/"/>
+    <updated>2015-03-03T15:06:06+00:00</updated>
+    <id>http://www.annevanrossum.com/blog/2015/03/03/sampling-of-dirichlet-process</id>
+    <content type="html"><![CDATA[<p>Thousands of articles describe the use of the Dirichlet Process, but very few describe how to sample from it. Most often one is referred to <a href="http://www.tandfonline.com/doi/pdf/10.1080/10618600.2000.10474879">Markov chain sampling methods for Dirichlet process mixture models (pdf)</a> by <a href="http://www.cs.toronto.edu/~radford/">Radford Neal</a> (at University of Toronto), which is a nice piece of work, but still a bit dense as an introduction. I contacted him by email about certain things that were difficult to understand at first and he was kind enough to respond, thanks a lot! Definitely also check out <a href="https://radfordneal.wordpress.com/">his blog</a> in which he regularly showcases his fast version of R.</p>
+
+<p>Let us introduce the Dirichlet Process with two lines:</p>
+
+<script type="math/tex; mode=display">G \sim DP(H,\alpha) \\
+\theta_i  \mid  G \sim G</script>
+
+<p>First of all, if you haven’t been reading an article about this material in the last decennia, the notation <script type="math/tex">\sim</script> stands for “is distributed as” (see <a href="http://stats.stackexchange.com/questions/41306/why-are-probability-distributions-denoted-with-a-tilde">stackexchange</a>).</p>
+
+<p>On the first line we have defined that <script type="math/tex">G</script> being distributed as a Dirichlet Process (DP) with parameters <script type="math/tex">H</script> and <script type="math/tex">\alpha</script>. The parameter <script type="math/tex">H</script> has kind of the role of a mean, the parameter <script type="math/tex">\alpha</script> has kind of the role of precision (inverse variance). The parameter <script type="math/tex">H</script> is called the base distribution, the parameter <script type="math/tex">\alpha</script> is called the dispersion factor.</p>
+
+<p>On the second line we generate a bunch of parameters <script type="math/tex">\theta_i</script> conditioned on the generated distribution <script type="math/tex">G</script>. A peculiar property of this distribution is that exactly the same <script type="math/tex">\theta_i</script> can be sampled multiple times. Hence, the Dirichlet Process can generate discrete objects out of a continuous base distribution <script type="math/tex">H</script>.</p>
+
+<p>If we have parameters we can subsequently generate observations as well:</p>
+
+<script type="math/tex; mode=display">y_i  \mid  \theta_i \sim F(\theta_i)</script>
+
+<p>Here <script type="math/tex">F</script> describes the mapping of parameters to observations.</p>
+
+<p>We can integrate over <script type="math/tex">G</script> to obtain a presentation such as:</p>
+
+<script type="math/tex; mode=display">\theta_{n+1}  \mid  \theta_1 \ldots \theta_{n-1} \sim \frac{1}{\alpha+n} (\alpha H + \sum_{i=1}^n \delta_{\theta_i})</script>
+
+<p>And just to write this down in a totally equivalent notation for your convenience:</p>
+
+<script type="math/tex; mode=display">p(\theta_m \mid \theta_{-m},\alpha,H) = \frac{a}{M-1+\alpha} H + \frac{1}{M-1+\alpha} \sum_{j=1,j\neq m}^M \delta_{\theta_j}</script>
+
+<p>Here we have picked an index <script type="math/tex">m</script> mid-way, and not a new item <script type="math/tex">n+1</script> which complicates the notation considerably. The notation <script type="math/tex">\theta_{-m}</script> with the minus sign means in this case the set of parameters <script type="math/tex">(\theta_1,\ldots,\theta_M)</script> with <script type="math/tex">\theta_m</script> excluded.</p>
+
+<p>This trick in which we can act as if a parameter mid-way is the same as a new one, is possible because of an underlying assumed property: <strong>exchangeability</strong> of observations.</p>
+
+<p>In both notations we have <script type="math/tex">\delta_{\theta}</script>, the distribution at the point <script type="math/tex">\theta</script>. Here <script type="math/tex">\delta</script> has the beautiful role of a functor which maps a function to a value. Something we will see back when we will take Hilbert spaces seriously, but that’s something for later.</p>
+
+<p>If we incorporate the likelihood <script type="math/tex">F(y_i,\theta_i)</script>, we will arrive at the following formula:</p>
+
+<script type="math/tex; mode=display">\theta_i  \mid  \theta_{-i}, y_i \sim C ( \sum_{i \neq j} F(y_i,\theta_j) \delta_{\theta_j} + \alpha H_i \int F(y_i,\theta) dH(\theta) )</script>
+
+<p>Here <script type="math/tex">C</script> is a normalization factor to make it a proper probability summing to one. The entity <script type="math/tex">H_i</script> is the posterior distribution of <script type="math/tex">\theta</script> given <script type="math/tex">H</script> as prior and given observation <script type="math/tex">y_i</script>. The integral on the right side has the imposing form of a (Lebesgue-)Stieltjes integral. The Lebesgue integral is a nice topic on its own as well, but skimming through <a href="http://en.wikipedia.org/wiki/Lebesgue_integration">wikipedia</a> should be sufficient. A one-line summary: For a two-dimensional function you can see it as “horizontal” integration rather than “vertical” integration. The Stieltjes part of it generalizes integration by (linear) parts <script type="math/tex">dx = x_i - x_{i-1}</script> to that of integration by <script type="math/tex">dg(x)</script>. If <script type="math/tex">g(x)</script> is differentiable everywhere and the derivative is continuous, it has the more familiar presentation:</p>
+
+<script type="math/tex; mode=display">\int F(y_i,\theta) H'(\theta) d\theta = \int F(y_i,\theta) \frac{dH(\theta)}{d\theta} d\theta = \int F(y_i,\theta) dH(\theta)</script>
+
+<p>There is a solid reason why this familiar notation is insufficient here. In probability theory we often have a nice cumulative distribution function <script type="math/tex">g(x)</script>. However, things become nasty for the probability density function as such. The Lebesgue measure for <script type="math/tex">g'(x)</script> (the “horizontal” integration) if the distribution of <script type="math/tex">x</script> is discrete becomes nonsense.</p>
+
+<p>Studying this multiplicative (or convolutive) form it is clear that a conjugate pair of <script type="math/tex">F</script> and <script type="math/tex">H</script> is extremely convenient.</p>
+
+<p>The definition of <script type="math/tex">p(\theta_i\ \mid \theta_{-i},y_i)</script> leads to Gibbs sampling by just drawing from it for all indices <script type="math/tex">(i=1,\ldots,n)</script>.</p>
+
+<p>To remind you about the basics of Gibbs sampling; if we sample the conditionals <script type="math/tex">p(a_0\ \mid a_1,b)</script> and <script type="math/tex">p(a_1\ \mid a_0,b)</script> iteratively, we will get the distribution <script type="math/tex">p(a_0,a_1\ \mid b)</script> which is joint in <script type="math/tex">a_0</script> and <script type="math/tex">a_1</script>. So, our sampling results in <script type="math/tex">p(\theta\ \mid y)</script> with <script type="math/tex">y</script> all observations. Note that Gibbs sampling allows you to forget a value <script type="math/tex">\theta_i</script> when it is time to sample it again.</p>
+
+<h2 id="using-cluster-indices">Using cluster indices</h2>
+
+<p>It is possible to calculate stuff using the parameters <script type="math/tex">\theta</script> directly, but considering that we are here interested
+in clustering, it makes sense to introduce <em>one level of indirection</em>. In this case: <strong>cluster indices</strong>. Each parameter
+<script type="math/tex">\theta_i</script> is paired with a cluster index <script type="math/tex">c_i</script>. The values of the cluster indices do not matter, as long as all the
+parameters that belong to the same cluster are having the same value <script type="math/tex">c_i</script>. For computational convenience a series of
+integers is appropriate, but it could just have as well be names from a dictionary about tropical trees.</p>
+
+<p>In <a href="http://www.tandfonline.com/doi/pdf/10.1080/10618600.2000.10474879">Neal’s paper</a> the derivation of the following is quite brief, so let me expand here a bit. The system under
+consideration here is not a Dirichlet Process, but a mixture of <script type="math/tex">K</script> Dirichlet distributions:</p>
+
+<script type="math/tex; mode=display">c_i  \mid  p \sim Discrete(p_1,\ldots,p_K) \\
+\phi_c \sim H \\
+p_1,\ldots,p_K \sim Dirichlet(\alpha/K,\ldots,\alpha/K)</script>
+
+<p>Now we have to integrate out the mixing proportions <script type="math/tex">p_i</script> to get a formula that operates on cluster indices. Again, the
+number of cluster indices is exactly equal to the number of parameters and exactly equal to the number of observations.</p>
+
+<p>Let us now consider the Dirichlet-Multinomial as it is often called (terrible name!). As you see from above it should
+be called the Dirichlet-Categorical (see for a derivation <a href="http://math.stackexchange.com/questions/709959/how-to-derive-the-dirichlet-multinomial">stackexchange</a> again).</p>
+
+<script type="math/tex; mode=display">\int p(c \mid p) p(p \mid \alpha) dp = \frac{\Gamma(\alpha)}{\Gamma(\alpha + n)} \prod_k \frac{\Gamma(\alpha_k + n(c_l=k))}{\Gamma(\alpha_k)}</script>
+
+<p>Here <script type="math/tex">\alpha=\sum_k \alpha_k</script>, <script type="math/tex">n=\sum_n n(c_l=k)</script> and <script type="math/tex">l</script> runs from <script type="math/tex">1</script> to <script type="math/tex">n</script> (over all observations). We will use the
+shorter notation <script type="math/tex">n_k=n(c_l=k)</script> as the number of cluster indices that point to the same cluster <script type="math/tex">k</script>. Do not forget however
+that this number is a function of <script type="math/tex">c_l</script>, or else you might think: where have all the <script type="math/tex">c</script>’s gone!?
+And of course the guy who uses a variable <script type="math/tex">p</script> in probabilistic
+texts should be a <script type="math/tex">p</script>-victim in Jackass. :-) I think you deserve a break on the moment:</p>
+
+<iframe width="740" height="480" src="//www.youtube.com/embed/VhnZ3wzrwik" frameborder="0" allowfullscreen=""></iframe>
+
+<p>In our case <script type="math/tex">\alpha_k</script> is taken to be the same for all clusters, so <script type="math/tex">\alpha/K</script>:</p>
+
+<script type="math/tex; mode=display">\int p(c \mid p) p(p \mid \alpha) dp = \frac{\Gamma(\alpha)}{\Gamma(\alpha + n)} \prod_k \frac{\Gamma(\alpha/K + n_k)}{\Gamma(\alpha/K)}</script>
+
+<p>What we are after is:</p>
+
+<script type="math/tex; mode=display">p(c_1,\ldots,c_{i-1};\alpha) = \int p(c_1,\ldots,c_{i-1} \mid p) p(p \mid \alpha) dp</script>
+
+<p>And:</p>
+
+<script type="math/tex; mode=display">p(c_1,\ldots,c_{i-1},c_i=c;\alpha) = \int p(c_1,\ldots,c_{i-1},c_i=c \mid p) p(p \mid \alpha) dp</script>
+
+<p>Basically the <script type="math/tex">;\alpha</script> means that we identified it as a variable. However, we haven’t decided yet if it is going to
+be a random variable or just a parameter. We can just leave it out in the next equations, just remember that the entire
+thing depends on <script type="math/tex">\alpha</script> in the end.
+Anyway, the above two functions are required to calculate the entity we are after.
+Using the definition of a conditional probability, we calculate the probability of a value for a specific cluster index
+given all other cluster indices:</p>
+
+<script type="math/tex; mode=display">p(c_i=c \mid c_1,\ldots,c_{i-1}) = \frac{p(c_1,\ldots,c_{i-1},c_i=c)}{p(c_1,\ldots,c_{i-1})}</script>
+
+<p>I try to follow here the notation in Neal’s paper as close as possible. Do not fry me because I use <script type="math/tex">c</script> here as an
+instance of <script type="math/tex">c_i</script>. It ain’t pretty, I know!</p>
+
+<p>The nominator:</p>
+
+<script type="math/tex; mode=display">\int p(c_1,\ldots,c_{i-1},c_i=c \mid p) p(p \mid \alpha) dp =
+ \frac{\Gamma(\alpha)}{\Gamma(\alpha + n)} \prod_k \frac{\Gamma(\alpha/K + n_k)}{\Gamma(\alpha/K)}</script>
+
+<p>And the denominator where we have one less component index to calculate with (so <script type="math/tex">n-1</script> to sum over):</p>
+
+<script type="math/tex; mode=display">\int p(c_1,\ldots,c_{i-1} \mid p) p(p \mid \alpha) dp =
+ \frac{\Gamma(\alpha)}{\Gamma(\alpha + n - 1)} \prod_k \frac{\Gamma(\alpha/K + n_{k,-i})}{\Gamma(\alpha/K)}</script>
+
+<p>The notation <script type="math/tex">n_{k,-i}</script> counts the cluster indices as for <script type="math/tex">n_k</script> but does not take into account <script type="math/tex">i</script>. This notation is a bit awkward
+admittedly, because the left-hand side does not seem to contain <script type="math/tex">c_i</script>. But it does because <script type="math/tex">n_k = n(c_l = k)</script> if you remember. The notation just becomes a bit less cluttered by writing it down like this,
+trust me. The division becomes:</p>
+
+<script type="math/tex; mode=display">p(c_i=c \mid c_1,\ldots,c_{i-1}) = \frac{
+ \frac{\Gamma(\alpha)}{\Gamma(\alpha + n)} \prod_k \frac{\Gamma(\alpha/K + n_k)}{\Gamma(\alpha/K)} }
+ {\frac{\Gamma(\alpha)}{\Gamma(\alpha + n - 1)} \prod_k \frac{\Gamma(\alpha/K + n_{k,-i})}{\Gamma(\alpha/K)} }</script>
+
+<p>And we are happy to see we can cross-out a lot of the terms in this fraction:</p>
+
+<script type="math/tex; mode=display">p(c_i=c \mid c_1,\ldots,c_{i-1}) = \frac{\Gamma(\alpha + n - 1)}{ \Gamma(\alpha+n)}
+\prod_k \frac{ \Gamma(\alpha/K + n_k)}
+{\Gamma(\alpha/K + n_{k,-i})}</script>
+
+<p>As you probably know <script type="math/tex">\Gamma(x)=(x-1)!</script>, so it is not hard to see that <script type="math/tex">\Gamma(x+1)=x\Gamma(x)</script> just as with a
+factorial: <script type="math/tex">x! = x(x-1)!</script>.
+Also, <script type="math/tex">\Gamma(x-1)=\Gamma(x)/(x-1)</script>, which leads to a simplification of the first fraction:</p>
+
+<script type="math/tex; mode=display">p(c_i=c \mid c_1,\ldots,c_{i-1}) =
+\frac{\Gamma(\alpha + n)}{(\alpha+n-1) \Gamma(\alpha+n)}
+\prod_k \frac{ \Gamma(\alpha/K + n_k)}
+{\Gamma(\alpha/K + n_{k,-i})} \\
+=\frac{1}{\alpha+n-1}
+\prod_k \frac{ \Gamma(\alpha/K + n_k)}
+{\Gamma(\alpha/K + n_{k,-i})}</script>
+
+<p>The second fraction requires splitting of the product for <script type="math/tex">c_i=k</script> or, equivalently, <script type="math/tex">k=c</script>. So, we bring the index that
+(amongst others) is pointed at by observation <script type="math/tex">c_i=k</script> to the front:</p>
+
+<script type="math/tex; mode=display">\prod_k \Gamma(\alpha/K + n_k) =
+\Gamma(\alpha/K + n_c) \prod_{k \neq c}  \Gamma(\alpha/K + n_k)</script>
+
+<p>If we think this through, we now know that <script type="math/tex">n_c</script> does contain the cluster corresponding with the observation with index <script type="math/tex">i</script> and henceforth that <script type="math/tex">n_k</script>
+does <strong>not</strong> contain that cluster. Thus the following is absolutely equivalent to the above:</p>
+
+<script type="math/tex; mode=display">\prod_k \Gamma(\alpha/K + n_k) =
+\Gamma(\alpha/K + n_c) \prod_{k \neq c}  \Gamma(\alpha/K + n_{k,-i})</script>
+
+<p>Thinking this through, we also realize that <script type="math/tex">n_c</script> does indeed contain this cluster corresponding with observation <script type="math/tex">i</script>,
+and therefore must be exactly one larger than if it would not be counting <script type="math/tex">c_i</script>!</p>
+
+<script type="math/tex; mode=display">\prod_k \Gamma(\alpha/K + n_k) =
+\Gamma(\alpha/K + n_{c,-i} + 1) \prod_{k \neq c}  \Gamma(\alpha/K + n_{k,-i})</script>
+
+<p>We can again make use of the <script type="math/tex">\Gamma(x+1)=x\Gamma(x)</script> fact:</p>
+
+<script type="math/tex; mode=display">\prod_k \Gamma(\alpha/K + n_k) =
+(\alpha/K + n_{c,-i}) \Gamma(\alpha/K + n_{c,-i}) \prod_{k \neq c}  \Gamma(\alpha/K + n_{k,-i})</script>
+
+<p>And we can move the Gamma term with <script type="math/tex">n_{c,-i}</script> within the product again:</p>
+
+<script type="math/tex; mode=display">\prod_k \Gamma(\alpha/K + n_k) =
+(\alpha/K + n_{c,-i}) \prod_k \Gamma(\alpha/K + n_{k,-i})</script>
+
+<p>Let me reiterate the equation from above (because it has now scrolled off your screen except if you keep your laptop
+vertically - on its side - when reading this, or if you use a ridiculous high resolution):</p>
+
+<script type="math/tex; mode=display">p(c_i=c \mid c_1,\ldots,c_{i-1}) = \frac{1}{\alpha+n-1}
+\prod_k \frac{ \Gamma(\alpha/K + n_k)}
+{\Gamma(\alpha/K + n_{k,-i})}</script>
+
+<p>Fill in our neat endevour with shifting in and out of the product, just to go through a Gamma function, and we arrive at:</p>
+
+<script type="math/tex; mode=display">p(c_i=c \mid c_1,\ldots,c_{i-1}) = \frac{ \alpha/K + n_{c,-i}  }{\alpha+n-1}</script>
+
+<p>The first time I encountered the sentence “just integrate out the mixing proportions <script type="math/tex">p_i</script>” I did not have a clue that a dozen steps
+like these were required. But, perhaps, I need them spelled out in more detail than a person with a normal brain…</p>
+
+<p>The step subsequently fo <script type="math/tex">K \rightarrow \infty</script> contains probably also many steps, but only for a mathematical rigorous
+mind, not my sloppy one. If we only consider cluster <script type="math/tex">c_i=c</script>, we can use the equation above and assume <script type="math/tex">\alpha/K</script> goes to zero.
+The only other assumption we need in this case, is that there is some other observation with cluster index <script type="math/tex">c_i</script>, so
+<script type="math/tex">n_{c,-i} \neq 0</script>.</p>
+
+<script type="math/tex; mode=display">p(c_i=c \textit{ and } n_{c,-i} \neq 0  \mid c_1,\ldots,c_{i-1}) = \frac{ n_{c,-i}  }{\alpha+n-1}</script>
+
+<p>Or, equivalently:</p>
+
+<script type="math/tex; mode=display">p(c_i=c \textit{ and } c_i = c_j \textit{ and } i \neq j  \mid c_1,\ldots,c_{i-1}) = \frac{ n_{c,-i}  }{\alpha+n-1}</script>
+
+<!--
+If we count all conditional probabilities for $$c_i \neq c$$ it has to sum to one minus the term above. This is just
+sampling over the entire sample space $$\Omega(\mathbf{c})$$. To recapitulate the essence of it:
+
+$$\sum_{\omega \in \Omega(\mathbf{c})} p(c_i=\omega \mid c_1,\ldots,c_{i-1}) = 1$$
+
+Apply this:
+
+$$ p(c_i\neq c \mid c_1,\ldots,c_{i-1}) = 1 - \frac{\alpha/K + n_{c,-i}  }{\alpha+n-1}
+= \frac{ \alpha + n - 1 - n_{c,-i} - \alpha/K  }{\alpha+n-1} $$
+
+If we let $$K \rightarrow \infty$$, it seems we arrive at:
+
+$$ p(c_i\neq c \mid c_1,\ldots,c_{i-1}) =
+\frac{ \alpha + n - 1 - n_{c,-i}  }{\alpha+n-1} $$
+
+Unless $$n_{c,-i} = n - 1$$ (which is of course not the case) we will not arrive at the same result as in the paper.
+So, we are calculating the wrong entity here. The equation is correct, but we are after a different entity, namely
+the following.
+
+Apparently, what we are after is not the collection of other options for $$c_i$$, which
+is indeed kind of trivial, but the probability that none of the other observations $$c_j$$ is part of the same cluster.
+
+-->
+<p>If we consider <script type="math/tex">c_i=c</script> again and now with <script type="math/tex">n_{c,-i}=0</script>:</p>
+
+<script type="math/tex; mode=display">p(c_i=c \textit{ and } c_i\neq c_j \textit{ and } i \neq j \mid c_1,\ldots,c_{i-1}) = \frac{ \alpha/K }{\alpha+n-1}</script>
+
+<p>I won’t say often “of course”, but here it is of course that <script type="math/tex">i \neq j</script>.
+Then if we allow <script type="math/tex">c_i</script> to take all possible <script type="math/tex">K</script> values, in this case the sum is not one because of the “and” operation:</p>
+
+<script type="math/tex; mode=display">\sum_{\omega \in \Omega(\mathbf{c})} p(c_i=\omega \textit{ and } c_i \neq c_j \textit{ and } i \neq j  \mid c_1 ,\ldots,c_{i-1}) = K \frac{ \alpha/K }{\alpha+n-1}</script>
+
+<p>So, this is straightforward the number of clusters, <script type="math/tex">K</script>, times the previously calculated probability for a single cluster.
+We arrive sweetly - without taking limits in this case - at:</p>
+
+<script type="math/tex; mode=display">p(c_i \in \Omega(\mathbf{c}) \textit{ and } c_i\neq c_j \textit{ and } i \neq j  \mid c_1,\ldots,c_{i-1}) =
+\frac{ \alpha }{\alpha+n-1}</script>
+
+<p>We kept here explicit that we consider all possible cluster indices for <script type="math/tex">c_i</script> by drawing it from the set <script type="math/tex">\Omega(\mathbf{c})</script>.
+Sorry, this is not standard notation, feel free to suggest improvements using the discussion section! The reason why
+I explicitly add it is because <script type="math/tex">p(c_i\neq c_j \textit{ and } i \neq j)</script> might be read as the sum of the probabilities
+of any two cluster indices being unequal (where we do not fix <script type="math/tex">i</script> to a specific cluster index). Note also that in
+Neal’s exposition <script type="math/tex">i</script> is the last observation. The notation here does not assume that <script type="math/tex">i</script> is the last observation,
+and hence uses <script type="math/tex">i \neq j</script> rather than <script type="math/tex">% &lt;![CDATA[
+j < i %]]&gt;</script>, but this is absolutely equivalent.</p>
+
+<h2 id="nonconjugate-priors">Nonconjugate priors</h2>
+
+<p><a href="http://www.tandfonline.com/doi/pdf/10.1080/10618600.2000.10474879">Neal’s article</a> is again a source of insight. Make sure however to also take a look at the first people working on these problems. Antoniak for example extended Ferguson’s Dirichlet Process to the mixture model case and reading <a href="http://projecteuclid.org/download/pdf_1/euclid.aos/1176342871">this old text</a> might be enlightening as well. Let us recapitulate quickly what we have. We have an equation for
+the conditional probabilities of cluster indices given the other cluster indices for an infinite number of clusters.
+The equation has two parts. One in which we have a cluster index that has been encountered before:</p>
+
+<script type="math/tex; mode=display">p(c_i=c \textit{ and } c_i=c_j \textit{ and } i \neq j  \mid  c_1,\ldots,c_{i-1}) = \frac{ n_{c,-i}  }{\alpha+n-1}</script>
+
+<p>And one part in which we have a cluster index that has not been encountered before:</p>
+
+<script type="math/tex; mode=display">p(c_i \in \Omega(\mathbf{c}) \textit{ and } c_i\neq c_j \textit{ and }i \neq j \mid c_1,\ldots,c_{i-1}) = \frac{ \alpha }{\alpha+n-1}</script>
+
+<p>The term <script type="math/tex">c_i=c_j \textit{ and } i \neq j</script> is true for any <script type="math/tex">i \neq j</script>, while <script type="math/tex">c_i \neq c_j \textit{ and } i \neq j</script> is true only when all of <script type="math/tex">c_j</script> are unequal to <script type="math/tex">c_i</script>.</p>
+
+<p>We now have to take a shortcut and bluntly introduce the <a href="http://en.wikipedia.org/wiki/Metropolis%E2%80%93Hastings_algorithm">Metropolis-Hastings algorithm</a>. Why it works I would love to
+show another time. It is a typical Monte Carlo method driven by detailed balance. Ehrenfest, the inventer of the
+<a href="http://en.wikipedia.org/wiki/Ehrenfest_model">dog-flea model</a> would have been proud.</p>
+
+<p>To sample a density <script type="math/tex">\pi(c_i)</script> a proposal density, <script type="math/tex">g(c_i^*\mid c_i)</script>, is used in calculating an acceptance probability <script type="math/tex">a(c_i^*,c_i)</script>:</p>
+
+<script type="math/tex; mode=display">a(c_i^*,c_i) = \min \left[ 1, \frac{g(c_i \mid c_i^*)}{g(c_i^* \mid c_i)} \frac{ \pi(c_i^*)}{\pi(c_i)} \right]</script>
+
+<p>With probability <script type="math/tex">a</script> the new state <script type="math/tex">c_i^*</script> is accepted. With probability <script type="math/tex">1-a</script> the old state <script type="math/tex">c_i</script> is maintained.</p>
+
+<script type="math/tex; mode=display">a(c_i^*,c_i) = \min \left[ 1, \frac{g(c_i \mid c_i^*)}{g(c_i^* \mid c_i)} \frac{p(c_i^*; k^* \mid c_{-i}^*)}{p(c_i; k \mid c_{-i})} \frac{ F(y_i,\phi_{c_i^*})}{F(y_i,\phi_{c_i})} \right]</script>
+
+<p>Here we made explicit that <script type="math/tex">k^*</script> and <script type="math/tex">k</script> might be different. Moreover, the notation <script type="math/tex">c_{-i}</script> stands for <script type="math/tex">c_1,\ldots,c_n</script> with <script type="math/tex">c_i</script> excluded.</p>
+
+<p>First, I went on a tangent here. I thought Neal was picking the following as a transition probability:</p>
+
+<script type="math/tex; mode=display">g(c_i^*\mid c_i) = \frac{p(c_i^*; k^* \mid c_{-i}^*)}{p(c_i; k \mid c_{-i})}</script>
+
+<p>And subsequently I started calculating this ratio, where I made mistakes as well not realizing at first that $k$ and $k^*$ do not need to be the same. However, after “breaking my head”, I finally understood that Neal proposes something much simpler:</p>
+
+<script type="math/tex; mode=display">g(c_i^* \mid c_i) = p(c_i^*; k^* \mid c_{-i}^*)</script>
+
+<p>In such a case the acceptance rule becomes indeed quite simple:</p>
+
+<script type="math/tex; mode=display">a(c_i^*,c_i) = \min \left[ 1, \frac{ F(y_i,\phi_{c_i^*})}{F(y_i,\phi_{c_i})} \right]</script>
+
+<p>Only the likelihood is used to calculate the Metropolis-Hastings ratio.</p>
+
+<h2 id="auxiliary-parameters">Auxiliary parameters</h2>
+
+<p>I have to study this part later.</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Bayesian approximation]]></title>
+    <link href="http://www.annevanrossum.com/blog/2014/12/21/bayesian-approximation/"/>
+    <updated>2014-12-21T13:35:18+00:00</updated>
+    <id>http://www.annevanrossum.com/blog/2014/12/21/bayesian-approximation</id>
+    <content type="html"><![CDATA[<p>In the world of Bayesian’s, a model is a triplet $p(x,z,\theta)$. The observations are random variables $x$. And then there is a seemingly artificial distinction between the random variables that are called <strong>hidden</strong> ($z$) and other random variables that are called <strong>parameters</strong> ($\theta$), and are hidden as well! So, how come that parameters got their distinguished name? In the case of for example a clustering task, we can assign each observation a corresponding hidden variable: an index of the cluster it belongs to. Hence, there are as many hidden variables as there are observations. Now, in contrary, we might define parameters in two different ways:</p>
+
+<ul>
+  <li>The number of parameters is fixed. The parameters are defined as that part of the model that is not adjusted with respect to the number of observations. In $k$-means there are $k$ means that need to be estimated. There are not more means to be estimated if the number of observations grows.</li>
+  <li>Parameters are more variable then the hidden variables. There are not just as many parameters as observations, no their number needs to be derived from the data. In nonparameteric Bayesian methods there will be more clusters (means) when the number of observations grows.</li>
+</ul>
+
+<p>Consider a dataset $D$, we would like to get our hands on $p(D,z,\theta)$. If this all concerns discrete variables, this is a 3D ‘matrix’ (a tensor of rank 3) with the observations along one dimension, the hidden variables along another dimension, and the parameters along the third dimension. The joint distribution $p(D,z,\theta)$ would tell us everything. Some examples where either marginalize out a variable, or use the definition of a conditional probability:</p>
+
+<script type="math/tex; mode=display">p(D,z) = \int d\theta \ p(D,z,\theta) \\
+p(z) = \int \int d\theta dz \ p(D,z,\theta) \\
+p(z|D) = p(z,D)/p(D)</script>
+
+<p>To get to the matrix $p(D,z)$ we sum over all entries in the rank 3 matrix in the direction of the dimension $\theta$. In other words, we are not interested anymore to what kind of fine granular information $\theta$ brings to bear. We are only interested in how often $D$ occurs with $z$.</p>
+
+<p>The problem is, we often do not have $p(D,z,\theta)$. 
+Now, we suppose we have instead all of the following conditional distributions, $p(D|z,\theta)$, $p(z|\theta,D)$, and $p(\theta|D,z)$, would we have enough information?</p>
+
+<p>The answer is a resounding yes. If you have all conditional distributions amongst a set of random variables you can reconstruct the joint distribution. It always helps to experiment with small discrete conditional and joint probability tables. In <a href="https://stats.stackexchange.com/questions/129956/how-to-derive-gibbs-sampling">this question</a> on <a href="https://stats.stackexchange.com">https://stats.stackexchange.com</a> you see how I construct a joint probability table from the corresponding conditional probability tables. Note the word <strong>corresponding</strong>: as Lucas points out in his answer there are problems with <strong>compatibility</strong>. If the conditional probabilities correspond to a joint probability, the latter can be found. However, if you come up with random conditional probability tables it is very likely that the joint probability table does not exist.</p>
+
+<p>The paper that I found very clarifying with respect to the different ways to do approximations to the full Bayesian method is <a href="https://www.siam.org/meetings/sdm06/proceedings/044wellingm.pdf">Bayesian K-Means as a “Maximization-Expectation” Algorithm (pdf)</a> by Welling and Kurihara.</p>
+
+<p>So, let us assume we are given a dataset $D$ (hence $p(D)$) and we want to find $p(z,\theta|D)$.</p>
+
+<p><strong>1. Gibbs sampling</strong></p>
+
+<p>We can approximate $p(z,\theta|D)$ by sampling. <a href="http://www.wikiwand.com/en/Gibbs_sampling">Gibbs sampling</a> gives $p(z,\theta|D)$ by alternating:</p>
+
+<script type="math/tex; mode=display">\theta \sim p(\theta|z,D) \\
+z \sim p(z|\theta,D)</script>
+
+<p><strong>2. Variational Bayes</strong></p>
+
+<p>Instead, we can try to establish a distribution $q(\theta)$ and $q(z)$ and minimize the difference with the distribution we are after $p(\theta,z|D)$. The difference between distributions has a convenient fancy name, the <a href="http://www.wikiwand.com/en/Kullback%E2%80%93Leibler_divergence">Kullback-Leibler divergence</a>. To minimize $KL[q(\theta)q(z)||p(\theta,z|D)]$ we update:</p>
+
+<script type="math/tex; mode=display">q(\theta) \propto \exp (E [\log p(\theta,z,D) ]_{q(z)} ) \\
+q(z) \propto \exp (E [\log p(\theta,z,D) ]_{q(\theta)} )</script>
+
+<p>This type of <a href="http://www.wikiwand.com/en/Variational_Bayesian_methods">variational Bayes</a> that uses the Kullback-Leibler divergence is also known under mean-field variational Bayes.</p>
+
+<p><strong>3. Expectation-Maximization</strong></p>
+
+<p>To come up with full-fledged probability distributions for both $z$ and $\theta$ might be considered extreme. Why don’t we instead consider a point estimate for one of these and keep the other nice and nuanced. In <a href="http://www.wikiwand.com/en/Expectation%E2%80%93maximization_algorithm">Expectation Maximization</a> the parameter $\theta$ is established as the one being unworthy of a full distribution, and set to its MAP (<a href="http://www.wikiwand.com/en/Maximum_a_posteriori_estimation">Maximum A Posteriori</a>) value, $\theta^*$.</p>
+
+<script type="math/tex; mode=display">\theta^* = \underset{\theta}{\operatorname{argmax}} E [\log p(\theta,z,D) ]_{q(z)} \\
+q(z) = p(z|\theta^*,D)</script>
+
+<p>Here $\theta^* \in \operatorname{argmax}$ would actually be a better notation: the argmax operator can return multiple values. But let’s not nitpick. Compared to variational Bayes you see that correcting for the $\log$ by $\exp$ doesn’t change the result, so that is not necessary anymore.</p>
+
+<p><strong>4. Maximization-Expectation</strong></p>
+
+<p>There is no reason to treat $z$ as a spoiled child. We can just as well use point estimates $z^*$ for our hidden variables and give the parameters $\theta$ the luxury of a full distribution.</p>
+
+<script type="math/tex; mode=display">z^* = \underset{z}{\operatorname{argmax}} E [\log p(\theta,z,D) ]_{q(\theta)} \\
+q(\theta) = p(\theta|z^*,D)</script>
+
+<p>If our hidden variables $z$ are indicator variables, we suddenly have a computationally cheap method to perform inference on the number of clusters. This is in other words: model selection (or automatic relevance detection or imagine another fancy name).</p>
+
+<p><strong>5. Iterated conditional modes</strong></p>
+
+<p>Of course, the poster child of approximate inference is to use point estimates  for both the parameters $\theta$ as well as the observations $z$.</p>
+
+<script type="math/tex; mode=display">\theta^* = \underset{\theta}{\operatorname{argmax}} p(\theta,z^*,D) \\
+z^* = \underset{z}{\operatorname{argmax}} p(\theta^*,z,D) \\</script>
+
+<p>To see how Maximization-Expectation plays out I highly recommend <a href="https://www.siam.org/meetings/sdm06/proceedings/044wellingm.pdf">the article</a>. In my opinion, the strength of this article is however not the application to a $k$-means alternative, but this lucid and concise exposition of approximation.</p>
+
+]]></content>
+  </entry>
+  
+</feed>

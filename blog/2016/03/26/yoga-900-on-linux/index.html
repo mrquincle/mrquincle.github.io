@@ -1,0 +1,280 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Yoga 900 on Linux  | Robots, machine learning, global issues</title>
+
+<meta name="author" content="Anne van Rossum">
+
+<meta name="description" content="Yoga 900 on Linux"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link rel="alternate" href="/atom.xml" title="Robots, machine learning, global issues" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link rel="shortcut icon" href="/favicon.png">
+	<link rel="apple-touch-icon" href="/favicon.png">
+	<link rel="apple-touch-icon" href="/favicon-152x152.png" sizes="152x152">
+	<link rel="apple-touch-icon" href="/favicon-180x180.png" sizes="180x180">
+	<link rel="apple-touch-icon" href="/favicon-167x167.png" sizes="167x167">
+	<link rel="stylesheet" href="/stylesheets/screen.css" media="screen, projection" type="text/css">
+	<link rel="stylesheet" href="/stylesheets/font-awesome.min.css" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+
+
+
+
+<!-- Social media content metadata -->
+
+<meta property="fb:admins" content="547279274" />
+<meta property="og:title" content="Yoga 900 on Linux" />
+<meta property="og:site_name" content="Robots, machine learning, global issues" />
+<meta property="og:url" content="http://www.annevanrossum.com/blog/2016/03/26/yoga-900-on-linux/" />
+<meta property="og:type" content="article" />
+<meta property="og:description" content="Yoga 900 on Linux" />
+<meta property="og:author" content="https://www.facebook.com/annevanrossum" />
+
+
+
+<meta property="twitter:card" content="summary" />
+<meta property="twitter:site" content="annevanrossum" />
+<meta property="twitter:url" content="http://www.annevanrossum.com/blog/2016/03/26/yoga-900-on-linux/" />
+<meta property="twitter:title" content="Yoga 900 on Linux" />
+<meta property="twitter:description" content="Yoga 900 on Linux" />
+<meta property="twitter:creator" content="annevanrossum" />
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  jax: ["input/TeX", "output/HTML-CSS"],
+  tex2jax: {
+    inlineMath: [ ['$', '$'] ],
+    displayMath: [ ['$$', '$$']],
+    processEscapes: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  TeX: { equationNumbers: { autoNumber: "AMS" } },
+  messageStyle: "none",
+  "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<!-- Site environment: production -->
+
+<!-- Get MathJax online -->
+<script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+
+
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Robots, machine learning, global issues</a></h1>
+<h4>Random thoughts</h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.annevanrossum.com">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Yoga 900 on Linux</h2>
+	<div class="entry-content"><p>The Yoga 900 is a beautiful machine that has a considerably long battery lifetime and can be folded such that it functions as a tablet. The Yoga arrived on Friday and the entire <a href="https://crownstone.rocks">Crownstone</a> team was enjoying how it came out of the box: it lifts up! If you’re creating your own hardware you suddenly appreciate how other people pay attention to packaging!</p>
+
+<!--more-->
+
+<p><img src="/images/blog/lenovo-yoga-900.jpg" alt="Yoga 900" title="Yoga 900, although mine is Silver to not annoy customers too much" /></p>
+
+<p>Today, Saturday, I have to run Linux on it! First, I thought to resize the Windows partition in Windows itself, but it decided that there were unmovable files somewhere at the end of the partition. Not nice, so just running gparted from a USB stick running Ubuntu it is.</p>
+
+<p>The beta version of <a href="http://releases.ubuntu.com/xenial/">Ubuntu 16.04 (Xenial Xerus)</a> is out, so time to try that out! Getting it to boot from USB was a bit cumbersome. On the Yoga 900 the function keys can only be reached through pressing Fn simultaneously. After trying a few times with F12 and Fn-F12 during booting I finally got into the boot menu.</p>
+
+<p>When running from the stick in the end I decided to disable internet and disable third-party repositories as well. If I didn’t do this I was running into a problem:</p>
+
+<pre><code>ubi-prepare failed with exit code 255
+use of unitialized value in concatenation
+</code></pre>
+
+<p>Hence, I just installed it without anything else enabled, disregarding the online posts that told me that I needed third-party repositories to get Wifi working etc. The Windows partition I shrunk to around 37 GB, giving it 8 GB of space on top of the 29 GB it was already sucking up. Around 20 GB for the root partition, 4GB for swap at the end, and the rest for the home partition. Fingers crossed I decided to put the boot loader on <code>/dev/sda</code> (the Windows bootloader is on <code>/dev/sda1</code> on this machine).</p>
+
+<p>Everything went smoothly!! No custom kernels needed. Wifi works out of the box. Bluetooth works out of the box. The touchpad works out of the box. The touchscreen works out of the box. Even if I fold the device to use it as a tablet the keyboard is automatically switched off.</p>
+
+<p>There are a few things I’ve to figure out. If someone else did, please drop me a message!</p>
+
+<ul>
+  <li>After suspend (by closing and opening the lid) the touchpad stops working.</li>
+  <li>After suspend the Wifi connection drops.</li>
+  <li>The touchpad doesn’t stop working in tablet mode (only the keyboard does).</li>
+  <li>On entering a textbox in tablet mode, there is not automatically a virtual keyboard popping up.</li>
+  <li>In tablet mode, the orientation is not automatically adjusted to upside-down in V-mode or portrait in tablet-mode.</li>
+  <li>The F6 function key does not disable the touchpad.</li>
+</ul>
+
+<p>The first issue can be temporarily resolved by going to a terminal <code>Ctrl+Alt+Fn+F1</code> and back to <code>Ctrl+Alt+Fn+F7</code>. The second issue can be resolved by a restart of the network manager: <code>sudo service network-manager restart</code>. I’m pretty sure these issues will be worked out.</p>
+
+<p>A super nice laptop, I’m super happy!</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<time datetime="2016-03-26T18:09:35+00:00" pubdate data-updated="true">March 26th, 2016</time></div>
+	
+
+
+	
+</div></article>
+
+	<div class="share">
+	<!-- Go to www.addthis.com/dashboard to customize your tools -->
+	<div class="addthis_sharing_toolbox"></div>
+	<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-549f5fe730fc5e91"></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <p>The comments are not automatically shown, so the page loads faster and you only partake in the disqus network if you click. However, this does not mean that your comments are not appreciated, to the contrary!</p> 
+    <br>
+    <div id="disqus_thread"> 
+	<a href="#" onclick="disqus();return false;"><i class="el el-group"></i> Show Comments</a>
+    </div> 
+</section>
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2020
+
+    Anne van Rossum
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+	var disqus_shortname = 'annevanrossum';
+	var disqus_loaded = false;
+        var disqus_identifier = 'http://www.annevanrossum.com/blog/2016/03/26/yoga-900-on-linux/';
+        var disqus_url = 'http://www.annevanrossum.com/blog/2016/03/26/yoga-900-on-linux/';
+        var disqus_script = 'embed.js';
+	// load disqus comments only on demand
+	function disqus() { 
+		if (!disqus_loaded){
+			var e = document.createElement("script"); 
+			e.type = "text/javascript"; 
+			e.async = true; 
+			e.src = "//" + disqus_shortname + ".disqus.com/" + disqus_script;
+			(document.getElementsByTagName("head")[0] ||
+			 document.getElementsByTagName("body")[0])
+				.appendChild(e);
+		} 
+	  }                       
+      /*
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.annevanrossum.com/blog/2016/03/26/yoga-900-on-linux/';
+        var disqus_url = 'http://www.annevanrossum.com/blog/2016/03/26/yoga-900-on-linux/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }()); */
+</script>
+
+
+
+
+
+</body>
+</html>
