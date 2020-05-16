@@ -101,7 +101,7 @@ article{
 				width: 100%;
 			}
 		}
-		
+
 		img, video{
 			max-width: 100%;
 			height: auto;
@@ -151,8 +151,9 @@ article{
 			display: block;
 			font-size: 0.9em;
 			color: $color-gray02;
-			padding-left: 25px;
+			/*padding-left: 25px; */
 			position: relative;
+			/*
 			&:before{
 				content: "\f040";
 				color: $color-gray03;
@@ -160,7 +161,7 @@ article{
 				line-height: 1.6em;
 				position: absolute;
 				left: 0;
-			}
+			}*/
 		}
 		.video-container{
 			position: relative;

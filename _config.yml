@@ -35,6 +35,8 @@ destination: public
 plugins_dir: plugins
 plugins:
 - jekyll-paginate
+- jekyll-youtube
+- octopress-image-tag
 
 code_dir: downloads/code
 category_dir: blog/categories

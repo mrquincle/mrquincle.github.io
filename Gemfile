@@ -16,6 +16,8 @@ group :development do
   gem 'stringex'
   gem 'pygments.rb'
   gem 'jekyll-paginate'
+  gem 'octopress-image-tag'
+  gem 'jekyll-youtube'
 end
 
 gem 'sinatra'
