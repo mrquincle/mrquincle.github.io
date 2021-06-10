@@ -1,4 +1,6 @@
 before_install:
+  - echo 'Set exec bit on cibuild script'
+  - chmod a+x ./scripts/cibuild
   - echo 'Run gem install bundler'
   - gem install bundler
   - echo 'No need to run npm install or install webpack'
@@ -8,6 +10,8 @@ before_install:
 git:
   depth: 1
 
+script: ./scripts/cibuild
+
 deploy:
   provider: pages
   local_dir: _site
@@ -16,6 +20,8 @@ deploy:
   github_token: $GH_TOKEN
   on:
     branch: source
+
+cache: bundler
 
 notifications:
   email: 

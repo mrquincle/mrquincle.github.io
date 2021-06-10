@@ -32,7 +32,8 @@ A deep belief network hand deep Boltzmann machines have multiple (hidden) layers
 
 # Markov Chain Monte Carlo (MCMC)
 
-Restricted Boltzmann Machines, Deep Belief Networks, and Deep Boltzmann Machines were trained by MCMC methods. MCMC computes the gradient of the log-likelihood (see post on [contrastive divergence](/blog/2017/05/03/what-is-contrastive-divergence/)). MCMC has particular difficulty in mixing between modes.
+Restricted Boltzmann Machines, Deep Belief Networks, and Deep Boltzmann Machines were trained by MCMC methods. MCMC computes the gradient of the log-likelihood (see post on [contrastive divergence]({% post_url 2017-05-03-what-is-contrastive-divergence %}).
+MCMC has particular difficulty in mixing between modes.
 
 # Autoencoder
 

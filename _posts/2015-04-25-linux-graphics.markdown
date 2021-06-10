@@ -39,7 +39,7 @@ components that we need to know, namely, what is:
 
 I have a N56VZ which has an **i7-3610QM** processor. The processor architecture is from the 
 [Ivy Bridge](http://en.wikipedia.org/wiki/Ivy_Bridge_%28microarchitecture%29) variety (on 22 mm). There are plenty of
-datasheets available for the [7-series chipset (pdf)](www.intel.nl/content/dam/www/.../7-series-chipset-pch-datasheet.pdf).
+datasheets available for the [7-series chipset (pdf)](https://www.intel.com/content/dam/www/public/us/en/documents/datasheets/7-series-chipset-pch-datasheet.pdf).
 Note also that this Ivy Bridge series is also called the 3rd Gen Intel Core family (see also this 
 [Intel Datasheet (pdf)](http://www.intel.com/content/dam/www/public/us/en/documents/datasheets/3rd-gen-core-family-mobile-vol-1-datasheet.pdf)).
 
@@ -55,11 +55,11 @@ So, what we have here is a hardware setup that is divided over the CPU and a thi
 which show how both the CPU and the PCH are integrated in the same chip (but on separate dies). The PCH of this previous
 generation is called *Cougar Point*. 
 
-![The "Cougar Point" Platform Controller Hub (2011)](/images/2011platform.png)
+![The "Cougar Point" Platform Controller Hub (2011)](/images/blog/2011platform.png)
 
 Another picture from Intel shows the Panther Point PCH:
 
-![The "Panther Point" Platform Controller Hub (2012)](/images/hm76.png)
+![The "Panther Point" Platform Controller Hub (2012)](/images/blog/hm76.png)
 
 Anyway, we apparently have the **BD82HM76** chipset, the "Panther Point" PCH (from 2012).
 
@@ -96,7 +96,7 @@ there are [technical reasons](https://dvdhrm.wordpress.com/2013/09/01/splitting-
 Laurens Pinchart has a nice presentation on DRM, KMS, and in particular, writing drivers at 
 [YouTube](https://www.youtube.com/watch?v=Ja8fM7rTae4). The picture below is from his presentation.
 
-![Device Model SoC (by Laurens Pinchart)](/images/device_model_soc.png)
+![Device Model SoC (by Laurens Pinchart)](/images/blog/device_model_soc.png)
 
 You see that in memory there are two structures, frame buffers (old) and planes (new). Subsequently, you see something
 that sounds very old-fashioned, a CRTC (Cathode Ray Tube Controller). This is just nomenclature from the past. It is
@@ -231,7 +231,7 @@ might be a symptom of something peculiar in the hardware.
 In the [North Display Registers](http://www.x.org/docs/intel/HD/IHD_OS_Vol_3_Part3_BJS.pdf) document you see a nice
 overview of the sequence in which the display needs to be set. 
 
-![Display Mode Set Sequence](/images/display_mode_set_sequence.png)
+![Display Mode Set Sequence](/images/blog/display_mode_set_sequence.png)
 
 You can follow along in the code, in particular, in the function `ironlake_crtc_enable`. Here you will see an order 
 like `intel_enable_pipe` -> `ironlake_pch_enable` -> `intel_crtc_enable_planes`. What is remarkable is that step 7
@@ -270,12 +270,4 @@ David Herrmann for example is the guy behind render nodes (integrated [since 3.1
 
 The Intel 7 Series PCH datasheet contains all kind of interesting information. See for example Fig. 5-13 for another
 view on the display architecture.
-
-
-
-<!-- 
-![Intel display](/images/intel_display.png)
--->
-
-
 
