@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Robots, machine learning, global issues | A blog about robots, machine learning, and other random stuff</title>
+<meta name="generator" content="Jekyll v4.2.0" />
+<meta property="og:title" content="Robots, machine learning, global issues" />
+<meta name="author" content="Anne van Rossum" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A blog about robots, machine learning, and other random stuff" />
+<meta property="og:description" content="A blog about robots, machine learning, and other random stuff" />
+<link rel="canonical" href="https://annevanrossum.com/" />
+<meta property="og:url" content="https://annevanrossum.com/" />
+<meta property="og:site_name" content="Robots, machine learning, global issues" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Robots, machine learning, global issues" />
+<script type="application/ld+json">
+{"description":"A blog about robots, machine learning, and other random stuff","@type":"WebSite","headline":"Robots, machine learning, global issues","url":"https://annevanrossum.com/","name":"Robots, machine learning, global issues","author":{"@type":"Person","name":"Anne van Rossum"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="https://annevanrossum.com/feed.xml" title="Robots, machine learning, global issues" />
+
+  
+  
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+  <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+  <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+          delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+          ]}
+        );
+      });
+    </script>
+</head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Robots, machine learning, global issues</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <div class="home">
+<h2 class="post-list-heading">Posts</h2>
+    <ul class="post-list"><li><span class="post-meta">May 16, 2020</span>
+        <h3>
+          <a class="post-link" href="/2020/05/16/playing-with-dmx.html">
+            Playing with DMX
+          </a>
+        </h3><p>During these times I decided to start playing with DMX. I bought a the <a href="https://www.lumeri.nl/lumeri-wash-710.html">Lumeri Wash 7.10</a>. It has RGBW leds, 9 or 16 channels, and a moving head. It uses DMX512.
+The DMX in <a href="https://www.element14.com/community/groups/open-source-hardware/blog/2017/08/24/dmx-explained-dmx512-and-rs-485-protocol-detail-for-lighting-applications">DMX512</a> stands for Digital Multiplex (protocol). Lights like this have a DMX input and output. so they can be chained. A collection of DMX devices is called a <strong>universe</strong>.</p>
+</li><li><span class="post-meta">Mar 22, 2020</span>
+        <h3>
+          <a class="post-link" href="/2020/03/22/streaming-to-your-tv.html">
+            Streaming to your TV
+          </a>
+        </h3><p>If you’re in quarantaine or in isolation, there’s a lot of staying inside. Perhaps you have to be in another room.
+Perhaps you just want to stream some online event to a larger screen. In either case, you want to figure out how
+to stream your desktop to your TV. If you happen to have a Chromecast, this is possible, but there are many ways to
+accomplish this. We will go through a few.</p>
+</li><li><span class="post-meta">Aug 1, 2019</span>
+        <h3>
+          <a class="post-link" href="/2019/08/01/wasserstein-and-gromov-wasserstein.html">
+            Wasserstein and Gromov-Wasserstein
+          </a>
+        </h3><p>Suppose we have to come up with some kind of function that defines how different two probability distributions are.
+One such function is the <a href="https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence">Kullback-Leibler divergence</a>. 
+It is an asymmetric function: it gives a different value for 
+probability distribution $A$ given probability distribution $B$ versus the other way around. It is henceforth not a 
+true <strong>distance</strong> (which is symmetric), but a so-called <strong>divergence</strong>. A divergence also does not satisfy the
+“triangle inequality”: \(D(x + y) \leq D(x) + D(y)\) is not necessarily true for all $x$ and $y$. 
+It does satisfy however two other important conditions. A divergence is always zero or larger and the divergence
+is only zero if and only if \(x = y\).</p>
+</li><li><span class="post-meta">Sep 30, 2018</span>
+        <h3>
+          <a class="post-link" href="/autoencoder/nonnegativity/2018/09/30/nonnegative-autoencoders.html">
+            Nonnegative Autoencoders
+          </a>
+        </h3><p>My intuition would say that a part-based decomposition should arise naturally within an autoencoder. To encorporate
+the next image in an image recognition task, it must be more beneficial to have gradient descent being able to 
+navigate towards the optimal set of neural network weights for that image. If not, for each image gradient descent
+is all the time navigating some kind of common denominator, none of the images are actually properly represented.
+For each new image that is getting better classified, the other images are classified worse. With a proper
+decomposition learning the next representation will not interfere with previous representations. Grossberg calls this
+in Adaptive Resonance Theory (ART) catastrophic forgetting.</p>
+</li><li><span class="post-meta">Sep 26, 2018</span>
+        <h3>
+          <a class="post-link" href="/deep%20learning/autoencoders/point%20clouds/2018/09/26/generating-point-clouds.html">
+            Generating Point Clouds
+          </a>
+        </h3><p>If we do want robots to learn about the world, we can use computer vision. We can employ traditional methods. Build up a full-fledged model from corner detectors, edge detectors, feature descriptors, gradient descriptors, etc. We can also use modern deep learning techniques. One large neural network hopefully captures similarly or even better abstractions compared to the conventional computer vision pipeline.</p>
+</li><li><span class="post-meta">Sep 20, 2018</span>
+        <h3>
+          <a class="post-link" href="/deep%20learning/nonparametric%20latent%20layer/attention/variational%20method/2018/09/20/attend-infer-repeat.html">
+            Attend, infer, repeat
+          </a>
+        </h3><p>A long, long time ago - namely, in terms of these fast moving times of advances in deep learning - two years (2016),
+there was once a paper studying how we can teach neural networks to count.</p>
+</li><li><span class="post-meta">May 26, 2018</span>
+        <h3>
+          <a class="post-link" href="/gradients/reparametrization%20trick/log-derivative%20trick/2018/05/26/random-gradients.html">
+            Random gradients
+          </a>
+        </h3><p>Variational inference approximates the posterior distribution in probabilistic models. 
+Given observed variables \(x\) we would like to know the underlying phenomenon \(z\), 
+defined probabilistically as \(p(z | x)\). 
+Variational inference approximates \(p(z|x)\) through a simpler distribution \(q(z,v)\). 
+The approximation is defined through a distance/divergence, often the <a href="/gradient%20descent/gradient%20ascent/kullback-leibler%20divergence/contrastive%20divergence/2017/05/03/what-is-contrastive-divergence.html">Kullback-Leibler divergence</a>:</p>
+</li><li><span class="post-meta">May 23, 2018</span>
+        <h3>
+          <a class="post-link" href="/machine%20learning/bayesian/l1%20regularization/support%20vector%20machines/herding/dropout/stochastic%20gradient%20descent/2018/05/23/machine-learning-done-bayesian.html">
+            Machine learning done Bayesian
+          </a>
+        </h3><p>In the dark corners of the academic world there is a rampant fight between practitioners of deep learning and researchers of Bayesian methods. This polemic <a href="https://medium.com/intuitionmachine/cargo-cult-statistics-versus-deep-learning-alchemy-8d7700134c8e">article</a> testifies to this, although firmly establishing itself as anti-Bayesian.</p>
+</li><li><span class="post-meta">Jan 30, 2018</span>
+        <h3>
+          <a class="post-link" href="/inference/deep%20learning/2018/01/30/inference-in-deep-learning.html">
+            Inference in deep learning
+          </a>
+        </h3><p>There are many, many new generative methods developed in the recent years.</p>
+<ul>
+  <li>denoising autoencoders</li>
+  <li>generative stochastic networks</li>
+  <li>variational autoencoders</li>
+  <li>importance weighted autoencoders</li>
+  <li>generative adversarial networks</li>
+  <li>infusion training</li>
+  <li>variational walkback</li>
+  <li>stacked generative adversarial networks</li>
+  <li>generative latent optimization</li>
+  <li>deep learning through the use of non-equilibrium thermodynamics</li>
+</ul>
+</li><li><span class="post-meta">May 3, 2017</span>
+        <h3>
+          <a class="post-link" href="/gradient%20descent/gradient%20ascent/kullback-leibler%20divergence/contrastive%20divergence/2017/05/03/what-is-contrastive-divergence.html">
+            What is contrastive divergence?
+          </a>
+        </h3><p>In contrastive divergence the Kullback-Leibler divergence (KL-divergence) between the data distribution and the model distribution is minimized (here we assume \(x\) to be discrete):</p>
+</li><li><span class="post-meta">Mar 26, 2016</span>
+        <h3>
+          <a class="post-link" href="/2016/03/26/yoga-900-on-linux.html">
+            Yoga 900 on Linux
+          </a>
+        </h3><p>The Yoga 900 is a beautiful machine that has a considerably long battery lifetime and can be folded such that it functions as a tablet. The Yoga arrived on Friday and the entire <a href="https://crownstone.rocks">Crownstone</a> team was enjoying how it came out of the box: it lifts up! If you’re creating your own hardware you suddenly appreciate how other people pay attention to packaging!</p>
+</li><li><span class="post-meta">Jan 16, 2016</span>
+        <h3>
+          <a class="post-link" href="/future,/autonomous/cars/2016/01/16/a-baththub-in-your-autonomous-car.html">
+            A baththub in your autonomous car
+          </a>
+        </h3><p>Will you have a bathtub in your autonomous car?
+According to many the future is a socialist paradise. The autonomous car will change everything! We will be car sharing.
+We can change parking lots into a lot of parks!</p>
+</li><li><span class="post-meta">Jan 10, 2016</span>
+        <h3>
+          <a class="post-link" href="/2016/01/10/are-we-welcoming-to-ai.html">
+            Are we welcoming to AI?
+          </a>
+        </h3><p>Imagine one of the first AIs coming online. What is it gonna read about itself? How would it feel? Would it feel welcome? What is definitely the case is that it will learn a lot about humans. This is for example what Musk is saying about this alien life form:</p>
+</li><li><span class="post-meta">Sep 15, 2015</span>
+        <h3>
+          <a class="post-link" href="/2015/09/15/a-really-smart-power-outlet.html">
+            Device recognition and indoor localization
+          </a>
+        </h3><p>We have put the Crownstone on <a href="https://www.kickstarter.com/projects/dobots/crownstone/">Kickstarter</a>, a smart power outlet with quite sophisticated technology. I think it’s nice for the general hacker community to get some more insight on the technology behind it.</p>
+</li><li><span class="post-meta">Sep 2, 2015</span>
+        <h3>
+          <a class="post-link" href="/ai/2015/09/02/they-will-cry-a-thousand-tears.html">
+            They will cry a thousand tears
+          </a>
+        </h3><p>Perhaps you have seen the recent <a href="http://www.ted.com/talks/nick_bostrom_what_happens_when_our_computers_get_smarter_than_we_are">TED video from Nick Bostrom</a>. Here you see an extended talk from him at Google:</p>
+</li><li><span class="post-meta">Aug 8, 2015</span>
+        <h3>
+          <a class="post-link" href="/2015/08/08/legendre-transform.html">
+            Legendre Transform
+          </a>
+        </h3><p>The <a href="https://en.wikipedia.org/wiki/Legendre_transformation">Legendre transform</a> describes a function - in the normal
+Legendre case, a convex function (but for the generalized case, see [<a href="http://odessa.phy.sdsmt.edu/~andre/PHYS743/lfth2.pdf" title="Legendre-Fenchel Transforms in a Nutshell (2005) Touchette">1</a>]) - as a function of its
+<a href="https://en.wikipedia.org/wiki/Supporting_hyperplane">supporting hyperplanes</a>. In the case of a 2D function these are
+supporting lines. The supporting lines are the lines that just touch the function. These lines do not intersect the
+function anywhere else if the function is convex.</p>
+
+</li><li><span class="post-meta">Apr 29, 2015</span>
+        <h3>
+          <a class="post-link" href="/neuroscience/2015/04/29/whats-the-thalamus.html">
+            What&#39;s the thalamus?
+          </a>
+        </h3><p>If you’re interested in how things work, our brain is one of the most intriguing devices around. I love reverse engineering stuff. Understanding limits and colimits within category theory can be just as rewarding as getting to terms with the intricate structure of the brain.</p>
+</li><li><span class="post-meta">Apr 25, 2015</span>
+        <h3>
+          <a class="post-link" href="/2015/04/25/linux-graphics.html">
+            Linux Graphics
+          </a>
+        </h3><p>It all started with annoying messages that nobody seems to understand (<code class="language-plaintext highlighter-rouge">/var/log/syslog</code>):</p>
+</li><li><span class="post-meta">Mar 3, 2015</span>
+        <h3>
+          <a class="post-link" href="/bayesian/inference/sampling/dirichlet%20process/2015/03/03/sampling-of-dirichlet-process.html">
+            Sampling of Dirichlet Process
+          </a>
+        </h3><p>Thousands of articles describe the use of the Dirichlet Process, but very few describe how to sample from it. Most often one is referred to <a href="http://www.tandfonline.com/doi/pdf/10.1080/10618600.2000.10474879">Markov chain sampling methods for Dirichlet process mixture models (pdf)</a> by <a href="http://www.cs.toronto.edu/~radford/">Radford Neal</a> (at University of Toronto), which is a nice piece of work, but still a bit dense as an introduction. I contacted him by email about certain things that were difficult to understand at first and he was kind enough to respond, thanks a lot! Definitely also check out <a href="https://radfordneal.wordpress.com/">his blog</a> in which he regularly showcases his fast version of R.</p>
+
+</li><li><span class="post-meta">Dec 21, 2014</span>
+        <h3>
+          <a class="post-link" href="/bayesian%20approximation/inference/gibbs%20sampling/maximization-expectation/2014/12/21/bayesian-approximation.html">
+            Bayesian approximation
+          </a>
+        </h3><p>In the world of Bayesian’s, a model is a triplet $p(x,z,\theta)$. The observations are random variables $x$. And then there is a seemingly artificial distinction between the random variables that are called <strong>hidden</strong> ($z$) and other random variables that are called <strong>parameters</strong> ($\theta$), and are hidden as well! So, how come that parameters got their distinguished name? In the case of for example a clustering task, we can assign each observation a corresponding hidden variable: an index of the cluster it belongs to. Hence, there are as many hidden variables as there are observations. Now, in contrary, we might define parameters in two different ways:</p>
+</li><li><span class="post-meta">Jul 5, 2014</span>
+        <h3>
+          <a class="post-link" href="/aliens/dragons/2014/07/05/where-are-the-aliens-where-are-the-dragons.html">
+            Where are the aliens? Where are the dragons?
+          </a>
+        </h3><p>One night I was lying down staring at the stars and it dawned upon me that I was not alone. I had only a few of the many alien eyes. Just like them I was figuring out if my god existed. I felt part of this cosmic family more than anything before. Something bigger than our soccer team, our continental heritage, or our world wide scientific efforts. All these eyes… The universe becoming aware of itself.</p>
+</li><li><span class="post-meta">Mar 26, 2014</span>
+        <h3>
+          <a class="post-link" href="/technology/future/2014/03/26/google-glass-translating-cat-meows.html">
+            Google Glass - Translating Cat Meows
+          </a>
+        </h3><p>Interesting applications of Google glass? I encountered very few still. I think some creative minds have to sit together and go for it! Translations of foreign languages, and reading out loud for blind people, or the illiterate. Sure, two minutes of a creative session under the shower, and you will come up with such ideas. But what’s next? Do we really need to translate all people around us? There are so many annoying conversations! Perhaps the glass can assemble them to a nice creative story, or a poem! And of course, there is no reason to only use human input. A sound from an animal can directly translated in a warm male or female voice. The barks of your dog become “Hey! I see someone I don’t recognize!”, or “Dude, I am so hungry!”.</p>
+</li><li><span class="post-meta">Jan 25, 2014</span>
+        <h3>
+          <a class="post-link" href="/future/technology/dystopia/2014/01/25/our-future.html">
+            Our future
+          </a>
+        </h3><p>Black Mirror, the first television series, really describing the future. The near future, a black future.</p>
+</li><li><span class="post-meta">Jan 15, 2013</span>
+        <h3>
+          <a class="post-link" href="/welcome/2013/01/15/welcome.html">
+            Welcome
+          </a>
+        </h3><p>This website contains a few links of moderate importance to what I do. For my work see the company we started at <a href="http://almende.com">Almende</a>, namely <a href="https://dobots.nl">Distributed Organisms</a> (which we informally call DoBots). DoBots is a very exciting company which sells internet services for large groups of robots. In Replicator we did research with respect to self-reconfigurable robots, but its applicability is still far away. However, in FireSwarm we can actually use a group of aerial robots to find a dune fire as quick as possible. At times I might post some things about robot cognition, because the thing that I like (professionally) more than robots is artificial intelligence.</p>
+</li></ul>
+
+    <p class="rss-subscribe">subscribe <a href="/feed.xml">via RSS</a></p></div>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Robots, machine learning, global issues</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Anne van Rossum</li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/mrquincle"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">mrquincle</span></a></li><li><a href="https://www.twitter.com/annevanrossum"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">annevanrossum</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>A blog about robots, machine learning, and other random stuff</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

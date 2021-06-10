@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Attend, infer, repeat | Robots, machine learning, global issues</title>
+<meta name="generator" content="Jekyll v4.2.0" />
+<meta property="og:title" content="Attend, infer, repeat" />
+<meta name="author" content="Anne van Rossum" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Attend, infer, repeat" />
+<meta property="og:description" content="Attend, infer, repeat" />
+<link rel="canonical" href="https://annevanrossum.com/deep%20learning/nonparametric%20latent%20layer/attention/variational%20method/2018/09/20/attend-infer-repeat.html" />
+<meta property="og:url" content="https://annevanrossum.com/deep%20learning/nonparametric%20latent%20layer/attention/variational%20method/2018/09/20/attend-infer-repeat.html" />
+<meta property="og:site_name" content="Robots, machine learning, global issues" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-09-20T08:57:08+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Attend, infer, repeat" />
+<script type="application/ld+json">
+{"description":"Attend, infer, repeat","@type":"BlogPosting","headline":"Attend, infer, repeat","dateModified":"2018-09-20T08:57:08+00:00","datePublished":"2018-09-20T08:57:08+00:00","url":"https://annevanrossum.com/deep%20learning/nonparametric%20latent%20layer/attention/variational%20method/2018/09/20/attend-infer-repeat.html","author":{"@type":"Person","name":"Anne van Rossum"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://annevanrossum.com/deep%20learning/nonparametric%20latent%20layer/attention/variational%20method/2018/09/20/attend-infer-repeat.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="https://annevanrossum.com/feed.xml" title="Robots, machine learning, global issues" />
+
+  
+  
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+  <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+  <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+          delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+          ]}
+        );
+      });
+    </script>
+</head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Robots, machine learning, global issues</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Attend, infer, repeat</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2018-09-20T08:57:08+00:00" itemprop="datePublished">Sep 20, 2018
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>A long, long time ago - namely, in terms of these fast moving times of advances in deep learning - two years (2016),
+there was once a paper studying how we can teach neural networks to count.</p>
+
+<h1 id="attend-infer-repeat">Attend, infer, repeat</h1>
+
+<p><a href="https://papers.nips.cc/paper/6230-attend-infer-repeat-fast-scene-understanding-with-generative-models.pdf">This paper</a> 
+is titled “Attend, infer, repeat: Fast scene understanding with generative models” and the authors are 
+<a href="http://arkitus.com/">Ali Eslami</a>, 
+Nicolas Heess,
+<a href="http://thphn.com/">Theophane Weber</a>, 
+Yuval Tassa (<a href="https://github.com/yuvaltassa">github</a>, nice, he does couchsurfing),
+<a href="http://szepi1991.github.io/">David Szepesvari</a>,
+<a href="https://koray.kavukcuoglu.org/">Koray Kavukcuoglu</a>,
+and
+<a href="http://www.cs.toronto.edu/~hinton/">Geoffrey Hinton</a>. 
+A team at Deepmind based in London.</p>
+
+<p>This has been a personal interest of mine. I felt it very satisfying that bees for example can 
+<a href="https://motherboard.vice.com/en_us/article/pgkman/bees-can-count-to-four-display-emotions-and-teach-each-other-new-skills">count landmarks</a> or 
+at least have a capability that approximates this fairly good. It is such an abstract concept, but very rich. Just
+take the fact that you can recognize yourself in the mirror (I hope). It’s grounded on something that really strongly
+believes that there is only one of you, that you are pretty unique.</p>
+
+<!--more-->
+
+<p>From a learning perspective, counting feels like mapping in autonomous robotics. The very well-known chicken and egg
+problem of simultaneous localisation and mapping (SLAM) immediately addresses that mapping and localisation is an
+intertwined problem where one task immediately influences the other task. To properly map it would be very useful if
+you have good odometry and can tell accurately how your location is changing. To properly locate yourself it would be
+very useful to have a very good map. In the beginning the robot sucks in both, but by learning (for example through
+expectation maximization) it learns to perform both better and better.</p>
+
+<p>Counting objects likewise benefits from properly being able to recognize objects. Moreover, it also likely benefits
+from localization objects. A child counts by pointing to the objects and even sometimes verbalizes the object in the
+process. Of course a network might do all three things in different layers, but that would remove the chance to have
+these layers to inform each other. If we introduce cross-connections manually the network would not learn to decompose
+in an autonomous manner. Ideally the network learns the decomposition itself so that we do not artificially 
+introduce limitations in the information transfer between those tasks.</p>
+
+<p>The paper by Eslami introduces several aspects that is important for a system like this:</p>
+
+<ul>
+  <li>Learning latent spaces of variable dimensionality.</li>
+  <li>An iterative process that attends to one object at a time. This requires also a stopping condition to stop counting.</li>
+  <li>Complete end-to-end learning by amortized variational inference.</li>
+</ul>
+
+<p>It is coined the <strong>AIR model</strong> by the authors: attend, infer, repeat.</p>
+
+<h2 id="learning-latent-spaces-of-variable-dimensions">Learning latent spaces of variable dimensions</h2>
+
+<p>The representation of a scene is with a fixed upper limit on the number of objects. A nice extension would be to
+make this a nonparametric prior like a Dirichlet Process. The number of objects is drawn from a Binomial distribution,
+\(p_N(n)\), and the scene model generates a variable length feature vector \(z \sim p_\theta(\cdot|n)\). 
+The data itself is generated from the features through \(x \sim p_\theta(\cdot|n)\). Summarized:</p>
+
+\[p_\theta(x) = \int p_\theta(z) p_\theta(x|z) dz\]
+
+<p>with the prior decomposed as:</p>
+
+\[p_\theta(z) = \sum_{n=1} p_N(n) p_\theta(z|n)\]
+
+<p>The posterior is given by Bayes’ rule, prior times likelihood divided by the evidence:</p>
+
+\[p_\theta(z|x) = \frac{p_\theta(z) p_\theta(x|z) }{p_\theta(x)}\]
+
+<p>Equivalently:</p>
+
+\[p_\theta(x|n) = \int p_\theta(z|n) p_\theta(x|z, n) dz\]
+
+<p>And:</p>
+
+\[p_\theta(z,n|x) = \frac{p_\theta(z|n) p_\theta(x|z, n) }{p_\theta(x|n)}\]
+
+<p>We approximate the posterior variationally by a simpler distribution \(q_\phi(z,n|x)\) using the Kullback-Leibler
+divergence:</p>
+
+\[KL\left[q_\phi(z,n|x)|| p_\theta(z,n|x)\right]\]
+
+<p>The divergence is minimized by searching through the parameter space \(\phi \in \Phi\).</p>
+
+<h2 id="an-iterative-process-and-a-stopping-condition">An iterative process and a stopping condition</h2>
+
+<p>One difficulty arises through \(n\) being generated through a random variable. This requires evaluating:</p>
+
+\[p_N(n|x) = \int p_\theta(z,n|x) dz\]
+
+<p>for all values of \(n = 1 \ldots N\).</p>
+
+<p>Now it is suggested to representent \(n\) through a latent vector \(z_{present}\) that is formed out of \(n\) ones followed
+by a zero (and has hence size \(n + 1\)). So we have \(q_\phi(z,z_{present}|x)\) rather than \(q_\phi(z,n|x)\).
+The posterior than does have the following form:</p>
+
+\[q_\phi(z,z_{present}|x) = q_\phi(z_{present}^{n+1} = 0 | z^{1:n}, x) \prod_{i=1}^n q_\phi(z^i, z_{present}^i = 1|z^{1:i-1},x)\]
+
+<p>The first term describes the stopping condition. If \(z_{present} = 0\) then there are no more objects to detect.
+The second term contains a conditional on previous objects. We do not want to describe the same object twice!</p>
+
+<h2 id="a-variational-implementation">A variational implementation</h2>
+
+<p>To optimize for \(\theta\) and \(\phi\) we use the negative free energy \(\mathcal{L}\). The negative free energy is 
+guaranteed to be smaller than \(\log p_\theta(x)\) so can be used to approximate the latter by increasing it as much
+as possible.</p>
+
+\[\mathcal{L}(\theta,\phi) = \mathop{\mathbb{E_{q_\phi}}} \left[ \log p_\theta(x,z,n) - \log q_\phi(z,n|x) \right]\]
+
+<p>We now have to calculate both \(\frac{\partial}{\partial\theta} \mathcal{L}\) and
+\(\frac{\partial}{\partial\phi} \mathcal{L}\)
+to perform gradient ascent.</p>
+
+<p>The estimate of the latter term is quite involved. First \(\omega_i\) denotes all parameters at time step \(i\) in 
+\((z_{present}^i, z^i)\). Then we map \(x\) to \(\omega^i\) through a recurrent function \((\omega^i,h^i) = R_\phi(x,h^{i-1})\).
+Here the recurrent function \(R_\phi\) is a recurrent neural network. The gradient obeys the chain rule:</p>
+
+\[\frac{\partial \mathcal{L}}{ \partial \phi} = \sum_i \frac{ \partial \mathcal{L} }{ \partial \omega^i} \times \frac{\partial \omega^i}{ \phi}\]
+
+<p>Now, we have to calculate \(\frac{\partial \mathcal{L}}{\partial \omega^i}\). Remember \(\omega_i\) can contain either
+continuous or discrete variables. With continuous variables the reparametrization trick is applied. With discrete
+variables a likelihood ratio estimator is used. The latter might have high variance with is reduced using 
+structured neural baselines.</p>
+
+<h2 id="results">Results</h2>
+
+<p>The results on a multi MNIST learning task can be seen in the next figure.</p>
+
+<p><img src="/images/blog/multi-mnist-training.png" alt="Multi MNIST task. Copyright: Eslami et al, 2018" title="From top to bottom training advances. Different numbers from the MNIST dataset are better recognized the longer the system runs. It learns to count from zero to three." /></p>
+
+<p>The figures shows how the system properly recognizes multiple visual digits from the MNIST training set. The boxes show attention windows. From top to bottom there is a steady improvement in count accuracy over time.</p>
+
+<h2 id="discussion">Discussion</h2>
+
+<p>What do we learn from this?</p>
+
+<ul>
+  <li>We have to come up with a <strong>particular representation</strong> of the number of objects. Using this representation we do not
+only inform the network that it has to count, but also that this has to be used as a stopping condition. It very much
+looks like a handcrafted architecture.</li>
+  <li>There is apparently <strong>no satisfying black-box approach</strong> to calculate the gradients. Not only do we have to manually
+describe which strategy has to be used for which parameter. For discrete variables we have to go even further and 
+come up with manners to reduce the variance of the estimator.</li>
+</ul>
+
+<p>If we would use this architecture would we be surprised that the network learns to count? No, I don’t think so. We
+pretty much hardcoded this in the architecture.</p>
+
+<p>An interesting observations by the authors concerns generalization. When the model is trained on images with up to
+two digits in a multi-MNIST task, it will not generalize to three digits. Likewise if it is trained on images with
+zero, one, or three digits, it will not be able to handle images with two digits. Another architecture change has
+been applied with the recurrent network fed by differences with the input
+\((\omega^i,h^i = R_\phi(x^i - x, h^{i=1})\). The author coin this the DAIR model rather than just the AIR model.</p>
+
+<p>The authors compare the system with the Deep Recurrent Attentive Writer (DRAW) architecture. The latter 
+exhibits good performance with the same counting task. Where it lacks is a task where a task of counting zero, one, or
+two digits is followed by another task using two digits. That other task is a) summing the two digits, or
+b) determining if the digits are in ascending order. Here the AIR model outperforms DRAW.</p>
+
+<h2 id="research-direction">Research direction</h2>
+
+<p>One the things that is interesting from the neuroscientific literature is the concept of subitizing. It might, or 
+might not be the case, that it is faster to count up to four than upwards from four. Over four there is a sequential
+process like the one described in this blog post. Some scientists think there is a different pathway that allows a
+more instantaneous response if there only a few objects.</p>
+
+<p><a href="https://arxiv.org/pdf/1808.00257.pdf">The paper</a> titled “Subitizing with Variational Autoencoders” by the authors
+Rijnder Wever (<a href="https://github.com/rien333">github</a>)
+and
+<a href="http://tomrunia.github.io/">Tom Runia</a>
+from the University of Amsterdam describes subitizing as an emerging phenomenon in an ordinary autoencoder. A 
+supervised classifier is trained on top of this unsupervised autoencoder. It is not entirely clear to me that the
+latent representation indeed somehow disentangled the object identification from the number of objects.</p>
+
+  </div><a class="u-url" href="/deep%20learning/nonparametric%20latent%20layer/attention/variational%20method/2018/09/20/attend-infer-repeat.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Robots, machine learning, global issues</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Anne van Rossum</li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/mrquincle"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">mrquincle</span></a></li><li><a href="https://www.twitter.com/annevanrossum"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">annevanrossum</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>A blog about robots, machine learning, and other random stuff</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Wasserstein and Gromov-Wasserstein | Robots, machine learning, global issues</title>
+<meta name="generator" content="Jekyll v4.2.0" />
+<meta property="og:title" content="Wasserstein and Gromov-Wasserstein" />
+<meta name="author" content="Anne van Rossum" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Wasserstein and Gromov-Wasserstein distances in multi-object recognition" />
+<meta property="og:description" content="Wasserstein and Gromov-Wasserstein distances in multi-object recognition" />
+<link rel="canonical" href="https://annevanrossum.com/2019/08/01/wasserstein-and-gromov-wasserstein.html" />
+<meta property="og:url" content="https://annevanrossum.com/2019/08/01/wasserstein-and-gromov-wasserstein.html" />
+<meta property="og:site_name" content="Robots, machine learning, global issues" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-08-01T10:12:07+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Wasserstein and Gromov-Wasserstein" />
+<script type="application/ld+json">
+{"description":"Wasserstein and Gromov-Wasserstein distances in multi-object recognition","@type":"BlogPosting","headline":"Wasserstein and Gromov-Wasserstein","dateModified":"2019-08-01T10:12:07+00:00","datePublished":"2019-08-01T10:12:07+00:00","url":"https://annevanrossum.com/2019/08/01/wasserstein-and-gromov-wasserstein.html","author":{"@type":"Person","name":"Anne van Rossum"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://annevanrossum.com/2019/08/01/wasserstein-and-gromov-wasserstein.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="https://annevanrossum.com/feed.xml" title="Robots, machine learning, global issues" />
+
+  
+  
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+  <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+  <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+          delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+          ]}
+        );
+      });
+    </script>
+</head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Robots, machine learning, global issues</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Wasserstein and Gromov-Wasserstein</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2019-08-01T10:12:07+00:00" itemprop="datePublished">Aug 1, 2019
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>Suppose we have to come up with some kind of function that defines how different two probability distributions are.
+One such function is the <a href="https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence">Kullback-Leibler divergence</a>. 
+It is an asymmetric function: it gives a different value for 
+probability distribution $A$ given probability distribution $B$ versus the other way around. It is henceforth not a 
+true <strong>distance</strong> (which is symmetric), but a so-called <strong>divergence</strong>. A divergence also does not satisfy the
+“triangle inequality”: \(D(x + y) \leq D(x) + D(y)\) is not necessarily true for all $x$ and $y$. 
+It does satisfy however two other important conditions. A divergence is always zero or larger and the divergence
+is only zero if and only if \(x = y\).</p>
+
+<h2 id="earth-movers-distance">Earth Mover’s distance</h2>
+
+<p>There is another function that defines how different two probability distributions are. It is called the
+<a href="https://en.wikipedia.org/wiki/Earth_mover%27s_distance">Earth Mover’s Distance</a>. This name has been suggested
+by Jorge Stol when he was working with CAD programs that have a function to compute the optimal earth displacement
+from roadcuts to roadfills. The concept is much older though (from <a href="https://en.wikipedia.org/wiki/Gaspard_Monge">Gaspard Monge</a>
+in 1781, more than two centuries ago).</p>
+
+<!--more-->
+
+<h2 id="1st-wasserstein-distance">1st Wasserstein distance</h2>
+
+<p>Mathematically this function is equivalent to the 1st <a href="https://en.wikipedia.org/wiki/Wasserstein_metric">Wasserstein distance</a>.
+The 1st Wasserstein distance between two probability measures $\mu$ and $\nu$ is defined as:</p>
+
+\[W(\mu, \nu) = \inf_{\lambda \in \Gamma(\mu,\nu)} \int_{M \times M} d(x,y) d\lambda(x,y)\]
+
+<p>where $\Gamma(\mu,\nu)$ is the collection of all measures $M \times M$ with marginals $\mu$ and $\nu$.
+This set $\Gamma(\mu,\nu)$ is called the set of all couplings of $\mu$ and $\nu$. We can write it also as:</p>
+
+\[W(\mu, \nu) = \inf_{\lambda \in \Gamma(\mu,\nu)} \int_\mu \int_\nu d(x,y) \lambda(x,y) dx dy\]
+
+<p>where we assume $\lambda$ to be well-behaved.</p>
+
+<p>Informally, given all kind of ways to send over “stuff” from position $x$ to position $y$ we find the one that
+minimizes (mathematically fancy the infimum) the distance $d(x,y)$ so that everything is moved.
+Note, that $\mu$ and $\nu$ are probability measures. They sum to one. There is no mass lost or gained in the process.</p>
+
+<p>We can use the Wasserstein distance to calculate the difference between point clouds. The above distance becomes now
+discrete:</p>
+
+\[W(\mu, \nu) = \min_{\lambda \in \Gamma(\mu,\nu)} \sum_{x \in \mu} \sum_{y \in \nu} d(x,y) \lambda(x,y)\]
+
+<!--
+We can define the problem as a minimization problem with particular constraints.
+Find a flow $F = [f_{i,j}]$ with $f_{i,j}$ the flow between $x_i$ and $y_i$ that minimizes the overall cost. That is,
+solve:
+
+$$\min \sum_i \sum_j f_{i,j} d(x_i,y_i)$$
+
+subject to
+
+$$f_{i,j} > 0, 1 \leq i \leq m, 1 \leq j \leq n$$
+
+$$\sum_{i=1}^m f_{i,j} \leq 1, 1 \leq j \leq n$$
+
+$$\sum_{j=1}^n f_{i,j} \leq 1, 1 \leq i \leq m$$
+
+$$\sum_{i=1}^m \sum_{j=1}^n f_{i,j} = \min (m, n)$$.
+-->
+
+<h2 id="assignment-problem">Assignment problem</h2>
+
+<p>This can also be formulated as an assignment problem or a matching problem on a (complete) bipartite graph. 
+The nodes $x \in \mu$ on the left, the nodes $y \in \nu$ on the right.
+The edges between the nodes in $\mu$ and the nodes in $\nu$ have weights corresponding to their distance $d(x,y)$. Now,
+define a mapping $\lambda$ that minimizes \(W(\mu,\nu)\).</p>
+
+<p>We can write the constraints on that indicate that each vertex is adjacent to exactly one edge:</p>
+
+\[\sum_{x \in \mu} \lambda(x,y) = 1 \quad \text{for} \quad y \in \nu\]
+
+\[\sum_{y \in \nu} \lambda(x,y) = 1 \quad \text{for} \quad x \in \mu\]
+
+\[0 \leq \lambda(x,y) \leq 1 \quad \text{for} \quad x \in \mu, y \in \nu\]
+
+\[\lambda(x,y) \in \mathbb{Z} \quad \text{for} \quad x \in \mu, y \in \nu\]
+
+<p>The last constraint can actually be removed. When we solve it without this constraint, we will end up with an optimal
+solution that satisfies this condition nevertheless.</p>
+
+<h2 id="gromov-wasserstein">Gromov-Wasserstein</h2>
+
+<p>The Gromov-Wasserstein distance can compare point clouds of different dimension. Suppose we have
+a point cloud A in 2D and a point cloud B in 3D, it can assign a distance to it. How is this possible? The distance
+between two points in any dimension is just a scalar. Hence, if we do not work with the point coordinates themselves,
+but only with the pairwise distances between points, we can minimize a function between the pairwise distances in A 
+and the pairwise distances in B.</p>
+
+<h1 id="challenge">Challenge</h1>
+
+<p>Now, the kind of distance we would like to formulate is one that can be used for multiple objects.</p>
+
+
+  </div><a class="u-url" href="/2019/08/01/wasserstein-and-gromov-wasserstein.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Robots, machine learning, global issues</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Anne van Rossum</li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/mrquincle"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">mrquincle</span></a></li><li><a href="https://www.twitter.com/annevanrossum"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">annevanrossum</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>A blog about robots, machine learning, and other random stuff</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

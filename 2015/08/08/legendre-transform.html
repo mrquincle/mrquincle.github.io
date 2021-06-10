@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Legendre Transform | Robots, machine learning, global issues</title>
+<meta name="generator" content="Jekyll v4.2.0" />
+<meta property="og:title" content="Legendre Transform" />
+<meta name="author" content="Anne van Rossum" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Legendre Transform" />
+<meta property="og:description" content="Legendre Transform" />
+<link rel="canonical" href="https://annevanrossum.com/2015/08/08/legendre-transform.html" />
+<meta property="og:url" content="https://annevanrossum.com/2015/08/08/legendre-transform.html" />
+<meta property="og:site_name" content="Robots, machine learning, global issues" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2015-08-08T19:51:39+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Legendre Transform" />
+<script type="application/ld+json">
+{"description":"Legendre Transform","@type":"BlogPosting","headline":"Legendre Transform","dateModified":"2015-08-08T19:51:39+00:00","datePublished":"2015-08-08T19:51:39+00:00","url":"https://annevanrossum.com/2015/08/08/legendre-transform.html","author":{"@type":"Person","name":"Anne van Rossum"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://annevanrossum.com/2015/08/08/legendre-transform.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="https://annevanrossum.com/feed.xml" title="Robots, machine learning, global issues" />
+
+  
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/vis/4.7.0/vis.js"></script>
+  
+  
+  <link href="//cdnjs.cloudflare.com/ajax/libs/vis/4.7.0/vis.css" rel="stylesheet" type="text/css" />
+  
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+  <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+  <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+          delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+          ]}
+        );
+      });
+    </script>
+</head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Robots, machine learning, global issues</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Legendre Transform</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2015-08-08T19:51:39+00:00" itemprop="datePublished">Aug 8, 2015
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>The <a href="https://en.wikipedia.org/wiki/Legendre_transformation">Legendre transform</a> describes a function - in the normal
+Legendre case, a convex function (but for the generalized case, see [<a href="http://odessa.phy.sdsmt.edu/~andre/PHYS743/lfth2.pdf" title="Legendre-Fenchel Transforms in a Nutshell (2005) Touchette">1</a>]) - as a function of its
+<a href="https://en.wikipedia.org/wiki/Supporting_hyperplane">supporting hyperplanes</a>. In the case of a 2D function these are
+supporting lines. The supporting lines are the lines that just touch the function. These lines do not intersect the
+function anywhere else if the function is convex.</p>
+
+<p>Why is the Legendre transform interesting? It is basically just writing down a function in a different manner. The
+Legendre transform is particular useful in the situation that the derivatives of a function \(f(x)\) are easier to
+describe than the function itself. For a nice introduction see [<a href="http://users.df.uba.ar/ariel/materias/FT3_2011_2C/Extra/LegendreTransform.pdf" title="Making Sense of the Legendre Transform (2008) Zia">2</a>]. Intuitively, we map from points \((x,f(x))\) to
+\((m,g(m))\), with \(m\) the slope and \(g(m)\) some value so that we can recover \(x\) and \(y\) (see below for the
+exact definition).</p>
+
+<p>In the following example, we will get get the Legendre transform of the function:</p>
+
+\[f(x)=c x^2\]
+
+<p>And in particular, \(c=2\).</p>
+
+<p>The Legendre transform is defined (with proper domain \(I\)) by:</p>
+
+\[g(m)=\sup_{x \in I}(mx - f(x))\]
+
+<p>In the animation below the first curve that is drawn is the <font color="blue">convex function</font> \(f(x)\) at hand.
+Subsequently we will be performing a for loop in which we draw <font color="orange">lines</font> \(h(m)\) over different slopes \(m\).
+The <font color="purple">curves</font> \(k(m)\) depict the
+difference between \(f(x)\) and the line \(h(m)\).
+The maximum difference is found by \(sup_x\), the supremum operation, which sweeps over all \(x\).
+This difference is visualized through a <font color="green">single peak</font> with height \(g(m)\).
+Last, the <font color="red">Legendre transform</font> is drawn as \(g(m)\) for all different slopes \(m\) we try.</p>
+
+\[g(m)=\frac{1}{4c}m^2\]
+
+<p>To refresh the animation, press F5.</p>
+
+<div id="visualization-legendre"></div>
+
+<p>I hope the Legendre transform is a little bit less mysterious after you’ve seen this animation. The animation has been
+created by making use of the <a href="http://visjs.org/">vis.js</a> library. The source code can be found at <a href="/javascripts/legendre.js">legendre.js</a>.</p>
+
+<h2 id="physics">Physics</h2>
+
+<p>A very common example of the <a href="https://www.wikiwand.com/en/Hamiltonian_mechanics#/Mathematical_formalism">Legendre transform in physics</a> is the one that transform the Lagrangian into the Hamiltonian. The Lagrangian describes a system in generalized position and velocity
+coordinates:</p>
+
+\[\cal{L}(q_j,\dot{q}_j,t)\]
+
+<p>The Hamiltonian is the Legende transform of the Lagrangian:</p>
+
+\[\cal{H}(q_j,p_j,t)=\left( \sum_i \dot{q}_i p_i \right) - \cal{L}(q_j,\dot{q}_j,t)\]
+
+<p>The Lagrangian is the function \(f(x)\) of above. The sum (or actually, the inner product \(\left&lt;\dot{q},p\right&gt;\)) is replacing the
+\(mx\) term.</p>
+
+<h2 id="probability-theory">Probability theory</h2>
+
+<p>The rate function is defined as the Legendre transform of the <a href="https://en.wikipedia.org/wiki/Cumulant">scaled cumulant generating function</a> of a random
+variable \(A_n\). The scaled cumulant generation function of $A_n$ is defined by the limit:</p>
+
+\[\lambda(k)=\lim_{n\rightarrow\infty}\frac{1}{n}\ln\left&lt;\exp(n k A_n) \right&gt;\]
+
+<p>And the Gärtner-Ellis theorem establishes under some conditions the rate function:</p>
+
+\[I(a)=\sup_{k \in \cal{R}} (ka - \lambda(k))\]
+
+<p>This theorem is more general than Cramér’s theorem, which is only valid for independent and identically distributed
+random variables.</p>
+
+<p>Now you know what a Legendre transform entails, you might start to notice it in the most surprising places! For example
+in clustering multivariate normal distributions [<a href="http://www.lix.polytechnique.fr/Labo/Frank.Nielsen/pdf/2008-C-ClusteringNormal-ETVC.pdf" title="Clustering Multivariate Normal Distributions (2008) Nielsen and Nock">3</a>]!</p>
+
+<ol>
+  <li><a href="http://odessa.phy.sdsmt.edu/~andre/PHYS743/lfth2.pdf" title="Legendre-Fenchel Transforms in a Nutshell (2005) Touchette">Legendre-Fenchel Transforms in a Nutshell</a>, a good explanation of the Legendre-Fenchel generalization of the Legendre transform</li>
+  <li><a href="http://users.df.uba.ar/ariel/materias/FT3_2011_2C/Extra/LegendreTransform.pdf" title="Making Sense of the Legendre Transform (2008) Zia">Making Sense of the Legendre Transform</a></li>
+  <li><a href="http://www.lix.polytechnique.fr/Labo/Frank.Nielsen/pdf/2008-C-ClusteringNormal-ETVC.pdf" title="Clustering Multivariate Normal Distributions (2008) Nielsen and Nock">Clustering Multivariate Normal Distributions</a></li>
+</ol>
+
+<script type="text/javascript" src="/javascripts/legendre.js">
+
+</script>
+
+  </div><a class="u-url" href="/2015/08/08/legendre-transform.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Robots, machine learning, global issues</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Anne van Rossum</li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/mrquincle"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">mrquincle</span></a></li><li><a href="https://www.twitter.com/annevanrossum"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">annevanrossum</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>A blog about robots, machine learning, and other random stuff</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

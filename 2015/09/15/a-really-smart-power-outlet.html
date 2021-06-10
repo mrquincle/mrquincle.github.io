@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Device recognition and indoor localization | Robots, machine learning, global issues</title>
+<meta name="generator" content="Jekyll v4.2.0" />
+<meta property="og:title" content="Device recognition and indoor localization" />
+<meta name="author" content="Anne van Rossum" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Device recognition and indoor localization, enabled through a smart power outlet" />
+<meta property="og:description" content="Device recognition and indoor localization, enabled through a smart power outlet" />
+<link rel="canonical" href="https://annevanrossum.com/2015/09/15/a-really-smart-power-outlet.html" />
+<meta property="og:url" content="https://annevanrossum.com/2015/09/15/a-really-smart-power-outlet.html" />
+<meta property="og:site_name" content="Robots, machine learning, global issues" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2015-09-15T15:55:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Device recognition and indoor localization" />
+<script type="application/ld+json">
+{"description":"Device recognition and indoor localization, enabled through a smart power outlet","@type":"BlogPosting","headline":"Device recognition and indoor localization","dateModified":"2015-09-15T15:55:00+00:00","datePublished":"2015-09-15T15:55:00+00:00","url":"https://annevanrossum.com/2015/09/15/a-really-smart-power-outlet.html","author":{"@type":"Person","name":"Anne van Rossum"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://annevanrossum.com/2015/09/15/a-really-smart-power-outlet.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="https://annevanrossum.com/feed.xml" title="Robots, machine learning, global issues" />
+
+  
+  
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+  <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+  <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+          delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+          ]}
+        );
+      });
+    </script>
+</head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Robots, machine learning, global issues</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Device recognition and indoor localization</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2015-09-15T15:55:00+00:00" itemprop="datePublished">Sep 15, 2015
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>We have put the Crownstone on <a href="https://www.kickstarter.com/projects/dobots/crownstone/">Kickstarter</a>, a smart power outlet with quite sophisticated technology. I think it’s nice for the general hacker community to get some more insight on the technology behind it.</p>
+
+<object type="application/x-shockwave-flash" style="width:700px; height:400px;" data="http://vimeo.com/moogaloop.swf?clip_id=138335017&amp;server=vimeo.com&amp;show_title=0&amp;show_byline=0&amp;show_portrait=0&amp;color=ff9933&amp;fullscreen=1" allowfullscreen="true" allowscriptaccess="always">
+<param name="movie" value="http://vimeo.com/moogaloop.swf?clip_id=138335017&amp;server=vimeo.com&amp;show_title=0&amp;show_byline=0&amp;show_portrait=0&amp;color=ff9933&amp;fullscreen=1" allowfullscreen="true" allowscriptaccess="always" />
+</object>
+
+<h2 id="indoor-localization">Indoor localization</h2>
+
+<p>A key problem (or challenge) within smart spaces is indoor localization: making estimates of users’ whereabouts. Without such information, systems are unable to react on the presence of users or, sometimes even more important, their absence. This can range from simply turning the lights on when someone enters a room to customizing the way devices interact with a specific user.</p>
+
+<p>Even more important for a system to know where users exactly are, is to know where users are relative to the devices it can control or use to sense the environment. This relation between user and device location is an essential input to these systems.</p>
+
+<p>At DoBots we have been working on robotics already for quite some time. One of the most well-known robotic algorithms
+is SLAM (simultaneous localization and mapping). We have been porting these algorithms to the scenario in which we
+have a human walking around, rather than a robot.</p>
+
+<p><img src="/images/blog/slac_devices_example.png" alt="SLAC devices" /></p>
+
+<p>You can read more on the <a href="https://dobots.nl/2015/09/03/human-slam-indoor-localization-using-particle-filters/">DoBots blog</a>.
+Wouter has been working hard to implement it in Javascript, so it runs on any device that is supported through Cordova.</p>
+
+<h2 id="device-recognition">Device recognition</h2>
+
+<p>At first thought, it might seem that device recognition is not possible. There are devices that use the same amount
+of power. However, after contemplating for a bit there are actually three ways in which more information can be
+obtained. Firstly, by measuring voltage as well as current, we can measure reactive power. So, we can distinguish
+motors from lamps quite easily. Secondly, we can observe the consumption pattern over the day. Thirdly, we can sample
+at a very high frequency and detect disturbances on the current curve. A device leaves its signature on the grid. The
+third option is something we keep for later, but which is of course quite interesting.</p>
+
+<p>Observing a device over a longer time period leads to current curves such as these:</p>
+
+<p><img src="/images/blog/fridge.png" alt="Fridge" /></p>
+
+<p>It is a fridge that turns on and off at regular time intervals. It is quite clear from this curve that the actual
+power consumption value is not so relevant: the form is really telling!</p>
+
+<p>We subsequently pool all kind of these features with boosting methods from machine learning. Boosting methods are collections of
+weak classifiers. The particular classifier we have been testing is a random committee classifier. You can read more
+on the <a href="https://dobots.nl/2015/09/04/recognize-that-fridge/">DoBots blog</a> again.</p>
+
+<p>If your heart is with open-source and open hardware projects, consider <a href="https://www.kickstarter.com/projects/dobots/crownstone/">backing us</a>.</p>
+
+  </div><a class="u-url" href="/2015/09/15/a-really-smart-power-outlet.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Robots, machine learning, global issues</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Anne van Rossum</li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/mrquincle"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">mrquincle</span></a></li><li><a href="https://www.twitter.com/annevanrossum"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">annevanrossum</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>A blog about robots, machine learning, and other random stuff</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

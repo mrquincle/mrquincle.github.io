@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Bayesian approximation | Robots, machine learning, global issues</title>
+<meta name="generator" content="Jekyll v4.2.0" />
+<meta property="og:title" content="Bayesian approximation" />
+<meta name="author" content="Anne van Rossum" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Different ways to do Bayesian approximation. From full-fledged variational messages to iterated conditional modes. Ever heard about the difference between Maximization-Expectation and Expectation-Maximization?" />
+<meta property="og:description" content="Different ways to do Bayesian approximation. From full-fledged variational messages to iterated conditional modes. Ever heard about the difference between Maximization-Expectation and Expectation-Maximization?" />
+<link rel="canonical" href="https://annevanrossum.com/bayesian%20approximation/inference/gibbs%20sampling/maximization-expectation/2014/12/21/bayesian-approximation.html" />
+<meta property="og:url" content="https://annevanrossum.com/bayesian%20approximation/inference/gibbs%20sampling/maximization-expectation/2014/12/21/bayesian-approximation.html" />
+<meta property="og:site_name" content="Robots, machine learning, global issues" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2014-12-21T13:35:18+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Bayesian approximation" />
+<script type="application/ld+json">
+{"description":"Different ways to do Bayesian approximation. From full-fledged variational messages to iterated conditional modes. Ever heard about the difference between Maximization-Expectation and Expectation-Maximization?","@type":"BlogPosting","headline":"Bayesian approximation","dateModified":"2014-12-21T13:35:18+00:00","datePublished":"2014-12-21T13:35:18+00:00","url":"https://annevanrossum.com/bayesian%20approximation/inference/gibbs%20sampling/maximization-expectation/2014/12/21/bayesian-approximation.html","author":{"@type":"Person","name":"Anne van Rossum"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://annevanrossum.com/bayesian%20approximation/inference/gibbs%20sampling/maximization-expectation/2014/12/21/bayesian-approximation.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="https://annevanrossum.com/feed.xml" title="Robots, machine learning, global issues" />
+
+  
+  
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+  <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"> </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"></script>
+  <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+          delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+          ]}
+        );
+      });
+    </script>
+</head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Robots, machine learning, global issues</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Bayesian approximation</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2014-12-21T13:35:18+00:00" itemprop="datePublished">Dec 21, 2014
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>In the world of Bayesian’s, a model is a triplet $p(x,z,\theta)$. The observations are random variables $x$. And then there is a seemingly artificial distinction between the random variables that are called <strong>hidden</strong> ($z$) and other random variables that are called <strong>parameters</strong> ($\theta$), and are hidden as well! So, how come that parameters got their distinguished name? In the case of for example a clustering task, we can assign each observation a corresponding hidden variable: an index of the cluster it belongs to. Hence, there are as many hidden variables as there are observations. Now, in contrary, we might define parameters in two different ways:</p>
+
+<ul>
+  <li>The number of parameters is fixed. The parameters are defined as that part of the model that is not adjusted with respect to the number of observations. In $k$-means there are $k$ means that need to be estimated. There are not more means to be estimated if the number of observations grows.</li>
+  <li>Parameters are more variable then the hidden variables. There are not just as many parameters as observations, no their number needs to be derived from the data. In nonparameteric Bayesian methods there will be more clusters (means) when the number of observations grows.</li>
+</ul>
+
+<p>Consider a dataset $D$, we would like to get our hands on $p(D,z,\theta)$. If this all concerns discrete variables, this is a 3D ‘matrix’ (a tensor of rank 3) with the observations along one dimension, the hidden variables along another dimension, and the parameters along the third dimension. The joint distribution $p(D,z,\theta)$ would tell us everything. Some examples where either marginalize out a variable, or use the definition of a conditional probability:</p>
+
+\[p(D,z) = \int d\theta \ p(D,z,\theta) \\
+p(z) = \int \int d\theta dz \ p(D,z,\theta) \\
+p(z|D) = p(z,D)/p(D)\]
+
+<p>To get to the matrix $p(D,z)$ we sum over all entries in the rank 3 matrix in the direction of the dimension $\theta$. In other words, we are not interested anymore to what kind of fine granular information $\theta$ brings to bear. We are only interested in how often $D$ occurs with $z$.</p>
+
+<p>The problem is, we often do not have $p(D,z,\theta)$. 
+Now, we suppose we have instead all of the following conditional distributions, $p(D|z,\theta)$, $p(z|\theta,D)$, and $p(\theta|D,z)$, would we have enough information?</p>
+
+<p>The answer is a resounding yes. If you have all conditional distributions amongst a set of random variables you can reconstruct the joint distribution. It always helps to experiment with small discrete conditional and joint probability tables. In <a href="https://stats.stackexchange.com/questions/129956/how-to-derive-gibbs-sampling">this question</a> on <a href="https://stats.stackexchange.com">https://stats.stackexchange.com</a> you see how I construct a joint probability table from the corresponding conditional probability tables. Note the word <strong>corresponding</strong>: as Lucas points out in his answer there are problems with <strong>compatibility</strong>. If the conditional probabilities correspond to a joint probability, the latter can be found. However, if you come up with random conditional probability tables it is very likely that the joint probability table does not exist.</p>
+
+<p>The paper that I found very clarifying with respect to the different ways to do approximations to the full Bayesian method is <a href="https://www.siam.org/meetings/sdm06/proceedings/044wellingm.pdf">Bayesian K-Means as a “Maximization-Expectation” Algorithm (pdf)</a> by Welling and Kurihara.</p>
+
+<p>So, let us assume we are given a dataset $D$ (hence $p(D)$) and we want to find $p(z,\theta|D)$.</p>
+
+<p><strong>1. Gibbs sampling</strong></p>
+
+<p>We can approximate $p(z,\theta|D)$ by sampling. <a href="http://www.wikiwand.com/en/Gibbs_sampling">Gibbs sampling</a> gives $p(z,\theta|D)$ by alternating:</p>
+
+\[\theta \sim p(\theta|z,D) \\
+z \sim p(z|\theta,D)\]
+
+<p><strong>2. Variational Bayes</strong></p>
+
+<p>Instead, we can try to establish a distribution $q(\theta)$ and $q(z)$ and minimize the difference with the distribution we are after $p(\theta,z|D)$. The difference between distributions has a convenient fancy name, the <a href="http://www.wikiwand.com/en/Kullback%E2%80%93Leibler_divergence">Kullback-Leibler divergence</a>. To minimize $KL[q(\theta)q(z)||p(\theta,z|D)]$ we update:</p>
+
+\[q(\theta) \propto \exp (E [\log p(\theta,z,D) ]_{q(z)} ) \\
+q(z) \propto \exp (E [\log p(\theta,z,D) ]_{q(\theta)} )\]
+
+<p>This type of <a href="http://www.wikiwand.com/en/Variational_Bayesian_methods">variational Bayes</a> that uses the Kullback-Leibler divergence is also known under mean-field variational Bayes.</p>
+
+<p><strong>3. Expectation-Maximization</strong></p>
+
+<p>To come up with full-fledged probability distributions for both $z$ and $\theta$ might be considered extreme. Why don’t we instead consider a point estimate for one of these and keep the other nice and nuanced. In <a href="http://www.wikiwand.com/en/Expectation%E2%80%93maximization_algorithm">Expectation Maximization</a> the parameter $\theta$ is established as the one being unworthy of a full distribution, and set to its MAP (<a href="http://www.wikiwand.com/en/Maximum_a_posteriori_estimation">Maximum A Posteriori</a>) value, $\theta^*$.</p>
+
+\[\theta^* = \underset{\theta}{\operatorname{argmax}} E [\log p(\theta,z,D) ]_{q(z)} \\
+q(z) = p(z|\theta^*,D)\]
+
+<p>Here $\theta^* \in \operatorname{argmax}$ would actually be a better notation: the argmax operator can return multiple values. But let’s not nitpick. Compared to variational Bayes you see that correcting for the $\log$ by $\exp$ doesn’t change the result, so that is not necessary anymore.</p>
+
+<p><strong>4. Maximization-Expectation</strong></p>
+
+<p>There is no reason to treat $z$ as a spoiled child. We can just as well use point estimates $z^*$ for our hidden variables and give the parameters $\theta$ the luxury of a full distribution.</p>
+
+\[z^* = \underset{z}{\operatorname{argmax}} E [\log p(\theta,z,D) ]_{q(\theta)} \\
+q(\theta) = p(\theta|z^*,D)\]
+
+<p>If our hidden variables $z$ are indicator variables, we suddenly have a computationally cheap method to perform inference on the number of clusters. This is in other words: model selection (or automatic relevance detection or imagine another fancy name).</p>
+
+<p><strong>5. Iterated conditional modes</strong></p>
+
+<p>Of course, the poster child of approximate inference is to use point estimates  for both the parameters $\theta$ as well as the observations $z$.</p>
+
+\[\theta^* = \underset{\theta}{\operatorname{argmax}} p(\theta,z^*,D) \\
+z^* = \underset{z}{\operatorname{argmax}} p(\theta^*,z,D) \\\]
+
+<p>To see how Maximization-Expectation plays out I highly recommend <a href="https://www.siam.org/meetings/sdm06/proceedings/044wellingm.pdf">the article</a>. In my opinion, the strength of this article is however not the application to a $k$-means alternative, but this lucid and concise exposition of approximation.</p>
+
+
+  </div><a class="u-url" href="/bayesian%20approximation/inference/gibbs%20sampling/maximization-expectation/2014/12/21/bayesian-approximation.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Robots, machine learning, global issues</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Anne van Rossum</li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/mrquincle"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">mrquincle</span></a></li><li><a href="https://www.twitter.com/annevanrossum"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">annevanrossum</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>A blog about robots, machine learning, and other random stuff</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
