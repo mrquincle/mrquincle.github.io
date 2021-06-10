@@ -11,6 +11,7 @@ git:
 deploy:
   provider: pages
   local_dir: _site
+  target_branch: master
   skip_cleanup: true
   github_token: $GH_TOKEN
   on:
