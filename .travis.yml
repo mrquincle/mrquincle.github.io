@@ -1,7 +1,16 @@
+before_install:
+  - echo 'Run gem install bundler'
+  - gem install bundler
+  - echo 'No need to run npm install or install webpack'
+  - echo 'Set bundle deployment flag'
+  - bundle config set deployment 'true'
+
+git:
+  depth: 1
+
 deploy:
   provider: pages
-  local_dir: public
-  target_branch: master
+  local_dir: _site
   skip_cleanup: true
   github_token: $GH_TOKEN
   on:
