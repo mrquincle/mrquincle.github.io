@@ -12,3 +12,6 @@ bundle install
 bundle exec jekyll serve
 ```
 
+## Copyrights
+
+Anne van Rossum (2021)
