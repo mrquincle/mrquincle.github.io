@@ -1,6 +1,6 @@
 # Personal website
 
-Can be found at <https://annevanrossum.com>.
+This website can be found at <https://annevanrossum.com>.
 
 ## Prerequisites
 
