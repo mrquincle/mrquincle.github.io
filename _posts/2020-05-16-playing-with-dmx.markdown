@@ -33,9 +33,9 @@ Also adjust the kernel to use serial at boot (see [here](https://elinux.org/RPi_
 sudo raspi-config
 ```
 
-Disable here the boot messages, but not the device itself. 
+Disable the boot messages, but not the device itself.
 
-Also in `/boot/cmdline.txt` remove the console parameter. I don't know if this is actually necessary, because it already has `plymouth.ignore-serial-consoles`. I also didn't find getty on the serial line and no `/etc/inittab` file. None of the processes was using `ttyAMA0` (quick check with `ps`). I've executed the following anyway:
+To be sure, in `/boot/cmdline.txt` remove the console parameter. I don't know if this is actually necessary, because it already has `plymouth.ignore-serial-consoles`. I also didn't find getty on the serial line and no `/etc/inittab` file. None of the processes was using `ttyAMA0` (quick check with `ps`). I've executed the following anyway:
 
 ```
 sudo systemctl disable serial-getty@ttyAMA0.service
